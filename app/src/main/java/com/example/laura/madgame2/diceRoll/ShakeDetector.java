@@ -25,14 +25,14 @@ public class ShakeDetector implements SensorEventListener {
     private static final int Y = 1;
     private static final int Z = 2;
 
-    private OnShakeListener oshakeListener;
+    private OnShakeListener shakeListener;
 
     private long startTime = 0;
     private int moveCount = 0;
 
 
-    public ShakeDetector(OnShakeListener oshakeListener) {
-        this.oshakeListener = oshakeListener;
+    public ShakeDetector(OnShakeListener shakeListener) {
+        this.shakeListener = shakeListener;
     }
 
     @Override
@@ -62,7 +62,7 @@ public class ShakeDetector implements SensorEventListener {
 
                 //prüfe ob genügend Bewegungen für Shake gemacht wurden
                 if (moveCount > MIN_MOVEMENTS) {
-                    oshakeListener.onShake();
+                    shakeListener.onShake();
 
                     //reset für nächsten Shake!!!!
                     resetShakeDetection();
@@ -110,7 +110,5 @@ public class ShakeDetector implements SensorEventListener {
     }
 
 
-    public interface OnShakeListener {
-        public void onShake();
-    }
+
 }
