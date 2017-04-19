@@ -1,10 +1,8 @@
 package com.example.laura.madgame2.diceRoll;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
-
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.hardware.Sensor;
@@ -23,7 +21,7 @@ import com.example.laura.madgame2.R;
 import java.util.Random;
 
 public class ShakeActivity extends AppCompatActivity {
-
+    boolean test = false;
     private Button roll_button;
 
     private ImageView dice_view;
@@ -50,32 +48,24 @@ public class ShakeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dice_roll);
 
-
         roll_button = (Button) findViewById(R.id.roll_button);
         dice_view = (ImageView) findViewById(R.id.dice_view);
-        Button cheat_button = (Button) findViewById(R.id.cheat_button);
+        cheat_button = (Button) findViewById(R.id.cheat_button);
 
         this.mp = MediaPlayer.create(this, R.raw.dicesound);
 
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mShakeDetector = new ShakeDetector(new ShakeDetector.OnShakeListener() {
-            @Override
-            public void onShake() {
-                rolledNumber = randomNumber.nextInt(6) + 1; //nextInt(6) gibt Zahlen von 0 bis 5 -> daher + 1
-                doAnimationAndSound();
-            }
-        });
 
-
+        //normaler Würfelbutton
         roll_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rolledNumber = randomNumber.nextInt(6) + 1; //nextInt(6) gibt Zahlen von 0 bis 5 -> daher + 1
-                doAnimationAndSound();
-                Toast.makeText(ShakeActivity.this, rolledNumber + " Gewürfelt!", Toast.LENGTH_SHORT).show();
-            }
-        });
+                    @Override
+                    public void onClick(View v) {
+                        rolledNumber = randomNumber.nextInt(6) + 1; //nextInt(6) gibt Zahlen von 0 bis 5 -> daher + 1
+                        doAnimationAndSound();
+                        //wird hier extra nochmal auf false gesetzt, falls im vorherigen Zug gecheated wurde
+                        cheated = false;
+                        Toast.makeText(ShakeActivity.this, rolledNumber + " Gewürfelt!", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
         //Button zum Schummeln
         cheat_button.setOnClickListener(new View.OnClickListener() {
@@ -96,10 +86,21 @@ public class ShakeActivity extends AppCompatActivity {
                     }
                 });
                 builder.show();
-
-
             }
         });
+
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mShakeDetector = new ShakeDetector();
+        mShakeDetector.setOnShakeListener(new OnShakeListener() {
+            @Override
+            public void onShake(int count) {
+                rolledNumber = randomNumber.nextInt(6) + 1; //nextInt(6) gibt Zahlen von 0 bis 5 -> daher + 1
+                doAnimationAndSound();
+                cheated = false;
+            }
+        });
+
 
     }
 
@@ -132,7 +133,8 @@ public class ShakeActivity extends AppCompatActivity {
             case 6:
                 dice_view.setImageResource(R.drawable.six);
                 break;
-
+            default:
+                dice_view.setImageResource(R.drawable.dice_standard);
         }
 
     }
@@ -147,6 +149,7 @@ public class ShakeActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mSensorManager.registerListener(mShakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
+
     }
 
     @Override
