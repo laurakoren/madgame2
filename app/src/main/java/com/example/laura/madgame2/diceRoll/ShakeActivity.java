@@ -21,7 +21,7 @@ import com.example.laura.madgame2.R;
 import java.util.Random;
 
 public class ShakeActivity extends AppCompatActivity {
-
+    boolean test = false;
     private Button roll_button;
 
     private ImageView dice_view;
@@ -50,25 +50,13 @@ public class ShakeActivity extends AppCompatActivity {
 
         roll_button = (Button) findViewById(R.id.roll_button);
         dice_view = (ImageView) findViewById(R.id.dice_view);
-        Button cheat_button = (Button) findViewById(R.id.cheat_button);
+        cheat_button = (Button) findViewById(R.id.cheat_button);
 
         this.mp = MediaPlayer.create(this, R.raw.dicesound);
 
 
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mShakeDetector = new ShakeDetector(new OnShakeListener() {
-            @Override
-            public void onShake() {
-                rolledNumber = randomNumber.nextInt(6) + 1; //nextInt(6) gibt Zahlen von 0 bis 5 -> daher + 1
-                doAnimationAndSound();
-                cheated=false;
-            }
-        });
-
-
-                //normaler Würfelbutton
-                roll_button.setOnClickListener(new View.OnClickListener() {
+        //normaler Würfelbutton
+        roll_button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         rolledNumber = randomNumber.nextInt(6) + 1; //nextInt(6) gibt Zahlen von 0 bis 5 -> daher + 1
@@ -98,10 +86,21 @@ public class ShakeActivity extends AppCompatActivity {
                     }
                 });
                 builder.show();
-
-
             }
         });
+
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mShakeDetector = new ShakeDetector();
+        mShakeDetector.setOnShakeListener(new OnShakeListener() {
+            @Override
+            public void onShake(int count) {
+                rolledNumber = randomNumber.nextInt(6) + 1; //nextInt(6) gibt Zahlen von 0 bis 5 -> daher + 1
+                doAnimationAndSound();
+                cheated = false;
+            }
+        });
+
 
     }
 
@@ -150,6 +149,7 @@ public class ShakeActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mSensorManager.registerListener(mShakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
+
     }
 
     @Override
