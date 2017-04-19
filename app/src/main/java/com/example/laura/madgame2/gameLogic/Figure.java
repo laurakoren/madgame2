@@ -24,5 +24,8 @@ public class Figure {
         //    this.field.setFigure(this);
     }
 
+    //public Field getStartField(Figure figure){
+     //
+    //}
 
 }
