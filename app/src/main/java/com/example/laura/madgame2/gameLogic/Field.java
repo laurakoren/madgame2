@@ -42,4 +42,6 @@ public class Field {
         //if (this.figure.getField() != this)
         //    this.figure.setField(this);
     }
+
+
 }

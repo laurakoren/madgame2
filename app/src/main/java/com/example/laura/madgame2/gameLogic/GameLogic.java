@@ -25,6 +25,7 @@ public class GameLogic {
         if (figure == null || distance < 0)
             return false;
 
+
         // TODO: züge ermöglichen
         // TODO: collision detection
 
@@ -40,4 +41,5 @@ public class GameLogic {
             figure.setField(field);
         }
     }
+
 }

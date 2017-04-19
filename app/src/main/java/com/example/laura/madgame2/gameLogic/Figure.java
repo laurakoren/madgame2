@@ -23,4 +23,6 @@ public class Figure {
         //if (this.field.getFigure() != this)
         //    this.field.setFigure(this);
     }
+
+
 }
