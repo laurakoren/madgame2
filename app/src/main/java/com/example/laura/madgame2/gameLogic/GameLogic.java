@@ -24,18 +24,38 @@ public class GameLogic {
     public boolean draw(Figure figure, int distance) {
         if (figure == null || distance < 0)
             return false;
+/*
+        if(figure.getField().equals(figure.getStartField)){ //TODO: Startfeld definieren
+            return false;
+        }else{
+            for(int i=1;i<=distance;i++){
+                figure.setField(figure.getField().next());
+                if(i<distance){
+                    //figure.getField().checkExit();       //TODO: Ausgangsknoten definieren
+                }
+                if(i==distance){
+                    kick(figure,figure.getField());
+                }
+
+                if(i==6){
+                    //TODO: bei einer 6 darf man nochmals würfeln
+                }
+            }
+        }
+
+
 
 
         // TODO: züge ermöglichen
         // TODO: collision detection
+*/
+        return true;}
 
-        return true;
-    }
 
     //checks whether a field already has a figure on it, sets that figure to its starting point and the new figure on the field
     public void kick(Figure figure, Field field) {
         if (field.hasFigure()) {
-            field.getFigure().setField(null);   // TODO: Startfeld bestimmen
+            //field.getFigure().setField(figure.getStartField);   // TODO: Startfeld bestimmen
             figure.setField(field);
         } else {
             figure.setField(field);
