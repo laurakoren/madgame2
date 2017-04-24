@@ -4,8 +4,9 @@ package com.example.laura.madgame2.gameLogic;
  * A single field on the game board. Can be occupied by a player's figure.
  */
 public class Field {
-    private int matrixCoordsX;
-    private int matrixCoordsY;
+    //private int matrixCoordsX;
+    //private int matrixCoordsY;
+    private int fieldNr;
 
     private Field next;
     //private Field prev;
@@ -15,9 +16,10 @@ public class Field {
     // TODO: abzweigungen (->Zielfelder)
 
 
-    public Field(int matrixCoordsX, int matrixCoordsY) {
-        this.matrixCoordsX = matrixCoordsX;
-        this.matrixCoordsY = matrixCoordsY;
+    public Field(int fieldNr) {
+       // this.matrixCoordsX = matrixCoordsX;
+       // this.matrixCoordsY = matrixCoordsY;
+        this.fieldNr=fieldNr;
         this.figure = null;
     }
 
@@ -30,7 +32,7 @@ public class Field {
     }
 
     public boolean hasFigure() {
-        return this.figure == null;
+        return this.figure != null;
     }
 
     public Figure getFigure() {
