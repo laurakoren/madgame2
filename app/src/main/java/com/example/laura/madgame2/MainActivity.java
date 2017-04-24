@@ -8,7 +8,6 @@ import android.view.View;
 import com.example.laura.madgame2.diceRoll.ShakeActivity;
 
 public class MainActivity extends AppCompatActivity {
-
     private Intent intent;
 
     @Override
@@ -26,6 +25,14 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(this, MultiplayerActivity.class);
         startActivity(intent);
     }
+
+
+    //####
+    public void onClickPlayNow(View view){
+        intent = new Intent(this, play_field.class);
+        startActivity(intent);
+    }
+
 
 
 }

@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.laura.madgame2.R;
+import com.example.laura.madgame2.play_field;
 
 import java.util.Random;
 
@@ -41,7 +42,7 @@ public class ShakeActivity extends AppCompatActivity {
 
     //zum Abspielen des Sounds
     private MediaPlayer mp;
-
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,15 +58,18 @@ public class ShakeActivity extends AppCompatActivity {
 
         //normaler Würfelbutton
         roll_button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        rolledNumber = randomNumber.nextInt(6) + 1; //nextInt(6) gibt Zahlen von 0 bis 5 -> daher + 1
-                        doAnimationAndSound();
-                        //wird hier extra nochmal auf false gesetzt, falls im vorherigen Zug gecheated wurde
-                        cheated = false;
-                        Toast.makeText(ShakeActivity.this, rolledNumber + " Gewürfelt!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            @Override
+            public void onClick(View v) {
+                rolledNumber = randomNumber.nextInt(6) + 1; //nextInt(6) gibt Zahlen von 0 bis 5 -> daher + 1
+                doAnimationAndSound();
+                //wird hier extra nochmal auf false gesetzt, falls im vorherigen Zug gecheated wurde
+                cheated = false;
+                Toast.makeText(ShakeActivity.this, rolledNumber + " Gewürfelt!", Toast.LENGTH_SHORT).show();
+
+            }
+
+        });
+
 
         //Button zum Schummeln
         cheat_button.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +87,8 @@ public class ShakeActivity extends AppCompatActivity {
                         rolledNumber = Integer.parseInt(numbers[which].toString());
                         doAnimationAndSound();
                         cheated = true;
+
+
                     }
                 });
                 builder.show();
@@ -158,5 +164,15 @@ public class ShakeActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    //#######################################################################
+    public void backToPlayfield(View view){
 
+        onBackPressed();
+
+
+    }
+
+    public int getRolledNumber(){
+        return this.rolledNumber;
+    }
 }
