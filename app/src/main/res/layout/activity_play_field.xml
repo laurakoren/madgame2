@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.laura.madgame2.play_field">
+
+    <ImageView
+        android:id="@+id/iv_mad_play_field"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        app:srcCompat="@drawable/menschenaergern_01"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline14"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline11"
+        app:layout_constraintRight_toLeftOf="@+id/guideline12"
+        android:layout_marginRight="8dp" />
+
+    <ImageView
+        android:id="@+id/iv_red1"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/fig_red_one"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.005"
+        app:layout_constraintVertical_bias="0.025"
+        android:clickable="true"/>
+
+    <ImageView
+        android:id="@+id/iv_red2"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/figr_red_two"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.105"
+        app:layout_constraintVertical_bias="0.025"/>
+    <ImageView
+        android:id="@+id/iv_red3"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/fig_red_three"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.005"
+        app:layout_constraintVertical_bias="0.11"/>
+
+    <ImageView
+        android:id="@+id/iv_red4"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/fig_red_four"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.105"
+        app:layout_constraintVertical_bias="0.11"/>
+
+
+    <ImageView
+        android:id="@+id/iv_blue1"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/fig_blue_one"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        android:layout_marginTop="8dp"
+        app:layout_constraintHorizontal_bias="0.87"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/iv_blue2"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/fig_blue_two"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        android:layout_marginTop="8dp"
+        app:layout_constraintHorizontal_bias="0.98"
+        app:layout_constraintVertical_bias="0.0" />
+    <ImageView
+        android:id="@+id/iv_blue3"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/fig_blue_three"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintHorizontal_bias="0.87"
+        app:layout_constraintVertical_bias="0.089999974" />
+
+    <ImageView
+        android:id="@+id/iv_blue4"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/fig_blue_four"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintHorizontal_bias="0.98"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        android:layout_marginTop="8dp"
+        app:layout_constraintVertical_bias="0.09" />
+
+
+    <ImageView
+        android:id="@+id/iv_green1"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/fig_green_one"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.88"
+        app:layout_constraintVertical_bias="0.865"/>
+
+    <ImageView
+        android:id="@+id/iv_green2"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/fig_green_two"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.98"
+        app:layout_constraintVertical_bias="0.865"/>
+    <ImageView
+        android:id="@+id/iv_green3"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/fig_green_three"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.88"
+        app:layout_constraintVertical_bias="0.96"/>
+
+    <ImageView
+        android:id="@+id/iv_green4"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/fig_green_four"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.98"
+        app:layout_constraintVertical_bias="0.965"/>
+
+    <ImageView
+        android:id="@+id/iv_yellow1"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/fig_yellow_one"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.01"
+        app:layout_constraintVertical_bias="0.865"/>
+
+    <ImageView
+        android:id="@+id/iv_yellow2"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/fig_yellow_two"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.105"
+        app:layout_constraintVertical_bias="0.865"/>
+    <ImageView
+        android:id="@+id/iv_yellow3"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/fig_yellow_three"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.01"
+        app:layout_constraintVertical_bias="0.96"/>
+
+    <ImageView
+        android:id="@+id/iv_yellow4"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/fig_yellow_four"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.105"
+        app:layout_constraintVertical_bias="0.965"/>
+
+
+    <!-- Spielfelder -->
+
+    <ImageView
+        android:id="@+id/iv_field1"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/clear_circle"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.595"
+        app:layout_constraintVertical_bias="0.025"/>
+
+    <ImageView
+        android:id="@+id/iv_field2"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/clear_circle"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.595"
+        app:layout_constraintVertical_bias="0.11"/>
+    <ImageView
+        android:id="@+id/iv_field3"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/clear_circle"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.595"
+        app:layout_constraintVertical_bias="0.195"/>
+
+    <ImageView
+        android:id="@+id/iv_field4"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/clear_circle"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.595"
+        app:layout_constraintVertical_bias="0.285"/>
+
+    <ImageView
+        android:id="@+id/iv_field5"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/clear_circle"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.595"
+        app:layout_constraintVertical_bias="0.395"/>
+
+    <ImageView
+        android:id="@+id/iv_field6"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/clear_circle"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.68"
+        app:layout_constraintVertical_bias="0.395"/>
+
+    <ImageView
+        android:id="@+id/iv_field7"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/clear_circle"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.78"
+        app:layout_constraintVertical_bias="0.395"/>
+
+
+    <ImageView
+        android:id="@+id/iv_field8"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/clear_circle"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.88"
+        app:layout_constraintVertical_bias="0.395"/>
+
+
+    <ImageView
+        android:id="@+id/iv_field9"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/clear_circle"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.97"
+        app:layout_constraintVertical_bias="0.395"/>
+
+    <ImageView
+        android:id="@+id/iv_field10"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/clear_circle"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.975"
+        app:layout_constraintVertical_bias="0.49"/>
+
+    <ImageView
+        android:id="@+id/iv_field11"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/clear_circle"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintHorizontal_bias="0.975"
+        app:layout_constraintVertical_bias="0.585"/>
+
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline11"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="0dp" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline12"
+        app:layout_constraintGuide_begin="385dp"
+        android:orientation="vertical" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline13"
+        app:layout_constraintGuide_begin="-3dp"
+        android:orientation="horizontal" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline14"
+        app:layout_constraintGuide_begin="509dp"
+        android:orientation="horizontal" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline15"
+        app:layout_constraintGuide_begin="367dp"
+        android:orientation="vertical" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline16"
+        app:layout_constraintGuide_begin="16dp"
+        android:orientation="vertical" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline17"
+        app:layout_constraintGuide_begin="80dp"
+        android:orientation="horizontal" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline18"
+        app:layout_constraintGuide_begin="430dp"
+        android:orientation="horizontal" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Würfeln"
+
+        android:onClick="diceRole"
+        tools:layout_editor_absoluteX="245dp"
+        tools:layout_editor_absoluteY="1dp" />
+
+
+</android.support.constraint.ConstraintLayout>
