@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.laura.madgame2.diceRoll.ShakeActivity;
@@ -15,13 +16,15 @@ public class PlayField extends AppCompatActivity  {
 
     private ShakeActivity shakeActivity = new ShakeActivity();
 
+    private static final int NUMBER_IDENTIFIER = 1;
+
+    private int numberRolled;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_field);
-
-
     }
 
     @Override
@@ -36,7 +39,7 @@ public class PlayField extends AppCompatActivity  {
         super.onResume();
 
 
-        //Toast.makeText(PlayField.this, shakeActivity.getRolledNumber() + " Gewürfelt!", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(Play_field.this, shakeActivity.getRolledNumber() + " Gewürfelt!", Toast.LENGTH_SHORT).show();
         changePosition();
     }
 
@@ -47,7 +50,7 @@ public class PlayField extends AppCompatActivity  {
 
         onPause();
         intent = new Intent(this, ShakeActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, NUMBER_IDENTIFIER);
 
 
 
@@ -65,5 +68,15 @@ public class PlayField extends AppCompatActivity  {
 
         ImageView imageView = (ImageView) findViewById(R.id.iv_red1);
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==NUMBER_IDENTIFIER){
+            if(resultCode==RESULT_OK){
+                this.numberRolled=data.getIntExtra("result",-1);
+            }
+        }
     }
 }
