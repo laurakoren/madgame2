@@ -31,7 +31,7 @@
         </activity>
         <activity android:name=".MultiplayerActivity" />
         <activity android:name=".MultiplayerLobbyActivity" />
-        <activity android:name=".play_field"></activity>
+        <activity android:name=".PlayField"></activity>
     </application>
 
 </manifest>

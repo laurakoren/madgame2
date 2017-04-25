@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import com.example.laura.madgame2.diceRoll.ShakeActivity;
 
-public class play_field extends AppCompatActivity  {
+public class PlayField extends AppCompatActivity  {
 
     private Intent intent;
 
@@ -36,7 +36,7 @@ public class play_field extends AppCompatActivity  {
         super.onResume();
 
 
-        Toast.makeText(play_field.this, shakeActivity.getRolledNumber() + " Gewürfelt!", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(PlayField.this, shakeActivity.getRolledNumber() + " Gewürfelt!", Toast.LENGTH_SHORT).show();
         changePosition();
     }
 

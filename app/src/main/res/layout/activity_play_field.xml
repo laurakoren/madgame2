@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.laura.madgame2.play_field">
+    tools:context="com.example.laura.madgame2.PlayField">
 
     <ImageView
         android:id="@+id/iv_mad_play_field"

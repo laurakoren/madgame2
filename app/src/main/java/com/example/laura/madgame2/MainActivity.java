@@ -27,13 +27,16 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(this, ShakeActivity.class);
         //mit startActitivityForResult Methode könnte Würfelergebnis reingeladen werden
         //startActivity(intent);
-        startActivityForResult(intent, NUMBER_IDENTIFIER);
+        startActivityForResult(intent, NUMBER_IDENTIFIER);                                //'''''''''''
     }
 
     public void setMultiplayerActivity(View view){
         intent = new Intent(this, MultiplayerActivity.class);
         startActivity(intent);
     }
+
+
+                                                                //'''''''''''
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     //####
     public void onClickPlayNow(View view){
-        intent = new Intent(this, play_field.class);
+        intent = new Intent(this, PlayField.class);
         startActivity(intent);
     }
 
