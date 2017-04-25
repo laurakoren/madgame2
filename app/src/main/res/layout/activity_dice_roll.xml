@@ -18,7 +18,8 @@
         app:layout_constraintHorizontal_bias="0.439"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/linearLayout">
 
         <RelativeLayout
             android:layout_width="279dp"
@@ -48,13 +49,31 @@
                 android:id="@+id/dice_view"
                 android:layout_width="match_parent"
                 android:layout_height="77dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="12dp"
                 app:srcCompat="@drawable/dice_standard"
                 tools:layout_editor_absoluteX="149dp"
-                tools:layout_editor_absoluteY="110dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="12dp" />
+                tools:layout_editor_absoluteY="110dp" />
+            <Button
+                android:id="@+id/back_to_playfield"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="zurueck zum Spiel"
+                android:onClick="backToPlayfield"
+                android:layout_marginLeft="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginRight="8dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.409"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true" />
+
+
         </RelativeLayout>
     </LinearLayout>
+
 
 </android.support.constraint.ConstraintLayout>

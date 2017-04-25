@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.example.laura.madgame2.diceRoll.ShakeActivity;
 
 public class MainActivity extends AppCompatActivity {
-
     private Intent intent;
     private static final int NUMBER_IDENTIFIER = 1;
     private int number;
@@ -47,5 +46,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    //####
+    public void onClickPlayNow(View view){
+        intent = new Intent(this, play_field.class);
+        startActivity(intent);
+    }
+
+
 
 }
