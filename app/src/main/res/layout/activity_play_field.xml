@@ -21,7 +21,7 @@
         android:layout_marginRight="8dp" />
 
     <ImageView
-        android:id="@+id/iv_red1"
+        android:id="@+id/iv_player0_figure0"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/fig_red_one"
@@ -36,7 +36,7 @@
         android:clickable="true"/>
 
     <ImageView
-        android:id="@+id/iv_red2"
+        android:id="@+id/iv_player0_figure1"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/figr_red_two"
@@ -49,7 +49,7 @@
         app:layout_constraintHorizontal_bias="0.105"
         app:layout_constraintVertical_bias="0.025"/>
     <ImageView
-        android:id="@+id/iv_red3"
+        android:id="@+id/iv_player0_figure2"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/fig_red_three"
@@ -63,7 +63,7 @@
         app:layout_constraintVertical_bias="0.11"/>
 
     <ImageView
-        android:id="@+id/iv_red4"
+        android:id="@+id/iv_player0_figure3"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/fig_red_four"
@@ -78,7 +78,7 @@
 
 
     <ImageView
-        android:id="@+id/iv_blue1"
+        android:id="@+id/iv_player1_figure0"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/fig_blue_one"
@@ -94,7 +94,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
-        android:id="@+id/iv_blue2"
+        android:id="@+id/iv_player1_figure1"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/fig_blue_two"
@@ -109,7 +109,7 @@
         app:layout_constraintHorizontal_bias="0.98"
         app:layout_constraintVertical_bias="0.0" />
     <ImageView
-        android:id="@+id/iv_blue3"
+        android:id="@+id/iv_player1_figure2"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/fig_blue_three"
@@ -125,7 +125,7 @@
         app:layout_constraintVertical_bias="0.089999974" />
 
     <ImageView
-        android:id="@+id/iv_blue4"
+        android:id="@+id/iv_player1_figure3"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/fig_blue_four"
@@ -142,7 +142,7 @@
 
 
     <ImageView
-        android:id="@+id/iv_green1"
+        android:id="@+id/iv_player2_figure0"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/fig_green_one"
@@ -156,7 +156,7 @@
         app:layout_constraintVertical_bias="0.865"/>
 
     <ImageView
-        android:id="@+id/iv_green2"
+        android:id="@+id/iv_player2_figure1"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/fig_green_two"
@@ -169,7 +169,7 @@
         app:layout_constraintHorizontal_bias="0.98"
         app:layout_constraintVertical_bias="0.865"/>
     <ImageView
-        android:id="@+id/iv_green3"
+        android:id="@+id/iv_player2_figure2"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/fig_green_three"
@@ -183,7 +183,7 @@
         app:layout_constraintVertical_bias="0.96"/>
 
     <ImageView
-        android:id="@+id/iv_green4"
+        android:id="@+id/iv_player2_figure3"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/fig_green_four"
@@ -197,7 +197,7 @@
         app:layout_constraintVertical_bias="0.965"/>
 
     <ImageView
-        android:id="@+id/iv_yellow1"
+        android:id="@+id/iv_player3_figure0"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/fig_yellow_one"
@@ -211,7 +211,7 @@
         app:layout_constraintVertical_bias="0.865"/>
 
     <ImageView
-        android:id="@+id/iv_yellow2"
+        android:id="@+id/iv_player3_figure1"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/fig_yellow_two"
@@ -224,7 +224,7 @@
         app:layout_constraintHorizontal_bias="0.105"
         app:layout_constraintVertical_bias="0.865"/>
     <ImageView
-        android:id="@+id/iv_yellow3"
+        android:id="@+id/iv_player3_figure2"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/fig_yellow_three"
@@ -238,7 +238,7 @@
         app:layout_constraintVertical_bias="0.96"/>
 
     <ImageView
-        android:id="@+id/iv_yellow4"
+        android:id="@+id/iv_player3_figure3"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/fig_yellow_four"
@@ -255,7 +255,7 @@
     <!-- Spielfelder -->
 
     <ImageView
-        android:id="@+id/iv_field1"
+        android:id="@+id/iv_field0"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/clear_circle"
@@ -269,7 +269,7 @@
         app:layout_constraintVertical_bias="0.025"/>
 
     <ImageView
-        android:id="@+id/iv_field2"
+        android:id="@+id/iv_field1"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/clear_circle"
@@ -282,7 +282,7 @@
         app:layout_constraintHorizontal_bias="0.595"
         app:layout_constraintVertical_bias="0.11"/>
     <ImageView
-        android:id="@+id/iv_field3"
+        android:id="@+id/iv_field2"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/clear_circle"
@@ -296,7 +296,7 @@
         app:layout_constraintVertical_bias="0.195"/>
 
     <ImageView
-        android:id="@+id/iv_field4"
+        android:id="@+id/iv_field3"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/clear_circle"
@@ -310,7 +310,7 @@
         app:layout_constraintVertical_bias="0.285"/>
 
     <ImageView
-        android:id="@+id/iv_field5"
+        android:id="@+id/iv_field4"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/clear_circle"
@@ -324,7 +324,7 @@
         app:layout_constraintVertical_bias="0.395"/>
 
     <ImageView
-        android:id="@+id/iv_field6"
+        android:id="@+id/iv_field5"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/clear_circle"
@@ -338,7 +338,7 @@
         app:layout_constraintVertical_bias="0.395"/>
 
     <ImageView
-        android:id="@+id/iv_field7"
+        android:id="@+id/iv_field6"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/clear_circle"
@@ -353,7 +353,7 @@
 
 
     <ImageView
-        android:id="@+id/iv_field8"
+        android:id="@+id/iv_field7"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/clear_circle"
@@ -368,7 +368,7 @@
 
 
     <ImageView
-        android:id="@+id/iv_field9"
+        android:id="@+id/iv_field8"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/clear_circle"
@@ -382,7 +382,7 @@
         app:layout_constraintVertical_bias="0.395"/>
 
     <ImageView
-        android:id="@+id/iv_field10"
+        android:id="@+id/iv_field9"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/clear_circle"
@@ -396,7 +396,7 @@
         app:layout_constraintVertical_bias="0.49"/>
 
     <ImageView
-        android:id="@+id/iv_field11"
+        android:id="@+id/iv_field10"
         android:layout_width="25dp"
         android:layout_height="25dp"
         app:srcCompat="@drawable/clear_circle"
@@ -473,8 +473,22 @@
         android:text="Würfeln"
 
         android:onClick="diceRole"
-        tools:layout_editor_absoluteX="245dp"
-        tools:layout_editor_absoluteY="1dp" />
+        android:layout_marginLeft="20dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="14dp"
+
+        android:layout_marginTop="8dp"
+        android:onClick="testAction"
+        android:text="Test"
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>
