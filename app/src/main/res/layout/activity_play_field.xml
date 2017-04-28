@@ -473,8 +473,10 @@
         android:text="Würfeln"
 
         android:onClick="diceRole"
-        tools:layout_editor_absoluteX="245dp"
-        tools:layout_editor_absoluteY="1dp" />
+        app:layout_constraintRight_toLeftOf="@+id/guideline15"
+        android:layout_marginRight="14dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp" />
 
 
 </android.support.constraint.ConstraintLayout>

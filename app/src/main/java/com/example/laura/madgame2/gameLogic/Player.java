@@ -30,7 +30,7 @@ public class Player {
             Figure fig33 = new Figure();
             Figure fig34 = new Figure();
 
-        }else if(playernr==2){
+        }else if(playernr==4){
             Figure fig41 = new Figure();
             Figure fig42 = new Figure();
             Figure fig43 = new Figure();

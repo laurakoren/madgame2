@@ -4,17 +4,14 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.laura.madgame2.diceRoll.ShakeActivity;
+import com.example.laura.madgame2.diceRoll.RollDiceActivity;
 
 public class PlayField extends AppCompatActivity  {
 
     private Intent intent;
 
-    private ShakeActivity shakeActivity = new ShakeActivity();
+    private RollDiceActivity shakeActivity;
 
     private static final int NUMBER_IDENTIFIER = 1;
 
@@ -25,6 +22,7 @@ public class PlayField extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_field);
+        this.shakeActivity=new RollDiceActivity();
     }
 
     @Override
@@ -49,7 +47,7 @@ public class PlayField extends AppCompatActivity  {
     public void diceRole (View view){
 
         onPause();
-        intent = new Intent(this, ShakeActivity.class);
+        intent = new Intent(this, RollDiceActivity.class);
         startActivityForResult(intent, NUMBER_IDENTIFIER);
 
 
@@ -65,8 +63,6 @@ public class PlayField extends AppCompatActivity  {
          * Implementierung: onGoing
          *
          */
-
-        ImageView imageView = (ImageView) findViewById(R.id.iv_red1);
 
     }
 

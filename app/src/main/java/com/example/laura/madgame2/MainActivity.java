@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 
-import com.example.laura.madgame2.diceRoll.ShakeActivity;
+import com.example.laura.madgame2.diceRoll.RollDiceActivity;
 
 public class MainActivity extends AppCompatActivity {
     private Intent intent;
@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void setRollDiceActivity(View view){
-        intent = new Intent(this, ShakeActivity.class);
+        intent = new Intent(this, RollDiceActivity.class);
         //mit startActitivityForResult Methode könnte Würfelergebnis reingeladen werden
         //startActivity(intent);
         startActivityForResult(intent, NUMBER_IDENTIFIER);                                //'''''''''''

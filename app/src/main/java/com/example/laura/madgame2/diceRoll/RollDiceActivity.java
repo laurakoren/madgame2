@@ -1,6 +1,5 @@
 package com.example.laura.madgame2.diceRoll;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -23,7 +22,7 @@ import com.example.laura.madgame2.R;
 import java.util.Random;
 
 
-public class ShakeActivity extends AppCompatActivity {
+public class RollDiceActivity extends AppCompatActivity {
 
     private Button roll_button;
 
@@ -66,11 +65,10 @@ public class ShakeActivity extends AppCompatActivity {
                 doAnimationAndSound();
                 //wird hier extra nochmal auf false gesetzt, falls im vorherigen Zug gecheated wurde? - Unnötig?
                 cheated = false;
-                Toast.makeText(ShakeActivity.this, rolledNumber + " Gewürfelt!", Toast.LENGTH_SHORT).show();
-                if(rolledNumber!=6) {
-                    setButtonsOff();
-                    sendData();
-                }
+                Toast.makeText(RollDiceActivity.this, rolledNumber + " Gewürfelt!", Toast.LENGTH_SHORT).show();
+                setButtonsOff();
+                sendData();
+
 
             }
         });
@@ -82,7 +80,7 @@ public class ShakeActivity extends AppCompatActivity {
                 final CharSequence numbers[] = new CharSequence[] {"1", "2", "3", "4", "5", "6"};
 
                 //DialogBox wo man eintragen kann welche Zahl man gerne würfeln würde.
-                AlertDialog.Builder builder = new AlertDialog.Builder(ShakeActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(RollDiceActivity.this);
                 builder.setTitle("Wähle die Zahl aus die du würfeln möchtest!");
                 builder.setItems(numbers, new DialogInterface.OnClickListener() {
                     @Override
@@ -91,14 +89,9 @@ public class ShakeActivity extends AppCompatActivity {
                         rolledNumber = Integer.parseInt(numbers[which].toString());
                         doAnimationAndSound();
                         cheated = true;
-                        if(rolledNumber!=6) {
-                            setButtonsOff();
-                            sendData();
-                            cheated=true;
-                        }  else if (rolledNumber==6){       //Es soll nur 1x ein 6er geschummelt werden können
-                            cheat_button.setEnabled(false);
+                        setButtonsOff();
+                        sendData();
 
-                        }
                     }
                 });
                 builder.show();
@@ -115,10 +108,9 @@ public class ShakeActivity extends AppCompatActivity {
                 rolledNumber = randomNumber.nextInt(6) + 1; //nextInt(6) gibt Zahlen von 0 bis 5 -> daher + 1
                 doAnimationAndSound();
                 cheated = false; //redundant?
-                if(rolledNumber!=6) {
-                    setButtonsOff();
-                    sendData();
-                }
+                setButtonsOff();
+                sendData();
+
             }
         });
 
@@ -175,10 +167,9 @@ public class ShakeActivity extends AppCompatActivity {
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("result",getRolledNumber());
                 setResult(RESULT_OK,returnIntent);
-                //wenn 1,2,3,4 oder 5 gewürfelt wurde, soll Fenster geschlossen werden
-                if(getRolledNumber()!=6){
-                    finish();
-                }
+                //Fenster schließen nach dem Würfeln
+                finish();
+
 
             }
         }, 3000);
