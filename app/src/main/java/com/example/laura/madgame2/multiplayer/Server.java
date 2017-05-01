@@ -42,7 +42,7 @@ public class Server extends Thread {
     private ServerSocket serverSocket;
     private int port;
     private String ip;
-    private List<Client> clients;
+    private List<EchoClient> clients;
     private int maxPlayer = 3;
     private int joinedPlayers = 0;
     private static boolean serverRunning = false;
@@ -80,28 +80,24 @@ public class Server extends Thread {
                 clientSocket = serverSocket.accept();
 
                 if (clientSocket != null) {
-                    Client newPlayer = new Client(clientSocket);
+                    EchoClient eClient = new EchoClient(clientSocket);
+                    eClient.start();
                     Thread.sleep(2000);
-                    clients.add(newPlayer);
-                  //  clients.get(joinedPlayers).start();
-                    String name = "";
-                    BufferedReader br = new BufferedReader(new InputStreamReader(newPlayer.getClientSocket().getInputStream()));
-                    PrintWriter pr = new PrintWriter(newPlayer.getClientSocket().getOutputStream());
-                    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(newPlayer.getClientSocket().getOutputStream()));
-                    while (name == "") {
-                        name = br.readLine();
-                    }
-                    clients.get(joinedPlayers).setPlayerName(name);
+                    clients.add(eClient);
                     MultiplayerLobbyActivity multiLobby = (MultiplayerLobbyActivity) ActivityUtils.getCurrentActivity();
-                    multiLobby.runThread(joinedPlayers+1, name);
-                    for(Client c : clients){
-                        bw.write(c.getPlayerName());
+                    while (eClient.getPlayername() == "") {
+                        Thread.sleep(100);
                     }
-                    bw.write(playerName);
-                    bw.flush();
-                    Log.d(TAG, "send Names");
+
+                    multiLobby.updateNames(joinedPlayers + 1, eClient.getPlayername());
+                    for (EchoClient c : clients) {
+                        c.sendString(getPlayerName());
+                        for (int i = 0; i < clients.size(); i++) {
+                            c.sendString(clients.get(i).getPlayername());
+                        }
+                    }
+
                     joinedPlayers++;
-                    clientSocket = null;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -177,7 +173,7 @@ public class Server extends Thread {
         return null;
     }
 
-    public Client getClient(int number) {
+    public EchoClient getClient(int number) {
         if (number < 0 || number > 3) {
             return null;
         }
@@ -194,12 +190,20 @@ public class Server extends Thread {
 
     public String getPlayerName() {
         if (playerName == "") {
-            return "Player" + (int) (Math.random() * 100);
+            playerName = "Player" + (int) (Math.random() * 100);
+            return  playerName;
         }
         return playerName;
     }
 
+
     public void setPlayerName(String playerName) {
         this.playerName = playerName;
+    }
+
+    public void sendStrings(String msg){
+        for(EchoClient c : clients){
+            c.sendString(msg);
+        }
     }
 }
