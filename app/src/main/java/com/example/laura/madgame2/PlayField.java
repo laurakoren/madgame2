@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.laura.madgame2.diceRoll.RollDiceActivity;
-import com.example.laura.madgame2.diceRoll.ShakeActivity;
 import com.example.laura.madgame2.gameLogic.GameLogic;
 import com.example.laura.madgame2.gameLogic.Player;
 
