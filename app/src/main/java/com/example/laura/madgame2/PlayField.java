@@ -1,11 +1,12 @@
 package com.example.laura.madgame2;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.laura.madgame2.diceRoll.RollDiceActivity;
 import com.example.laura.madgame2.diceRoll.ShakeActivity;
 import com.example.laura.madgame2.gameLogic.GameLogic;
 import com.example.laura.madgame2.gameLogic.Player;
@@ -17,7 +18,7 @@ public class PlayField extends AppCompatActivity  {
 
     private Intent intent;
 
-    private ShakeActivity shakeActivity = new ShakeActivity();
+    private RollDiceActivity shakeActivity;
 
     private static final int NUMBER_IDENTIFIER = 1;
 
@@ -33,6 +34,7 @@ public class PlayField extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_field);
+        this.shakeActivity=new RollDiceActivity();
 
         players = new ArrayList<>();
         players.add(new Player(0));
@@ -86,7 +88,7 @@ public class PlayField extends AppCompatActivity  {
     public void diceRole (View view){
 
         onPause();
-        intent = new Intent(this, ShakeActivity.class);
+        intent = new Intent(this, RollDiceActivity.class);
         startActivityForResult(intent, NUMBER_IDENTIFIER);
 
 

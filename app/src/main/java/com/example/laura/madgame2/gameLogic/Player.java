@@ -6,6 +6,7 @@ import java.util.List;
  * Created by Alex on 18.04.2017.
  */
 
+
 public class Player {
 
     private int playerNr;       //Spielernummern 1-4
