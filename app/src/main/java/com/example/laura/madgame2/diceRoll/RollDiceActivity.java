@@ -1,6 +1,7 @@
 package com.example.laura.madgame2.diceRoll;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Context;
@@ -20,8 +21,9 @@ import com.example.laura.madgame2.R;
 
 import java.util.Random;
 
-public class ShakeActivity extends AppCompatActivity {
-    boolean test = false;
+
+public class RollDiceActivity extends AppCompatActivity {
+
     private Button roll_button;
 
     private ImageView dice_view;
@@ -57,15 +59,19 @@ public class ShakeActivity extends AppCompatActivity {
 
         //normaler Würfelbutton
         roll_button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        rolledNumber = randomNumber.nextInt(6) + 1; //nextInt(6) gibt Zahlen von 0 bis 5 -> daher + 1
-                        doAnimationAndSound();
-                        //wird hier extra nochmal auf false gesetzt, falls im vorherigen Zug gecheated wurde
-                        cheated = false;
-                        Toast.makeText(ShakeActivity.this, rolledNumber + " Gewürfelt!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            @Override
+            public void onClick(View v) {
+                rolledNumber = randomNumber.nextInt(6) + 1; //nextInt(6) gibt Zahlen von 0 bis 5 -> daher + 1
+                doAnimationAndSound();
+                //wird hier extra nochmal auf false gesetzt, falls im vorherigen Zug gecheated wurde? - Unnötig?
+                cheated = false;
+                Toast.makeText(RollDiceActivity.this, rolledNumber + " Gewürfelt!", Toast.LENGTH_SHORT).show();
+                setButtonsOff();
+                sendData();
+
+
+            }
+        });
 
         //Button zum Schummeln
         cheat_button.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +80,7 @@ public class ShakeActivity extends AppCompatActivity {
                 final CharSequence numbers[] = new CharSequence[] {"1", "2", "3", "4", "5", "6"};
 
                 //DialogBox wo man eintragen kann welche Zahl man gerne würfeln würde.
-                AlertDialog.Builder builder = new AlertDialog.Builder(ShakeActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(RollDiceActivity.this);
                 builder.setTitle("Wähle die Zahl aus die du würfeln möchtest!");
                 builder.setItems(numbers, new DialogInterface.OnClickListener() {
                     @Override
@@ -83,6 +89,9 @@ public class ShakeActivity extends AppCompatActivity {
                         rolledNumber = Integer.parseInt(numbers[which].toString());
                         doAnimationAndSound();
                         cheated = true;
+                        setButtonsOff();
+                        sendData();
+
                     }
                 });
                 builder.show();
@@ -92,12 +101,16 @@ public class ShakeActivity extends AppCompatActivity {
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mShakeDetector = new ShakeDetector();
+        //Listener für Shake Event! Es wird beim Shaken normal gewürfelt
         mShakeDetector.setOnShakeListener(new OnShakeListener() {
             @Override
             public void onShake(int count) {
                 rolledNumber = randomNumber.nextInt(6) + 1; //nextInt(6) gibt Zahlen von 0 bis 5 -> daher + 1
                 doAnimationAndSound();
-                cheated = false;
+                cheated = false; //redundant?
+                setButtonsOff();
+                sendData();
+
             }
         });
 
@@ -139,6 +152,33 @@ public class ShakeActivity extends AppCompatActivity {
 
     }
 
+    //Buttons sind nach 1-maligem Würfeln nicht mehr klickbar!
+    private void setButtonsOff(){
+        this.cheat_button.setEnabled(false);
+        this.roll_button.setEnabled(false);
+    }
+
+    //Methode um einen Rückgabewert der Acitivity zu setzen
+    private void sendData(){
+        //Fenster soll erst nach gewisser Zeit (hier 3 sek.) geschlossen werden!
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("result",getRolledNumber());
+                setResult(RESULT_OK,returnIntent);
+                //Fenster schließen nach dem Würfeln
+                finish();
+
+
+            }
+        }, 3000);
+    }
+
+
+    public int getRolledNumber(){
+        return this.rolledNumber;
+    }
 
     public boolean getCheat(){
         return this.cheated;
@@ -157,6 +197,8 @@ public class ShakeActivity extends AppCompatActivity {
         mSensorManager.unregisterListener(mShakeDetector);
         super.onPause();
     }
+
+
 
 
 }

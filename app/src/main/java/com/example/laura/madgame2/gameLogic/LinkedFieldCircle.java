@@ -1,5 +1,9 @@
 package com.example.laura.madgame2.gameLogic;
 
+import android.view.View;
+
+import java.util.List;
+
 /**
  * Model for the circular path on the game board.
  */
@@ -8,19 +12,24 @@ class LinkedFieldCircle {
 
     private Field first;
 
-    public LinkedFieldCircle() {
-        this.first = new Field(1);
+    public LinkedFieldCircle(List<View> fields, List<Player> players) {
+        Field dummy = new Field(null);
+        Field current = dummy;
+        Field tmp = null;
 
-        Field current = first;
+        for (int i = 0; i < fields.size(); i++) {
 
-        // platziert alle felder in den ersten paar zeilen der matrix. muss noch umgebaut werden.
-        /*for (int i = 2; i <= 40; i++) {
-            current.setNext(new Field(((i - 1) % 11) + 1, ((i - 1) / 11) + 1));
-            //current.next().setPrev(current);
-
+            current.setNext(new Field(fields.get(i)));
             current = current.next();
-        }*/
 
+            // declare start fields
+            if (i % 10 == 0 && players.get(i/10) != null) {
+                players.get(i / 10).setStartField(current);
+            }
+        }
+
+        // close circle
+        first = dummy.next();
         current.setNext(first);
     }
 

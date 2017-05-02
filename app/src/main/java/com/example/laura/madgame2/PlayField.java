@@ -5,23 +5,64 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.example.laura.madgame2.diceRoll.ShakeActivity;
+import com.example.laura.madgame2.diceRoll.RollDiceActivity;
+import com.example.laura.madgame2.gameLogic.GameLogic;
+import com.example.laura.madgame2.gameLogic.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayField extends AppCompatActivity  {
 
     private Intent intent;
 
-    private ShakeActivity shakeActivity = new ShakeActivity();
+    private RollDiceActivity shakeActivity;
 
+    private static final int NUMBER_IDENTIFIER = 1;
+
+    private int numberRolled;
+
+    private GameLogic gameLogic;
+
+    private List<Player> players;
+
+    private static final int NUM_FIELDS = 11;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_field);
+        this.shakeActivity=new RollDiceActivity();
 
+        players = new ArrayList<>();
+        players.add(new Player(0));
+        players.add(null);
+        players.add(null);
+        players.add(null);
 
+        // save fields into list
+        List<View> fields = new ArrayList<>();
+        for (int i = 0; i < NUM_FIELDS; i++) {
+            fields.add(getViewById("iv_field" + i));
+        }
+
+        // save finish fields into separate list
+        //List<View> finishFields = new ArrayList<View>();
+
+        List<List<View>> figures = new ArrayList<>();
+        List<View> tmp;
+        for (int player = 0; player < 4; player++) {
+            tmp = new ArrayList<>();
+            for (int figure = 0; figure < 4; figure++) {
+                tmp.add(getViewById("iv_player" + player + "_figure" + figure));
+            }
+            figures.add(tmp);
+        }
+
+        gameLogic = new GameLogic(players, fields, figures);
+
+        gameLogic.draw(players.get(0).getFigures().get(0), 6, players.get(0));
     }
 
     @Override
@@ -36,7 +77,7 @@ public class PlayField extends AppCompatActivity  {
         super.onResume();
 
 
-        //Toast.makeText(PlayField.this, shakeActivity.getRolledNumber() + " Gewürfelt!", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(Play_field.this, shakeActivity.getRolledNumber() + " Gewürfelt!", Toast.LENGTH_SHORT).show();
         changePosition();
     }
 
@@ -46,8 +87,8 @@ public class PlayField extends AppCompatActivity  {
     public void diceRole (View view){
 
         onPause();
-        intent = new Intent(this, ShakeActivity.class);
-        startActivity(intent);
+        intent = new Intent(this, RollDiceActivity.class);
+        startActivityForResult(intent, NUMBER_IDENTIFIER);
 
 
 
@@ -63,7 +104,38 @@ public class PlayField extends AppCompatActivity  {
          *
          */
 
-        ImageView imageView = (ImageView) findViewById(R.id.iv_red1);
+        ImageView imageView = (ImageView) findViewById(R.id.iv_player0_figure0);
 
+    }
+
+    public void moveFigureToField(int figureNr, int playerNr, int fieldNr) {
+
+        View fig = getViewById("iv_" + playerNr + "_figure" + figureNr);
+        View field = getViewById("iv_field" + fieldNr);
+
+        fig.setLayoutParams(field.getLayoutParams());
+    }
+
+    public void testAction(View view) {
+        gameLogic.draw(players.get(0).getFigures().get(0), 1, players.get(0));
+    }
+
+    /**
+     * Returns the associated UI element (view) for the given id.
+     * @param id the id name declared in the activities xml layout
+     * @return the View object
+     */
+    private View getViewById(String id) {
+        return findViewById(getResources().getIdentifier(id, "id", getPackageName()));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==NUMBER_IDENTIFIER){
+            if(resultCode==RESULT_OK){
+                this.numberRolled=data.getIntExtra("result",-1);
+            }
+        }
     }
 }

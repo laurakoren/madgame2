@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.laura.madgame2.diceRoll.ShakeActivity"
+    tools:context="com.example.laura.madgame2.diceRoll.RollDiceActivity"
     tools:layout_editor_absoluteY="81dp"
     tools:layout_editor_absoluteX="0dp">
 
@@ -55,21 +55,6 @@
                 app:srcCompat="@drawable/dice_standard"
                 tools:layout_editor_absoluteX="149dp"
                 tools:layout_editor_absoluteY="110dp" />
-            <Button
-                android:id="@+id/back_to_playfield"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="zurueck zum Spiel"
-                android:onClick="backToPlayfield"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                android:layout_marginRight="8dp"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.409"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true" />
 
 
         </RelativeLayout>

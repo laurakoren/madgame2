@@ -1,5 +1,6 @@
 package com.example.laura.madgame2;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,13 +20,15 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
     private Server server;
     private TextView hostIp;
     private Role role;
-    private TextView[] playerNames;
+    public TextView[] playerNames;
+    Activity m;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ActivityUtils.setCurrentActivity(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiplayer_lobby);
+        m = this;
         playerNames = new TextView[4];
         playerNames[0] = (TextView) findViewById(R.id.txtPlayerOne);
         playerNames[1] = (TextView) findViewById(R.id.txtPlayerTwo);
@@ -51,14 +54,27 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void runThread(final int pos, final String name) {
-        runOnUiThread(new Runnable() {
+    public void updateNames(final String[] names) {
+        this.runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                for(int i =0; i<names.length; i++) {
+                    playerNames[i].setText(names[i]);
+                }
+            }
+        });
+    }
+
+    public void updateNames(final int pos, final String name) {
+        this.runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
                 playerNames[pos].setText(name);
             }
         });
+
 
     }
 

@@ -1,48 +1,71 @@
 package com.example.laura.madgame2.gameLogic;
 
+import android.view.View;
+import android.view.ViewGroup;
+
 /**
  * A single field on the game board. Can be occupied by a player's figure.
  */
 public class Field {
-    //private int matrixCoordsX;
-    //private int matrixCoordsY;
-    private int fieldNr;
 
     private Field next;
-    //private Field prev;
 
     private Figure figure;
 
-    // TODO: abzweigungen (->Zielfelder)
+    private View view;
 
+    private boolean isFinish;
+    private Field fork;
 
-    public Field(int fieldNr) {
-       // this.matrixCoordsX = matrixCoordsX;
-       // this.matrixCoordsY = matrixCoordsY;
-        this.fieldNr=fieldNr;
+    Field(View view) {
+        this.view = view;
         this.figure = null;
+
+        this.fork = null;
+        this.isFinish = false;
     }
 
-    public Field next() {
+    /**
+     * Returns the next Field for the given Player.
+     * That is, if the Player were to move a piece from this Field with a dice roll of one, the Field the piece would land on matches this methods return value.
+     */
+    Field next(Player player) {
+        if (player == null)
+            return next;
+
+        // TODO: abzweigungen (->Zielfelder)
+
         return next;
     }
 
-    public void setNext(Field next) {
+    Field next() {
+        return next;
+    }
+
+    void setNext(Field next) {
         this.next = next;
     }
 
-    public boolean hasFigure() {
+    boolean hasFigure() {
         return this.figure != null;
     }
 
-    public Figure getFigure() {
+    Figure getFigure() {
         return figure;
     }
 
-    public void setFigure(Figure figure) {
+    /**
+     * Puts a Figure on this Field.
+     * Note: It is recommended to do this by calling moveTo on a given Figure.
+     *
+     * @param figure the Figure to place on this Field
+     */
+    void setFigure(Figure figure) {
         this.figure = figure;
-        //if (this.figure.getField() != this)
-        //    this.figure.setField(this);
+    }
+
+    ViewGroup.LayoutParams getViewLayout() {
+        return view.getLayoutParams();
     }
 
 
