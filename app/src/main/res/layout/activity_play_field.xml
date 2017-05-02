@@ -49,7 +49,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.105"
-        app:layout_constraintVertical_bias="0.025"/>
+        app:layout_constraintVertical_bias="0.025"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_red3"
         android:layout_width="25dp"
@@ -62,7 +63,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.005"
-        app:layout_constraintVertical_bias="0.11"/>
+        app:layout_constraintVertical_bias="0.11"
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/iv_red4"
@@ -76,7 +78,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.105"
-        app:layout_constraintVertical_bias="0.11"/>
+        app:layout_constraintVertical_bias="0.11"
+        android:clickable="true"/>
 
 
     <ImageView
@@ -93,7 +96,8 @@
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         android:layout_marginTop="8dp"
         app:layout_constraintHorizontal_bias="0.87"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/iv_blue2"
@@ -109,7 +113,8 @@
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         android:layout_marginTop="8dp"
         app:layout_constraintHorizontal_bias="0.98"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_blue3"
         android:layout_width="25dp"
@@ -124,7 +129,8 @@
         app:layout_constraintRight_toLeftOf="@+id/guideline15"
         android:layout_marginRight="8dp"
         app:layout_constraintHorizontal_bias="0.87"
-        app:layout_constraintVertical_bias="0.089999974" />
+        app:layout_constraintVertical_bias="0.089999974"
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/iv_blue4"
@@ -140,7 +146,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         android:layout_marginTop="8dp"
-        app:layout_constraintVertical_bias="0.09" />
+        app:layout_constraintVertical_bias="0.09"
+        android:clickable="true"/>
 
 
     <ImageView
@@ -155,7 +162,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.88"
-        app:layout_constraintVertical_bias="0.865"/>
+        app:layout_constraintVertical_bias="0.865"
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/iv_green2"
@@ -169,7 +177,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.98"
-        app:layout_constraintVertical_bias="0.865"/>
+        app:layout_constraintVertical_bias="0.865"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_green3"
         android:layout_width="25dp"
@@ -182,7 +191,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.88"
-        app:layout_constraintVertical_bias="0.96"/>
+        app:layout_constraintVertical_bias="0.96"
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/iv_green4"
@@ -196,7 +206,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.98"
-        app:layout_constraintVertical_bias="0.965"/>
+        app:layout_constraintVertical_bias="0.965"
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/iv_yellow1"
@@ -210,7 +221,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.01"
-        app:layout_constraintVertical_bias="0.865"/>
+        app:layout_constraintVertical_bias="0.865"
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/iv_yellow2"
@@ -224,7 +236,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.105"
-        app:layout_constraintVertical_bias="0.865"/>
+        app:layout_constraintVertical_bias="0.865"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_yellow3"
         android:layout_width="25dp"
@@ -237,7 +250,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.01"
-        app:layout_constraintVertical_bias="0.96"/>
+        app:layout_constraintVertical_bias="0.96"
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/iv_yellow4"
@@ -251,7 +265,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.105"
-        app:layout_constraintVertical_bias="0.965"/>
+        app:layout_constraintVertical_bias="0.965"
+        android:clickable="true"/>
 
 
     <!-- Spielfelder -->
@@ -268,7 +283,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.595"
-        app:layout_constraintVertical_bias="0.025"/>
+        app:layout_constraintVertical_bias="0.025"
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/iv_field2"
@@ -282,7 +298,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.595"
-        app:layout_constraintVertical_bias="0.11"/>
+        app:layout_constraintVertical_bias="0.11"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field3"
         android:layout_width="25dp"
@@ -295,7 +312,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.595"
-        app:layout_constraintVertical_bias="0.195"/>
+        app:layout_constraintVertical_bias="0.195"
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/iv_field4"
@@ -309,7 +327,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.595"
-        app:layout_constraintVertical_bias="0.285"/>
+        app:layout_constraintVertical_bias="0.285"
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/iv_field5"
@@ -323,7 +342,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.595"
-        app:layout_constraintVertical_bias="0.396"/>
+        app:layout_constraintVertical_bias="0.396"
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/iv_field6"
@@ -337,7 +357,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.685"
-        app:layout_constraintVertical_bias="0.395"/>
+        app:layout_constraintVertical_bias="0.395"
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/iv_field7"
@@ -351,7 +372,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.78"
-        app:layout_constraintVertical_bias="0.395"/>
+        app:layout_constraintVertical_bias="0.395"
+        android:clickable="true"/>
 
 
     <ImageView
@@ -366,7 +388,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.88"
-        app:layout_constraintVertical_bias="0.395"/>
+        app:layout_constraintVertical_bias="0.395"
+        android:clickable="true"/>
 
 
     <ImageView
@@ -381,7 +404,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.97"
-        app:layout_constraintVertical_bias="0.395"/>
+        app:layout_constraintVertical_bias="0.395"
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/iv_field10"
@@ -395,7 +419,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.975"
-        app:layout_constraintVertical_bias="0.49"/>
+        app:layout_constraintVertical_bias="0.49"
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/iv_field11"
@@ -409,7 +434,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.975"
-        app:layout_constraintVertical_bias="0.585"/>
+        app:layout_constraintVertical_bias="0.585"
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/iv_field12"
@@ -423,7 +449,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.88"
-        app:layout_constraintVertical_bias="0.585"/>
+        app:layout_constraintVertical_bias="0.585"
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/iv_field13"
@@ -437,7 +464,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.78"
-        app:layout_constraintVertical_bias="0.585"/>
+        app:layout_constraintVertical_bias="0.585"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field14"
         android:layout_width="25dp"
@@ -450,7 +478,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.685"
-        app:layout_constraintVertical_bias="0.585"/>
+        app:layout_constraintVertical_bias="0.585"
+        android:clickable="true"/>
     <ImageView
     android:id="@+id/iv_field15"
     android:layout_width="25dp"
@@ -463,7 +492,8 @@
     app:layout_constraintBottom_toTopOf="@+id/guideline18"
     app:layout_constraintTop_toTopOf="@+id/guideline17"
     app:layout_constraintHorizontal_bias="0.595"
-    app:layout_constraintVertical_bias="0.585"/>
+    app:layout_constraintVertical_bias="0.585"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field16"
         android:layout_width="25dp"
@@ -476,7 +506,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.595"
-        app:layout_constraintVertical_bias="0.68"/>
+        app:layout_constraintVertical_bias="0.68"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field17"
         android:layout_width="25dp"
@@ -489,7 +520,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.595"
-        app:layout_constraintVertical_bias="0.77"/>
+        app:layout_constraintVertical_bias="0.77"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field18"
         android:layout_width="25dp"
@@ -502,7 +534,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.595"
-        app:layout_constraintVertical_bias="0.865"/>
+        app:layout_constraintVertical_bias="0.865"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field19"
         android:layout_width="25dp"
@@ -515,7 +548,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.595"
-        app:layout_constraintVertical_bias="0.96"/>
+        app:layout_constraintVertical_bias="0.96"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field20"
         android:layout_width="25dp"
@@ -528,7 +562,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0.96"/>
+        app:layout_constraintVertical_bias="0.96"
+        android:clickable="true"/>
 
 
     <ImageView
@@ -543,7 +578,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.395"
-        app:layout_constraintVertical_bias="0.96"/>
+        app:layout_constraintVertical_bias="0.96"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field22"
         android:layout_width="25dp"
@@ -556,7 +592,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.395"
-        app:layout_constraintVertical_bias="0.865"/>
+        app:layout_constraintVertical_bias="0.865"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field23"
         android:layout_width="25dp"
@@ -569,7 +606,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.395"
-        app:layout_constraintVertical_bias="0.775"/>
+        app:layout_constraintVertical_bias="0.775"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field24"
         android:layout_width="25dp"
@@ -582,7 +620,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.395"
-        app:layout_constraintVertical_bias="0.68"/>
+        app:layout_constraintVertical_bias="0.68"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field25"
         android:layout_width="25dp"
@@ -595,7 +634,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.395"
-        app:layout_constraintVertical_bias="0.585"/>
+        app:layout_constraintVertical_bias="0.585"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field26"
         android:layout_width="25dp"
@@ -608,7 +648,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.285"
-        app:layout_constraintVertical_bias="0.585"/>
+        app:layout_constraintVertical_bias="0.585"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field27"
         android:layout_width="25dp"
@@ -621,7 +662,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.185"
-        app:layout_constraintVertical_bias="0.585"/>
+        app:layout_constraintVertical_bias="0.585"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field28"
         android:layout_width="25dp"
@@ -634,7 +676,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.095"
-        app:layout_constraintVertical_bias="0.585"/>
+        app:layout_constraintVertical_bias="0.585"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field29"
         android:layout_width="25dp"
@@ -647,7 +690,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.01"
-        app:layout_constraintVertical_bias="0.585"/>
+        app:layout_constraintVertical_bias="0.585"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field30"
         android:layout_width="25dp"
@@ -660,7 +704,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.01"
-        app:layout_constraintVertical_bias="0.49"/>
+        app:layout_constraintVertical_bias="0.49"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field31"
         android:layout_width="25dp"
@@ -673,7 +718,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.01"
-        app:layout_constraintVertical_bias="0.4"/>
+        app:layout_constraintVertical_bias="0.4"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field32"
         android:layout_width="25dp"
@@ -686,7 +732,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintVertical_bias="0.4"/>
+        app:layout_constraintVertical_bias="0.4"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field33"
         android:layout_width="25dp"
@@ -699,7 +746,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.19"
-        app:layout_constraintVertical_bias="0.4"/>
+        app:layout_constraintVertical_bias="0.4"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field34"
         android:layout_width="25dp"
@@ -712,7 +760,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.287"
-        app:layout_constraintVertical_bias="0.4"/>
+        app:layout_constraintVertical_bias="0.4"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field35"
         android:layout_width="25dp"
@@ -725,7 +774,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.39"
-        app:layout_constraintVertical_bias="0.4"/>
+        app:layout_constraintVertical_bias="0.4"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field36"
         android:layout_width="25dp"
@@ -738,7 +788,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.39"
-        app:layout_constraintVertical_bias="0.3"/>
+        app:layout_constraintVertical_bias="0.3"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field37"
         android:layout_width="25dp"
@@ -751,7 +802,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.39"
-        app:layout_constraintVertical_bias="0.2"/>
+        app:layout_constraintVertical_bias="0.2"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field38"
         android:layout_width="25dp"
@@ -764,7 +816,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.39"
-        app:layout_constraintVertical_bias="0.11"/>
+        app:layout_constraintVertical_bias="0.11"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field39"
         android:layout_width="25dp"
@@ -777,7 +830,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.39"
-        app:layout_constraintVertical_bias="0.023"/>
+        app:layout_constraintVertical_bias="0.023"
+        android:clickable="true"/>
     <ImageView
         android:id="@+id/iv_field40"
         android:layout_width="25dp"
@@ -790,7 +844,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0.023"/>
+        app:layout_constraintVertical_bias="0.023"
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/iv_bluefin1"
