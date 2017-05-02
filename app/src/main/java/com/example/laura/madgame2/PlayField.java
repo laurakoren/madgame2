@@ -27,7 +27,7 @@ public class PlayField extends AppCompatActivity  {
 
     private List<Player> players;
 
-    private static final int NUM_FIELDS = 11;
+    private static final int NUM_FIELDS = 40;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +84,7 @@ public class PlayField extends AppCompatActivity  {
 
 
     @SuppressWarnings("deprecation")
-    public void diceRole (View view){
+    public void diceRoll(View view){
 
         onPause();
         intent = new Intent(this, RollDiceActivity.class);
@@ -135,6 +135,7 @@ public class PlayField extends AppCompatActivity  {
         if(requestCode==NUMBER_IDENTIFIER){
             if(resultCode==RESULT_OK){
                 this.numberRolled=data.getIntExtra("result",-1);
+                gameLogic.draw(players.get(0).getFigures().get(0), this.numberRolled, players.get(0));
             }
         }
     }
