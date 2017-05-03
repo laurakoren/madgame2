@@ -1,4 +1,6 @@
 package com.example.laura.madgame2;
+import android.view.View.OnClickListener;
+import android.widget.Toast;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -63,6 +65,29 @@ public class PlayField extends AppCompatActivity  {
         gameLogic = new GameLogic(players, fields, figures);
 
         gameLogic.draw(players.get(0).getFigures().get(0), 6, players.get(0));
+
+
+        //Onclick Listener für die einzelnen Spielfelder mit Figuren drauf
+
+        ImageView imageView = (ImageView) getViewById("iv_player0_figure0");
+        ImageView imageView2 = (ImageView) getViewById("iv_player0_figure1");
+
+        imageView.setOnClickListener(new OnClickListener() {
+
+            public void onClick(View v) {
+                Toast.makeText(getApplication(), "iv_player0_figure0",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        imageView2.setOnClickListener(new OnClickListener() {
+
+            public void onClick(View v) {
+                Toast.makeText(getApplication(), "iv_player0_figure1",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override
