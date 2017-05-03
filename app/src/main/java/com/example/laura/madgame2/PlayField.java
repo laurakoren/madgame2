@@ -145,6 +145,13 @@ public class PlayField extends AppCompatActivity  {
         gameLogic.draw(players.get(0).getFigures().get(0), 1, players.get(0));
     }
 
+    public void getInfo(View view){
+        int pt1=players.get(0).getPlayerNr();
+        players.get(0).getFigures().get(0);
+        Toast.makeText(getApplication(), pt1+" "+players.get(0).getFigures().get(0),
+                Toast.LENGTH_SHORT).show();
+    }
+
     /**
      * Returns the associated UI element (view) for the given id.
      * @param id the id name declared in the activities xml layout

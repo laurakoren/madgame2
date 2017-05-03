@@ -97,7 +97,8 @@
         android:layout_marginTop="8dp"
         app:layout_constraintHorizontal_bias="0.87"
         app:layout_constraintVertical_bias="0.0"
-        android:clickable="true"/>
+        android:clickable="true"
+        android:onClick="getInfo"/>
 
     <ImageView
         android:id="@+id/iv_player0_figure1"
@@ -130,7 +131,10 @@
         android:layout_marginRight="8dp"
         app:layout_constraintHorizontal_bias="0.87"
         app:layout_constraintVertical_bias="0.089999974"
-        android:clickable="true"/>
+        android:clickable="true"
+        android:onClick="getInfo"
+        />
+
 
     <ImageView
         android:id="@+id/iv_player0_figure3"
