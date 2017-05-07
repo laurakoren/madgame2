@@ -129,10 +129,12 @@ public class PlayField extends AppCompatActivity  {
 
     //Onclick Methode für die einzelnen Spielfelder mit Figuren drauf
 
-    public void click(View view){
-        int pt1=players.get(0).getPlayerNr();
-        players.get(0).getFigures().get(0);
-        Toast.makeText(getApplication(), pt1+" "+players.get(0).getFigures().get(0),
+    public void click(View viewIn){
+
+        String idOut = viewIn.getResources().getResourceEntryName(viewIn.getId());
+        //int pt1=players.get(0).getPlayerNr();
+        //players.get(0).getFigures().get(0);
+        Toast.makeText(getApplication(), idOut,
                 Toast.LENGTH_SHORT).show();
     }
 
