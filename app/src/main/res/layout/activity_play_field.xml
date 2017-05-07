@@ -98,7 +98,7 @@
         app:layout_constraintHorizontal_bias="0.87"
         app:layout_constraintVertical_bias="0.0"
         android:clickable="true"
-        android:onClick="getInfo"/>
+        android:onClick="click"/>
 
     <ImageView
         android:id="@+id/iv_player0_figure1"
@@ -115,7 +115,8 @@
         android:layout_marginTop="8dp"
         app:layout_constraintHorizontal_bias="0.98"
         app:layout_constraintVertical_bias="0.0"
-        android:clickable="true"/>
+        android:clickable="true"
+        android:onClick="click"/>
     <ImageView
         android:id="@+id/iv_player0_figure2"
         android:layout_width="25dp"
@@ -132,7 +133,7 @@
         app:layout_constraintHorizontal_bias="0.87"
         app:layout_constraintVertical_bias="0.089999974"
         android:clickable="true"
-        android:onClick="getInfo"
+        android:onClick="click"
         />
 
 
@@ -151,7 +152,8 @@
         app:layout_constraintTop_toTopOf="@+id/guideline17"
         android:layout_marginTop="8dp"
         app:layout_constraintVertical_bias="0.09"
-        android:clickable="true"/>
+        android:clickable="true"
+        android:onClick="click"/>
 
 
     <ImageView
