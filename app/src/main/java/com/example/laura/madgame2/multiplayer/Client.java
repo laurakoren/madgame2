@@ -1,6 +1,7 @@
 package com.example.laura.madgame2.multiplayer;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.laura.madgame2.MultiplayerLobbyActivity;
 import com.example.laura.madgame2.utils.ActivityUtils;
@@ -9,6 +10,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -65,7 +67,6 @@ public class Client extends Thread {
             out.flush();
         } catch (IOException e) {
             logger.log(Level.WARNING, "IOException at Client Thread run!" ,e);
-            e.printStackTrace();
         }
         Log.d(TAG, "playername send");
 
@@ -80,10 +81,8 @@ public class Client extends Thread {
 
             } catch (IOException e) {
                 logger.log(Level.WARNING, "IOException at Client Thread run!" ,e);
-                e.printStackTrace();
             } catch (InterruptedException e) {
                 logger.log(Level.WARNING, "Interrupted at Client Thread run!" ,e);
-                e.printStackTrace();
                 Thread.currentThread().interrupt();
             }
         }
@@ -111,14 +110,13 @@ public class Client extends Thread {
             out.flush();
         } catch (IOException e) {
             logger.log(Level.WARNING, "IOException at Client sendingString!" ,e);
-            e.printStackTrace();
         }
 
     }
 
     public static String getPlayerName() {
         if (playerName == "") {
-            playerName = "Player" + (int) (Math.random() * 100);
+            playerName = "Player" + new Random().nextInt(100);
             return playerName;
         }
         return playerName;
@@ -135,10 +133,10 @@ public class Client extends Thread {
             String temp = in.readUTF();
             String[] response = temp.split(";");
             if (response.equals(UpdateTyp.TOAST.toString())) {
+                Log.d(TAG,"GOT "+response);
             }
         } catch (IOException e) {
             logger.log(Level.WARNING, "IOException at Client waitingForResponse!" ,e);
-            e.printStackTrace();
         }
     }
 

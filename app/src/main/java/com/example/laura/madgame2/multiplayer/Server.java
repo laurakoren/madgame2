@@ -14,6 +14,9 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Philipp on 03.04.17.
@@ -31,6 +34,7 @@ public class Server extends Thread {
     private int maxPlayer = 3;
     private int joinedPlayers = 0;
     private static boolean serverRunning = false;
+    private static Logger logger = Logger.getLogger("global");
 
 
     private Server() {
@@ -43,7 +47,7 @@ public class Server extends Thread {
 
             start();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.WARNING, "IOException at Server instantiation!" ,e);
         }
 
     }
@@ -85,7 +89,7 @@ public class Server extends Thread {
                     joinedPlayers++;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.log(Level.WARNING, "Exception at Server Thread run!" ,e);
             }
 
         }
@@ -100,7 +104,7 @@ public class Server extends Thread {
             setServerRunning(false);
             serverSocket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.WARNING, "IOException at Client instantiation!" ,e);
         }
 
     }
@@ -147,13 +151,13 @@ public class Server extends Thread {
                         //filter for ipv4/ipv6
                         if (ia.getAddress().getAddress().length == 4) {
                             //4 for ipv4, 16 for ipv6
-                            return ia.getAddress().getHostAddress().toString();
+                            return ia.getAddress().getHostAddress();
                         }
                     }
                 }
             }
         } catch (SocketException e) {
-            e.printStackTrace();
+            logger.log(Level.WARNING, "SocketException at Server getLocapIp!" ,e);
         }
         return null;
     }
@@ -170,12 +174,12 @@ public class Server extends Thread {
     }
 
     public static void setServerRunning(boolean serverRunning) {
-        serverRunning = serverRunning;
+        Server.serverRunning = serverRunning;
     }
 
     public String getPlayerName() {
         if (playerName == "") {
-            playerName = "Player" + (int) (Math.random() * 100);
+            playerName = "Player" + new Random().nextInt(100);
             return playerName;
         }
         return playerName;
