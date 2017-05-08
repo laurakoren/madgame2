@@ -1103,5 +1103,14 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="8dp" />
 
+    <TextView
+        android:id="@+id/PlayerTurn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="26dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline11"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </android.support.constraint.ConstraintLayout>

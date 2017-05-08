@@ -1,34 +1,22 @@
 package com.example.laura.madgame2.multiplayer;
 
 
-import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
-import android.widget.TextView;
 
-import com.example.laura.madgame2.MultiplayerActivity;
 import com.example.laura.madgame2.MultiplayerLobbyActivity;
-import com.example.laura.madgame2.R;
 import com.example.laura.madgame2.utils.ActivityUtils;
-
-import org.w3c.dom.Text;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Philipp on 03.04.17.
@@ -36,7 +24,7 @@ import java.util.List;
 
 public class Server extends Thread {
 
-    private static String playerName = "";
+    private String playerName = "";
     private static Server instance;
     private final String TAG = "Server";
     private static ServerSocket serverSocket;
@@ -46,6 +34,7 @@ public class Server extends Thread {
     private int maxPlayer = 3;
     private int joinedPlayers = 0;
     private static boolean serverRunning = false;
+    private static Logger logger = Logger.getLogger("global");
 
 
     private Server() {
@@ -58,7 +47,7 @@ public class Server extends Thread {
 
             start();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.WARNING, "IOException at Server instantiation!" ,e);
         }
 
     }
@@ -73,7 +62,7 @@ public class Server extends Thread {
 
     @Override
     public void run() {
-        serverRunning = true;
+        setServerRunning(true);
         while (joinedPlayers < maxPlayer && !serverSocket.isClosed()) {
             try {
                 Socket clientSocket = null;
@@ -100,7 +89,7 @@ public class Server extends Thread {
                     joinedPlayers++;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.log(Level.WARNING, "Exception at Server Thread run!" ,e);
             }
 
         }
@@ -109,13 +98,13 @@ public class Server extends Thread {
         }
     }
 
-    public void shutdown() {
+    public static void shutdown() {
         try {
             instance = null;
+            setServerRunning(false);
             serverSocket.close();
-            serverRunning = false;
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.WARNING, "IOException at Client instantiation!" ,e);
         }
 
     }
@@ -162,13 +151,13 @@ public class Server extends Thread {
                         //filter for ipv4/ipv6
                         if (ia.getAddress().getAddress().length == 4) {
                             //4 for ipv4, 16 for ipv6
-                            return ia.getAddress().getHostAddress().toString();
+                            return ia.getAddress().getHostAddress();
                         }
                     }
                 }
             }
         } catch (SocketException e) {
-            e.printStackTrace();
+            logger.log(Level.WARNING, "SocketException at Server getLocapIp!" ,e);
         }
         return null;
     }
@@ -185,13 +174,13 @@ public class Server extends Thread {
     }
 
     public static void setServerRunning(boolean serverRunning) {
-        serverRunning = serverRunning;
+        Server.serverRunning = serverRunning;
     }
 
     public String getPlayerName() {
         if (playerName == "") {
-            playerName = "Player" + (int) (Math.random() * 100);
-            return  playerName;
+            playerName = "Player" + new Random().nextInt(100);
+            return playerName;
         }
         return playerName;
     }
@@ -201,8 +190,8 @@ public class Server extends Thread {
         this.playerName = playerName;
     }
 
-    public void sendStrings(String msg){
-        for(EchoClient c : clients){
+    public void sendStrings(String msg) {
+        for (EchoClient c : clients) {
             c.sendString(msg);
         }
     }

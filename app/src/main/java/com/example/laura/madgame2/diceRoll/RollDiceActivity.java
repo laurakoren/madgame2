@@ -154,8 +154,8 @@ public class RollDiceActivity extends AppCompatActivity {
 
     //Buttons sind nach 1-maligem Würfeln nicht mehr klickbar!
     private void setButtonsOff(){
-        this.cheat_button.setEnabled(false);
-        this.roll_button.setEnabled(false);
+        this.cheat_button.setClickable(false);
+        this.roll_button.setClickable(false);
     }
 
     //Methode um einen Rückgabewert der Acitivity zu setzen
