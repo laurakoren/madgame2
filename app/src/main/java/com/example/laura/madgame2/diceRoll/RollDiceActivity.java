@@ -172,7 +172,7 @@ public class RollDiceActivity extends AppCompatActivity {
 
 
             }
-        }, 3000);
+        }, 500);
     }
 
 

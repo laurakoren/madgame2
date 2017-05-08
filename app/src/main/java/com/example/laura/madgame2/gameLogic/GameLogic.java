@@ -47,16 +47,15 @@ public class GameLogic {
      *
      * @param figure   the piece to move
      * @param distance the distance to move it
-     * @param player   the player making the move
      * @return true on success, false on failure
      */
-    public boolean draw(Figure figure, int distance, Player player) {
-        if (figure == null || distance < 0)
+    public boolean draw(Figure figure, int distance) {
+        if (figure == null || distance < 0 || distance > 6)
             return false;
 
-        Log.d("LOGIC","msg");
-
         Field current = figure.getField();
+
+        Player player = figure.getPlayer();
 
         // determine where the figure is
         if (current == null) {
