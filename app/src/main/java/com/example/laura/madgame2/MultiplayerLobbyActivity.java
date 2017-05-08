@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.laura.madgame2.multiplayer.Role;
@@ -15,7 +13,7 @@ import com.example.laura.madgame2.utils.ActivityUtils;
 
 public class MultiplayerLobbyActivity extends AppCompatActivity {
 
-    private final String TAG = "MulitplayerLobby";
+    private static final String TAG = "MulitplayerLobby";
     private Intent intent;
     private Server server;
     private TextView hostIp;
@@ -25,7 +23,6 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ActivityUtils.setCurrentActivity(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiplayer_lobby);
         m = this;
@@ -34,6 +31,7 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
         playerNames[1] = (TextView) findViewById(R.id.txtPlayerTwo);
         playerNames[2] = (TextView) findViewById(R.id.txtPlayerThree);
         playerNames[3] = (TextView) findViewById(R.id.txtPlayerFour);
+        ActivityUtils.setCurrentActivity(this);
         if (Server.isServerRunning()) {
             server = Server.getInstance();
             role = Role.Host;
