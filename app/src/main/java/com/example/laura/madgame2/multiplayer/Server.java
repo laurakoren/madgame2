@@ -36,10 +36,10 @@ import java.util.List;
 
 public class Server extends Thread {
 
-    private String playerName = "";
+    private static String playerName = "";
     private static Server instance;
     private final String TAG = "Server";
-    private ServerSocket serverSocket;
+    private static ServerSocket serverSocket;
     private int port;
     private String ip;
     private List<EchoClient> clients;

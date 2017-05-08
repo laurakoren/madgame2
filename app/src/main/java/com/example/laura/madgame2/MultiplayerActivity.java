@@ -1,8 +1,10 @@
 package com.example.laura.madgame2;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,7 +16,8 @@ import com.example.laura.madgame2.utils.NetworkUtils;
 
 public class MultiplayerActivity extends AppCompatActivity {
 
-    private Server server;
+    private static final String TAG ="MultiplayerActivity";
+    private Server server = null;
     private Intent intent;
     private Client client;
 
@@ -34,12 +37,14 @@ public class MultiplayerActivity extends AppCompatActivity {
         EditText inputIp = (EditText) findViewById(R.id.inputIp);
         String ipText = inputIp.getText().toString();
         if (NetworkUtils.checkIp(ipText)) {
-            String ipPort[] = ipText.split(":");
+            String[] ipPort = ipText.split(":");
             new AsyncClientTask().execute(ipPort[0], ipPort[1]);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                intent = new Intent(this, MainActivity.class);
+                Log.e(TAG, e.toString());
+                startActivity(intent);
             }
             client = client.getInstance();
             client.start();

@@ -1,26 +1,14 @@
 package com.example.laura.madgame2.multiplayer;
 
-import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.laura.madgame2.MultiplayerLobbyActivity;
 import com.example.laura.madgame2.utils.ActivityUtils;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.SocketAddress;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Philipp on 05.04.17.
@@ -28,11 +16,10 @@ import java.util.Set;
 
 public class Client extends Thread {
 
-    private final String TAG = "Client";
+    private static  final String TAG = "Client";
 
+    private static String playerName = "";
     private Socket clientSocket;
-    private String playerName = "";
-    private boolean connected;
     private DataInputStream in;
     private DataOutputStream out;
     private int port;
@@ -48,22 +35,21 @@ public class Client extends Thread {
             in = new DataInputStream(clientSocket.getInputStream());
             out = new DataOutputStream(clientSocket.getOutputStream());
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, e.toString());
         }
     }
 
-    public synchronized static void setInstance(Client client) {
+    public static synchronized  void setInstance(Client client) {
         instance = client;
     }
 
-    public synchronized static Client getInstance() {
+    public static synchronized  Client getInstance() {
         return instance;
     }
 
 
     @Override
     public void run() {
-        MultiplayerLobbyActivity multiLobby = (MultiplayerLobbyActivity) ActivityUtils.getCurrentActivity();
         String[] playerNames = new String[4];
         String response = null;
 
@@ -71,9 +57,12 @@ public class Client extends Thread {
             out.writeUTF(getPlayerName());
             out.flush();
         } catch (IOException e) {
+            Log.e(TAG, e.toString());
             e.printStackTrace();
         }
         Log.d(TAG, "playername send");
+
+
 
         int count = 0;
         while (!gameStarted) {
@@ -84,8 +73,10 @@ public class Client extends Thread {
                 ((MultiplayerLobbyActivity) ActivityUtils.getCurrentActivity()).updateNames(playerNames);
 
             } catch (IOException e) {
+                Log.e(TAG, e.toString());
                 e.printStackTrace();
             } catch (InterruptedException e) {
+                Log.e(TAG, e.toString());
                 e.printStackTrace();
             }
         }
@@ -105,17 +96,7 @@ public class Client extends Thread {
         this.clientSocket = clientSocket;
     }
 
-    public String getPlayerName() {
-        if (playerName == "") {
-            playerName = "Player" + (int) (Math.random() * 100);
-            return playerName;
-        }
-        return playerName;
-    }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
-    }
 
     public boolean isConnected() {
         return clientSocket.isConnected();
@@ -131,6 +112,19 @@ public class Client extends Thread {
 
     }
 
+    public static String getPlayerName() {
+        if (playerName == "") {
+            playerName = "Player" + (int) (Math.random() * 100);
+            return playerName;
+        }
+        return playerName;
+    }
+
+    public static void setPlayerName(String playerName) {
+        Client.playerName = playerName;
+    }
+
+
     public void waitForResponse(){
         try {
             Log.d(TAG, "waiting for response");
@@ -139,6 +133,7 @@ public class Client extends Thread {
             if(response.equals(UpdateTyp.TOAST.toString())){
             }
         } catch (IOException e) {
+            Log.e(TAG, e.toString());
             e.printStackTrace();
         }
     }
