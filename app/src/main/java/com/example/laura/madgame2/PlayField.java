@@ -1,14 +1,12 @@
 package com.example.laura.madgame2;
-import android.view.View.OnClickListener;
-import android.widget.TextView;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ImageView;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.laura.madgame2.diceRoll.RollDiceActivity;
 import com.example.laura.madgame2.gameLogic.GameLogic;
@@ -24,8 +22,6 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
 
     private Intent intent;
 
-    private RollDiceActivity shakeActivity;
-
     private static final int NUMBER_IDENTIFIER = 1;
 
     private int numberRolled;
@@ -39,15 +35,14 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
 
     private static final int NUM_FIELDS = 40;
 
-    private static int countTurn;
+    private int countTurn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_field);
-        this.shakeActivity=new RollDiceActivity();
-        countTurn=0;
-        TextView outPutText = (TextView)getViewById("PlayerTurn");
+        countTurn = 0;
+        TextView outPutText = (TextView) getViewById("PlayerTurn");
         outPutText.setText("Spieler 0 starte Spiel!");
 
         players = new ArrayList<>();
@@ -88,7 +83,7 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
         gameLogic = new GameLogic(players, NUM_FIELDS, this);
     }
 
-    public void diceRoll(View view){
+    public void diceRoll(View view) {
         onPause();
         intent = new Intent(this, RollDiceActivity.class);
         startActivityForResult(intent, NUMBER_IDENTIFIER);
@@ -97,7 +92,7 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
     /**
      * Onclick Methode für die einzelnen Spielfelder mit Figuren drauf
      */
-    public void click(View viewIn){
+    public void click(View viewIn) {
 
         String idOut = viewIn.getResources().getResourceEntryName(viewIn.getId());
         //int pt1=players.get(0).getPlayerNr();
@@ -106,14 +101,15 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
         Pattern p = Pattern.compile("(.*)(\\d+)(.*)(\\d+)");
         Matcher m = p.matcher(idOut);
 
-        if(m.matches()) {
-            Toast.makeText(getApplication(), "Player: "+m.group(2)+" "+"Figure: "+m.group(4),
+        if (m.matches()) {
+            Toast.makeText(getApplication(), "Player: " + m.group(2) + " " + "Figure: " + m.group(4),
                     Toast.LENGTH_SHORT).show();
         }
     }
 
     /**
      * Returns the associated UI element (view) for the given id.
+     *
      * @param id the id name declared in the activities xml layout
      * @return the View object
      */
@@ -122,36 +118,38 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==NUMBER_IDENTIFIER){
-            if(resultCode==RESULT_OK){
+        if (requestCode == NUMBER_IDENTIFIER) {
+            if (resultCode == RESULT_OK) {
 
-                TextView outPutText = (TextView)getViewById("PlayerTurn");
+                TextView outPutText = (TextView) getViewById("PlayerTurn");
                 int player = countTurn;
-                this.numberRolled=data.getIntExtra("result",-1);
-                if(this.numberRolled!=6){
+                this.numberRolled = data.getIntExtra("result", -1);
+
+                if (this.numberRolled != 6) {
                     gameLogic.draw(players.get(player).getFigure(0), this.numberRolled);
                     countTurn++;
-                    countTurn%=4;
-                    outPutText.setText("Spieler "+countTurn+", du bist dran!");
-                } else if (this.numberRolled==6){
+                    countTurn %= 4;
+                    outPutText.setText("Spieler " + countTurn + ", du bist dran!");
+                } else {
                     gameLogic.draw(players.get(player).getFigure(0), this.numberRolled);
-                    outPutText.setText("Spieler "+countTurn+", du darfst erneut würfeln!");
+                    outPutText.setText("Spieler " + countTurn + ", du darfst erneut würfeln!");
                 }
 
 
-             //   this.numberRolled=data.getIntExtra("result",-1);
-              //  gameLogic.draw(players.get(0).getFigure(0), this.numberRolled);
+                //   this.numberRolled=data.getIntExtra("result",-1);
+                //  gameLogic.draw(players.get(0).getFigure(0), this.numberRolled);
             }
         }
     }
 
     /**
      * Moves a figure to a given field by moving its ImageView to the field's ImageView.
+     *
      * @param playerNr the player the figure belongs to
      * @param figureNr the number of the figure
-     * @param fieldNr the number of the field to move to
+     * @param fieldNr  the number of the field to move to
      */
     @Override
     public void moveFigure(int playerNr, int figureNr, int fieldNr) {
