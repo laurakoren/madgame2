@@ -31,6 +31,14 @@ public class Player {
         this.startField = startField;
     }
 
+    public Figure getFigure(int figureNr) {
+        if (figures.size() <= figureNr) {
+            return null;
+        } else {
+            return figures.get(figureNr);
+        }
+    }
+
     public List<Figure> getFigures() {
         return figures;
     }

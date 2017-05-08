@@ -1,6 +1,10 @@
 package com.example.laura.madgame2.gameLogic;
 
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
+
+import com.example.laura.madgame2.PlayField;
 
 import java.util.List;
 
