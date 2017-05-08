@@ -23,7 +23,7 @@ public class Player {
         return playerNr;
     }
 
-    Field getStartField() {
+    public Field getStartField() {
         return startField;
     }
 
@@ -32,11 +32,10 @@ public class Player {
     }
 
     public Figure getFigure(int figureNr) {
-        if (figures.size() <= figureNr) {
+        if (figureNr < 0 || figures.size() <= figureNr)
             return null;
-        } else {
+        else
             return figures.get(figureNr);
-        }
     }
 
     public List<Figure> getFigures() {

@@ -1,8 +1,5 @@
 package com.example.laura.madgame2.gameLogic;
 
-import android.view.View;
-import android.view.ViewGroup;
-
 /**
  * A single field on the game board. Can be occupied by a player's figure.
  */
@@ -12,15 +9,15 @@ public class Field {
 
     private Figure figure;
 
-    private View view;
+    private int fieldNr;
 
     private boolean isFinish;
+
     private Field fork;
 
-    Field(View view) {
-        this.view = view;
+    Field(int fieldNr) {
+        this.fieldNr = fieldNr;
         this.figure = null;
-
         this.fork = null;
         this.isFinish = false;
     }
@@ -38,8 +35,17 @@ public class Field {
         return next;
     }
 
-    Field next() {
-        return next;
+    Field next(Player player, int times) {
+        if (times < 0)
+            return null;
+        if (times == 0)
+            return this;
+
+        Field tmp = this;
+        for (int i = 0; i < times; i++) {
+            tmp = tmp.next(player);
+        }
+        return tmp;
     }
 
     void setNext(Field next) {
@@ -64,9 +70,7 @@ public class Field {
         this.figure = figure;
     }
 
-    ViewGroup.LayoutParams getViewLayout() {
-        return view.getLayoutParams();
+    public int getFieldNr() {
+        return fieldNr;
     }
-
-
 }
