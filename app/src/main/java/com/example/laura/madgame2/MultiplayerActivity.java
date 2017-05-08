@@ -14,12 +14,15 @@ import com.example.laura.madgame2.multiplayer.Client;
 import com.example.laura.madgame2.multiplayer.Server;
 import com.example.laura.madgame2.utils.NetworkUtils;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class MultiplayerActivity extends AppCompatActivity {
 
     private static final String TAG ="MultiplayerActivity";
-    private Server server = null;
     private Intent intent;
     private Client client;
+    private Logger logger = Logger.getLogger("global");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +31,7 @@ public class MultiplayerActivity extends AppCompatActivity {
     }
 
     public void hostGame(View view) {
-        server = Server.getInstance();
+        Server server = Server.getInstance();
         intent = new Intent(this, MultiplayerLobbyActivity.class);
         startActivity(intent);
     }
@@ -43,13 +46,13 @@ public class MultiplayerActivity extends AppCompatActivity {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 intent = new Intent(this, MainActivity.class);
-                Log.e(TAG, e.toString());
+                logger.log(Level.WARNING, "Interrupted at MultiplayerActivity sleep!" ,e);
                 startActivity(intent);
+                Thread.currentThread().interrupt();
             }
             client = client.getInstance();
             client.start();
             if (client.isConnected()) {
-               // client.sendString(client.getPlayerName());
                 intent = new Intent(this, MultiplayerLobbyActivity.class);
                 startActivity(intent);
             } else {

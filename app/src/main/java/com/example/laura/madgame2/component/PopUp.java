@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.text.InputType;
 import android.widget.EditText;
 
-import com.example.laura.madgame2.gameLogic.Player;
 import com.example.laura.madgame2.multiplayer.Client;
 import com.example.laura.madgame2.utils.ActivityUtils;
 

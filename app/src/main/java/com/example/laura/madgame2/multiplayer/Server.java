@@ -1,30 +1,15 @@
 package com.example.laura.madgame2.multiplayer;
 
 
-import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
-import android.widget.TextView;
 
-import com.example.laura.madgame2.MultiplayerActivity;
 import com.example.laura.madgame2.MultiplayerLobbyActivity;
-import com.example.laura.madgame2.R;
 import com.example.laura.madgame2.utils.ActivityUtils;
-
-import org.w3c.dom.Text;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -36,7 +21,7 @@ import java.util.List;
 
 public class Server extends Thread {
 
-    private static String playerName = "";
+    private String playerName = "";
     private static Server instance;
     private final String TAG = "Server";
     private static ServerSocket serverSocket;
@@ -73,7 +58,7 @@ public class Server extends Thread {
 
     @Override
     public void run() {
-        serverRunning = true;
+        setServerRunning(true);
         while (joinedPlayers < maxPlayer && !serverSocket.isClosed()) {
             try {
                 Socket clientSocket = null;
@@ -109,11 +94,11 @@ public class Server extends Thread {
         }
     }
 
-    public void shutdown() {
+    public static void shutdown() {
         try {
             instance = null;
+            setServerRunning(false);
             serverSocket.close();
-            serverRunning = false;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -191,7 +176,7 @@ public class Server extends Thread {
     public String getPlayerName() {
         if (playerName == "") {
             playerName = "Player" + (int) (Math.random() * 100);
-            return  playerName;
+            return playerName;
         }
         return playerName;
     }
@@ -201,8 +186,8 @@ public class Server extends Thread {
         this.playerName = playerName;
     }
 
-    public void sendStrings(String msg){
-        for(EchoClient c : clients){
+    public void sendStrings(String msg) {
+        for (EchoClient c : clients) {
             c.sendString(msg);
         }
     }
