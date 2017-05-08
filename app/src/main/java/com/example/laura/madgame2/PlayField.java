@@ -1,5 +1,6 @@
 package com.example.laura.madgame2;
 import android.view.View.OnClickListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import android.content.Intent;
@@ -33,11 +34,16 @@ public class PlayField extends AppCompatActivity  {
 
     private static final int NUM_FIELDS = 40;
 
+    private static int countTurn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_field);
         this.shakeActivity=new RollDiceActivity();
+        countTurn=0;
+        TextView outPutText = (TextView)getViewById("PlayerTurn");
+        outPutText.setText("Spieler 0 starte Spiel!");
 
         players = new ArrayList<>();
         players.add(new Player(0));
@@ -66,8 +72,8 @@ public class PlayField extends AppCompatActivity  {
 
         gameLogic = new GameLogic(players, fields, figures);
 
-        gameLogic.draw(players.get(1).getFigures().get(0), 6);
-        gameLogic.draw(players.get(1).getFigures().get(0), 6);
+        //gameLogic.draw(players.get(1).getFigures().get(0), 6);
+        //gameLogic.draw(players.get(1).getFigures().get(0), 6);
     }
 
     @Override
@@ -143,9 +149,26 @@ public class PlayField extends AppCompatActivity  {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==NUMBER_IDENTIFIER){
             if(resultCode==RESULT_OK){
+
+                TextView outPutText = (TextView)getViewById("PlayerTurn");
+                int player = countTurn;
                 this.numberRolled=data.getIntExtra("result",-1);
-                gameLogic.draw(players.get(0).getFigure(0), this.numberRolled);
+                if(this.numberRolled!=6){
+                    gameLogic.draw(players.get(player).getFigure(0), this.numberRolled);
+                    countTurn++;
+                    countTurn%=4;
+                    outPutText.setText("Spieler "+countTurn+", du bist dran!");
+                } else if (this.numberRolled==6){
+                    gameLogic.draw(players.get(player).getFigure(0), this.numberRolled);
+                    outPutText.setText("Spieler "+countTurn+", du darfst erneut würfeln!");
+                }
+
+
+             //   this.numberRolled=data.getIntExtra("result",-1);
+              //  gameLogic.draw(players.get(0).getFigure(0), this.numberRolled);
             }
         }
     }
+
+
 }
