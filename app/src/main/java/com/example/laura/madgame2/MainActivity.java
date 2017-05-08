@@ -21,8 +21,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-
-
     public void setRollDiceActivity(View view){
         intent = new Intent(this, RollDiceActivity.class);
         //mit startActitivityForResult Methode könnte Würfelergebnis reingeladen werden
@@ -33,21 +31,6 @@ public class MainActivity extends AppCompatActivity {
     public void setMultiplayerActivity(View view){
         intent = new Intent(this, MultiplayerActivity.class);
         startActivity(intent);
-    }
-
-
-                                                                //'''''''''''
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==NUMBER_IDENTIFIER){
-            if(resultCode==RESULT_OK){
-                this.number=data.getIntExtra("result",-1);
-                TextView textView = (TextView) findViewById(R.id.textView);
-                textView.setText(number+" wurde gewürfelt!!!");
-            }
-        }
     }
 
     //####

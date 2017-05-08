@@ -14,6 +14,7 @@ import com.example.laura.madgame2.gameLogic.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class PlayField extends AppCompatActivity  {
 
@@ -39,9 +40,9 @@ public class PlayField extends AppCompatActivity  {
 
         players = new ArrayList<>();
         players.add(new Player(0));
-        players.add(null);
-        players.add(null);
-        players.add(null);
+        players.add(new Player(1));
+        players.add(new Player(2));
+        players.add(new Player(3));
 
         // save fields into list
         List<View> fields = new ArrayList<>();
@@ -64,45 +65,31 @@ public class PlayField extends AppCompatActivity  {
 
         gameLogic = new GameLogic(players, fields, figures);
 
-        gameLogic.draw(players.get(0).getFigures().get(0), 6, players.get(0));
-
-
-
-
-
+        gameLogic.draw(players.get(1).getFigures().get(0), 6);
+        gameLogic.draw(players.get(1).getFigures().get(0), 6);
     }
 
     @Override
     public void onPause(){          // sichert den aktuellen Spiel-/GUI-Stand
-
         super.onPause();
     }
 
     @Override
     public void onResume (){        // ruft den gesicherten Spiel-/GUI-Stand auf
-
         super.onResume();
-
 
         // Toast.makeText(Play_field.this, shakeActivity.getRolledNumber() + " Gewürfelt!", Toast.LENGTH_SHORT).show();
         changePosition();
     }
 
-
-
-    @SuppressWarnings("deprecation")
     public void diceRoll(View view){
-
         onPause();
         intent = new Intent(this, RollDiceActivity.class);
         startActivityForResult(intent, NUMBER_IDENTIFIER);
-
-
-
     }
-    @SuppressWarnings("deprecation")
+
     public void changePosition(){
-        /**Todo: Die gewuerfelte Augenzahl mir gewähltem Spielstein ziehen
+        /*Todo: Die gewuerfelte Augenzahl mir gewähltem Spielstein ziehen
          * ImageView auf jeder Pos. des Spielfeld's werden je nach Augenzahl und Spieler angesprochen und das jeweilige Image des Spielers,
          * zb. "red1", "green2" usw. angezeigt.
          * wenn Spielzug nicht möglich,  wird der jeweilige Spielstein des Spielers der am Zug ist gesperrt, dass er nur Regelkonforme Züge machen kann.
@@ -123,15 +110,14 @@ public class PlayField extends AppCompatActivity  {
         fig.setLayoutParams(field.getLayoutParams());
     }
 
-    public void testAction(View view) {
-        gameLogic.draw(players.get(0).getFigures().get(0), 1, players.get(0));
-    }
-
-    //Onclick Methode zum Anzeigen der ImageView ID
-
+    /**
+     * Onclick Methode für die einzelnen Spielfelder mit Figuren drauf
+     */
     public void click(View viewIn){
 
         String idOut = viewIn.getResources().getResourceEntryName(viewIn.getId());
+        //int pt1=players.get(0).getPlayerNr();
+        //players.get(0).getFigures().get(0);
         Toast.makeText(getApplication(), idOut,
                 Toast.LENGTH_SHORT).show();
     }
@@ -151,7 +137,7 @@ public class PlayField extends AppCompatActivity  {
         if(requestCode==NUMBER_IDENTIFIER){
             if(resultCode==RESULT_OK){
                 this.numberRolled=data.getIntExtra("result",-1);
-                gameLogic.draw(players.get(0).getFigures().get(0), this.numberRolled, players.get(0));
+                gameLogic.draw(players.get(0).getFigure(0), this.numberRolled);
             }
         }
     }
