@@ -14,6 +14,7 @@ import com.example.laura.madgame2.gameLogic.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PlayField extends AppCompatActivity  {
@@ -118,8 +119,14 @@ public class PlayField extends AppCompatActivity  {
         String idOut = viewIn.getResources().getResourceEntryName(viewIn.getId());
         //int pt1=players.get(0).getPlayerNr();
         //players.get(0).getFigures().get(0);
-        Toast.makeText(getApplication(), idOut,
-                Toast.LENGTH_SHORT).show();
+
+        Pattern p = Pattern.compile("(.*)(\\d+)(.*)(\\d+)");
+        Matcher m = p.matcher(idOut);
+
+        if(m.matches()) {
+            Toast.makeText(getApplication(), "Player: "+m.group(2)+" "+"Figure: "+m.group(4),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
