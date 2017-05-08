@@ -67,26 +67,8 @@ public class PlayField extends AppCompatActivity  {
         gameLogic.draw(players.get(0).getFigures().get(0), 6, players.get(0));
 
 
-        //Onclick Listener für die einzelnen Spielfelder mit Figuren drauf
 
-        ImageView imageView = (ImageView) getViewById("iv_player0_figure0");
-        ImageView imageView2 = (ImageView) getViewById("iv_player0_figure1");
 
-        imageView.setOnClickListener(new OnClickListener() {
-
-            public void onClick(View v) {
-                Toast.makeText(getApplication(), "iv_player0_figure0",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        imageView2.setOnClickListener(new OnClickListener() {
-
-            public void onClick(View v) {
-                Toast.makeText(getApplication(), "iv_player0_figure1",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
 
     }
 
@@ -143,6 +125,17 @@ public class PlayField extends AppCompatActivity  {
 
     public void testAction(View view) {
         gameLogic.draw(players.get(0).getFigures().get(0), 1, players.get(0));
+    }
+
+    //Onclick Methode für die einzelnen Spielfelder mit Figuren drauf
+
+    public void click(View viewIn){
+
+        String idOut = viewIn.getResources().getResourceEntryName(viewIn.getId());
+        //int pt1=players.get(0).getPlayerNr();
+        //players.get(0).getFigures().get(0);
+        Toast.makeText(getApplication(), idOut,
+                Toast.LENGTH_SHORT).show();
     }
 
     /**
