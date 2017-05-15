@@ -117,13 +117,13 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
                     Toast.LENGTH_SHORT).show();
         }
 
-        int fieldrtrn = gameLogic.highlight(players.get(Integer.parseInt(m.group(2))).getFigure(Integer.parseInt(m.group(4))),5);
-        final View img = getViewById("iv_field"+fieldrtrn);
+        int fieldreturn = gameLogic.highlight(players.get(Integer.parseInt(m.group(2))).getFigure(Integer.parseInt(m.group(4))),5);
+        final View img = getViewById("iv_field"+fieldreturn);
         img.setBackgroundResource(R.drawable.fig_empty);
 
         new CountDownTimer(2000, 1000) {
             public void onFinish() {
-               resetImg(img);
+                img.setBackgroundResource(R.drawable.clear_circle);
             }
 
             public void onTick(long millisUntilFinished) {
@@ -133,14 +133,6 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
 
     }
 
-
-
-
-    void resetImg(View img){
-        img.setBackgroundResource(R.drawable.clear_circle);
-
-
-    }
 
     /**
      * Returns the associated UI element (view) for the given id.
