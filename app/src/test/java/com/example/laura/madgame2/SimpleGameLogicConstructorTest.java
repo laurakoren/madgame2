@@ -27,6 +27,9 @@ public class SimpleGameLogicConstructorTest {
             public void moveFigureToOutField(int playerNr, int figureNr) {
                 // see moveFigure() above for empty method
             }
+            public void moveFigureToFinishField(int playerNr, int figureNr, int finishFieldNr) {
+                // see moveFigure() above for empty method
+            }
         });
 
         Assert.assertNotNull(logic);

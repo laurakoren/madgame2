@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Player {
 
-    private int playerNr;       //Spielernummern 1-4
+    private int playerNr;
 
     private Field startField;
 
@@ -32,7 +32,7 @@ public class Player {
     }
 
     public Figure getFigure(int figureNr) {
-        if (figureNr < 0 || figures.size() <= figureNr)
+        if (figures == null || figureNr < 0 || figureNr >= figures.size())
             return null;
         else
             return figures.get(figureNr);
@@ -44,6 +44,10 @@ public class Player {
 
     void setFigures(List<Figure> figures) {
         this.figures = figures;
+    }
+
+    public boolean equals(Player that) {
+        return this.getPlayerNr() == that.getPlayerNr();
     }
 }
 

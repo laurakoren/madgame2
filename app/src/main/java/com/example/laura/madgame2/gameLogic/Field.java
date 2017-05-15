@@ -11,26 +11,33 @@ public class Field {
 
     private int fieldNr;
 
-    private boolean isFinish;
+    private Player finishFieldForPlayer;
 
     private Field fork;
 
-    Field(int fieldNr) {
+    Field(int fieldNr, Player finishFieldForPlayer) {
         this.fieldNr = fieldNr;
+        this.finishFieldForPlayer = finishFieldForPlayer;
         this.figure = null;
         this.fork = null;
-        this.isFinish = false;
+    }
+
+    Field(int fieldNr) {
+        this(fieldNr, null);
     }
 
     /**
      * Returns the next Field for the given Player.
      * That is, if the Player were to move a piece from this Field with a dice roll of one, the Field the piece would land on matches this methods return value.
+     * If called with argument null, finish fields are ignored.
      */
     Field next(Player player) {
         if (player == null)
             return next;
 
-        // TODO: abzweigungen (->Zielfelder)
+        // if this is the last field before the player's finish go there
+        if (fork != null && player.equals(fork.getFinishFieldOwner()))
+            return fork;
 
         return next;
     }
@@ -41,11 +48,14 @@ public class Field {
         if (times == 0)
             return this;
 
-        Field tmp = this;
+        Field current = this;
         for (int i = 0; i < times; i++) {
-            tmp = tmp.next(player);
+            // if current field is null (i.e. end of path is crossed) return null
+            if (current == null)
+                return null;
+            current = current.next(player);
         }
-        return tmp;
+        return current;
     }
 
     void setNext(Field next) {
@@ -70,7 +80,19 @@ public class Field {
         this.figure = figure;
     }
 
-    public int getFieldNr() {
+    int getFieldNr() {
         return fieldNr;
+    }
+
+    private Player getFinishFieldOwner() {
+        return finishFieldForPlayer;
+    }
+
+    boolean isFinishField() {
+        return finishFieldForPlayer != null;
+    }
+
+    void setFork(Field fork) {
+        this.fork = fork;
     }
 }

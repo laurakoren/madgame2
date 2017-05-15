@@ -27,11 +27,13 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
     private int numberRolled;
 
     private GameLogic gameLogic;
-
     private List<Player> players;
+
     private List<View> fieldViews;
+    private List<List<View>> finishFieldViews;
     private List<List<View>> figureViews;
     private List<List<ViewGroup.LayoutParams>> outFields;
+    TextView outPutText;
 
     private static final int NUM_FIELDS = 40;
 
@@ -41,8 +43,9 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_field);
+
         countTurn = 0;
-        TextView outPutText = (TextView) getViewById("PlayerTurn");
+        outPutText = (TextView) getViewById("PlayerTurn");
         outPutText.setText("Spieler 0 starte Spiel!");
 
         players = new ArrayList<>();
@@ -53,29 +56,34 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
 
         // save fieldViews into list
         fieldViews = new ArrayList<>();
-        for (int i = 0; i < NUM_FIELDS; i++) {
+        for (int i = 0; i < NUM_FIELDS; i++)
             fieldViews.add(getViewById("iv_field" + i));
-        }
 
-        // save finish fieldViews into separate list
-        //List<View> finishFields = new ArrayList<View>();
-
+        // save finishFieldViews, figureViews and outField coords into list
+        finishFieldViews = new ArrayList<>();
+        List<View> tmpFinViews;
         figureViews = new ArrayList<>();
         List<View> tmpFigViews;
-
         outFields = new ArrayList<>();
         List<ViewGroup.LayoutParams> tmpLayoutParams;
 
         View tmpView;
-
         for (int player = 0; player < 4; player++) {
+            tmpFinViews = new ArrayList<>();
             tmpFigViews = new ArrayList<>();
             tmpLayoutParams = new ArrayList<>();
-            for (int figure = 0; figure < 4; figure++) {
-                tmpView = getViewById("iv_player" + player + "_figure" + figure);
+
+            for (int count = 0; count < 4; count++) {
+                // add finishFieldViews to array
+                tmpFinViews.add(getViewById("iv_player" + player + "_finish" + count));
+
+                // add player views and out field coords to arrays
+                tmpView = getViewById("iv_player" + player + "_figure" + count);
                 tmpFigViews.add(tmpView);
                 tmpLayoutParams.add(tmpView.getLayoutParams());
             }
+
+            finishFieldViews.add(tmpFinViews);
             figureViews.add(tmpFigViews);
             outFields.add(tmpLayoutParams);
         }
@@ -123,7 +131,7 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
         if (requestCode == NUMBER_IDENTIFIER) {
             if (resultCode == RESULT_OK) {
 
-                TextView outPutText = (TextView) getViewById("PlayerTurn");
+                outPutText = (TextView) getViewById("PlayerTurn");
                 int player = countTurn;
                 this.numberRolled = data.getIntExtra("result", -1);
 
@@ -153,11 +161,36 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
      */
     @Override
     public void moveFigure(int playerNr, int figureNr, int fieldNr) {
-        figureViews.get(playerNr).get(figureNr).setLayoutParams(fieldViews.get(fieldNr).getLayoutParams());
+        moveTo(figureViews.get(playerNr).get(figureNr), fieldViews.get(fieldNr));
     }
 
     @Override
     public void moveFigureToOutField(int playerNr, int figureNr) {
         figureViews.get(playerNr).get(figureNr).setLayoutParams(outFields.get(playerNr).get(figureNr));
+    }
+
+    @Override
+    public void moveFigureToFinishField(int playerNr, int figureNr, int finishFieldNr) {
+        moveTo(figureViews.get(playerNr).get(figureNr), finishFieldViews.get(playerNr).get(finishFieldNr));
+    }
+
+    /**
+     * Helper function to move a view to the location of another view
+     *
+     * @param target to view to move
+     * @param destination the view to move it to
+     */
+    private void moveTo(View target, View destination) {
+        if (target != null && destination != null)
+            target.setLayoutParams(destination.getLayoutParams());
+    }
+
+    /**
+     * Helper function do display a toast message.
+     *
+     * @param s the message to display
+     */
+    public void toast(String s) {
+        Toast.makeText(getApplication(), s, Toast.LENGTH_SHORT).show();
     }
 }

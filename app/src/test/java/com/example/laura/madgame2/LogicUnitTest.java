@@ -72,4 +72,8 @@ public class LogicUnitTest extends LogicAbstractUnitTest {
         Assert.assertNull(a.getField());
         Assert.assertEquals(b.getField(), f);
     }
+
+    // TODO test case: cant kick own figures
+    // TODO test case: finish fields (+isFinishField)
+    // TODO test case: game winning criteria
 }
