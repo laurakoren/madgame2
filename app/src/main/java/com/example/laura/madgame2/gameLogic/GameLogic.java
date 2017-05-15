@@ -137,6 +137,20 @@ public class GameLogic {
         }
     }
 
+    public int highlight(Figure figure, int distance) {
+
+        Field current = figure.getField();
+        Player player = figure.getPlayer();
+
+            // figure is somewhere on the game board
+            for (int i = 0; i < distance; i++)
+                current = current.next(player);
+            return current.getFieldNr();
+
+
+        }
+
+
     /**
      * Moves a figure to a field after checking the field for availability.
      *

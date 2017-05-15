@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +16,9 @@ import com.example.laura.madgame2.gameLogic.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Handler;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -113,6 +117,12 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
             Toast.makeText(getApplication(), "Player: " + m.group(2) + " " + "Figure: " + m.group(4),
                     Toast.LENGTH_SHORT).show();
         }
+
+        int fieldrtrn = gameLogic.highlight(players.get(Integer.parseInt(m.group(2))).getFigure(Integer.parseInt(m.group(4))),5);
+        View img = getViewById("iv_field"+fieldrtrn);
+        img.setBackgroundResource(R.drawable.fig_empty);
+
+
     }
 
     /**
