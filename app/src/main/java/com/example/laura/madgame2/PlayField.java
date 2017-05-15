@@ -2,6 +2,7 @@ package com.example.laura.madgame2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,8 +108,6 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
     public void click(View viewIn) {
 
         String idOut = viewIn.getResources().getResourceEntryName(viewIn.getId());
-        //int pt1=players.get(0).getPlayerNr();
-        //players.get(0).getFigures().get(0);
 
         Pattern p = Pattern.compile("(.*)(\\d+)(.*)(\\d+)");
         Matcher m = p.matcher(idOut);
@@ -119,8 +118,26 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
         }
 
         int fieldrtrn = gameLogic.highlight(players.get(Integer.parseInt(m.group(2))).getFigure(Integer.parseInt(m.group(4))),5);
-        View img = getViewById("iv_field"+fieldrtrn);
+        final View img = getViewById("iv_field"+fieldrtrn);
         img.setBackgroundResource(R.drawable.fig_empty);
+
+        new CountDownTimer(2000, 1000) {
+            public void onFinish() {
+               resetImg(img);
+            }
+
+            public void onTick(long millisUntilFinished) {
+
+            }
+        }.start();
+
+    }
+
+
+
+
+    void resetImg(View img){
+        img.setBackgroundResource(R.drawable.clear_circle);
 
 
     }

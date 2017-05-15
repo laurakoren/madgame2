@@ -142,6 +142,18 @@ public class GameLogic {
         Field current = figure.getField();
         Player player = figure.getPlayer();
 
+
+        if (current == null) {
+            switch(player.getPlayerNr()){
+
+                case 0: return 0;
+                case 1: return 10;
+                case 2: return 20;
+                case 3: return 30;
+            }
+
+            return 0;
+        }
             // figure is somewhere on the game board
             for (int i = 0; i < distance; i++)
                 current = current.next(player);
