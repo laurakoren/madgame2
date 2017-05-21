@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.laura.madgame2.multiplayer.AsyncServerTask;
@@ -22,6 +23,7 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
     private TextView hostIp;
     private Role role;
     public TextView[] playerNames;
+    private Button[] kickPlayer;
     Activity m;
 
     @Override
@@ -34,6 +36,12 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
         playerNames[1] = (TextView) findViewById(R.id.txtPlayerTwo);
         playerNames[2] = (TextView) findViewById(R.id.txtPlayerThree);
         playerNames[3] = (TextView) findViewById(R.id.txtPlayerFour);
+
+        kickPlayer = new Button[4];
+        kickPlayer[0] = (Button)findViewById(R.id.btnKickPlayerTwo);
+        kickPlayer[1] = (Button)findViewById(R.id.btnKickPlayerThree);
+        kickPlayer[2] = (Button)findViewById(R.id.btnKickPlayerFour);
+
         ActivityUtils.setCurrentActivity(this);
         if (Server.isServerRunning()) {
             server = Server.getInstance();
@@ -44,9 +52,7 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
         } else {
             role = Role.Client;
         }
-        if(role.equals(Role.Client)) {
-            findViewById(R.id.btnStart).setVisibility(View.INVISIBLE);
-        }
+
     }
 
     public void doCancel(View view) {
@@ -69,12 +75,18 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
         });
     }
 
-    public void updateNames(final int pos, final String name) {
+    public void updateNames(final int pos, final String name, final boolean kicked) {
         this.runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
                 playerNames[pos].setText(name);
+                if(kicked) {
+                    kickPlayer[pos].setVisibility(View.INVISIBLE);
+                } else if(pos != 0){
+                    kickPlayer[pos-1].setVisibility(View.VISIBLE);
+                }
+
             }
         });
     }
@@ -82,5 +94,22 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
     public void startGame(View view) {
         Server.getInstance().startGame();
     }
+
+    public void kickPlayer(View view) {
+        switch (view.getId()) {
+            case R.id.btnKickPlayerTwo:
+                Server.getInstance().kickPlayer(1);
+                break;
+            case R.id.btnKickPlayerThree:
+                Server.getInstance().kickPlayer(2);
+                break;
+            case R.id.btnKickPlayerFour:
+                Server.getInstance().kickPlayer(3);
+                break;
+            default:
+                break;
+        }
+    }
+
 
 }

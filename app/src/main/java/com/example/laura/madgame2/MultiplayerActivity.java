@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.example.laura.madgame2.multiplayer.AsyncClientTask;
 import com.example.laura.madgame2.multiplayer.Client;
 import com.example.laura.madgame2.multiplayer.Server;
+import com.example.laura.madgame2.utils.ActivityUtils;
 import com.example.laura.madgame2.utils.NetworkUtils;
 
 import java.util.logging.Level;
@@ -28,6 +29,7 @@ public class MultiplayerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiplayer);
+        ActivityUtils.setCurrentActivity(this);
     }
 
     public void hostGame(View view) {

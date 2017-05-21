@@ -32,6 +32,7 @@ public class EchoClient extends Thread {
     private ObjectOutputStream objectOut;
     private ObjectInputStream objectIn;
     private Object update;
+    private boolean killThread = false;
 
     public EchoClient(Socket socket) {
         this.socket = socket;
@@ -48,7 +49,7 @@ public class EchoClient extends Thread {
     @Override
     public void run() {
         Log.d(TAG, "Started");
-        while(!gameStarted){
+        while(!gameStarted && !killThread){
         try {
             playername = in.readUTF();
         } catch (IOException e) {
@@ -57,7 +58,7 @@ public class EchoClient extends Thread {
         Log.d(TAG, "GOT: " + playername);
         }
 
-        while(gameStarted){
+        while(gameStarted && !killThread){
             try {
                 Log.d(TAG, "start reading");
                 update = (Update) objectIn.readObject();
@@ -70,6 +71,8 @@ public class EchoClient extends Thread {
             }
         }
 
+        Log.d(TAG, "KILLED");
+
     }
 
     public void sendString(String msg) {
@@ -77,7 +80,6 @@ public class EchoClient extends Thread {
             out.writeUTF(msg);
             out.flush();
         } catch (IOException e) {
-
             logger.log(Level.WARNING, "IOException at EchoClient sendString!" ,e);
         }
     }
@@ -114,7 +116,18 @@ public class EchoClient extends Thread {
         this.out = out;
     }
 
-
+    public void shutdown(){
+        try {
+            killThread = true;
+            in.close();
+            out.close();
+            objectIn.close();
+            objectOut.close();
+            socket.close();
+        } catch (IOException e) {
+            logger.log(Level.INFO, "Killed Thread while running");
+        }
+    }
 
     public void sendUpdate(Object update){
         try {

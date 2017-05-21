@@ -1,9 +1,11 @@
 package com.example.laura.madgame2.multiplayer;
 
 import android.content.Intent;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.laura.madgame2.MultiplayerActivity;
 import com.example.laura.madgame2.MultiplayerLobbyActivity;
 import com.example.laura.madgame2.TestActivity;
 import com.example.laura.madgame2.utils.ActivityUtils;
@@ -38,6 +40,7 @@ public class Client extends Thread {
     private boolean gameStarted = false;
     private Object update;
     private Logger logger = Logger.getLogger("global");
+    private boolean killThread = false;
 
     public Client(String ip, int port) {
         try {
@@ -83,7 +86,7 @@ public class Client extends Thread {
 
         int count = 0;
         String input;
-        while (!gameStarted) {
+        while (!gameStarted && !killThread) {
             try {
                 Thread.sleep(500);
                 input = in.readUTF();
@@ -98,6 +101,7 @@ public class Client extends Thread {
                 ((MultiplayerLobbyActivity) ActivityUtils.getCurrentActivity()).updateNames(playerNames);
             } catch (IOException e) {
                 logger.log(Level.WARNING, "IOException at Client Thread run!", e);
+                killMe();
             } catch (InterruptedException e) {
                 logger.log(Level.WARNING, "Interrupted at Client Thread run!", e);
                 Thread.currentThread().interrupt();
@@ -105,7 +109,7 @@ public class Client extends Thread {
 
         }
 
-        while (gameStarted) {
+        while (gameStarted && !killThread) {
             try {
                 Log.d(TAG, "start reading");
                 update = (Update) objectIn.readObject();
@@ -113,6 +117,7 @@ public class Client extends Thread {
                 Log.d(TAG, update.toString());
             } catch (IOException e) {
                 e.printStackTrace();
+                killMe();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -121,6 +126,14 @@ public class Client extends Thread {
 
     }
 
+    private void killMe(){
+        killThread = true;
+        instance = null;
+        ActivityUtils.getCurrentActivity().startActivity(new Intent(ActivityUtils.getCurrentActivity(), MultiplayerActivity.class));
+        Looper.prepare();
+        Toast.makeText(ActivityUtils.getCurrentActivity(),"You have been kicked", Toast.LENGTH_SHORT).show();
+        Looper.loop();
+    }
 
     public Socket getClientSocket() {
         return clientSocket;
@@ -157,19 +170,6 @@ public class Client extends Thread {
         Client.playerName = playerName;
     }
 
-
-    public void waitForResponse() {
-        try {
-            Log.d(TAG, "waiting for response");
-            String temp = in.readUTF();
-            String[] response = temp.split(";");
-            if (response.equals(UpdateTyp.TOAST.toString())) {
-                Log.d(TAG, "GOT " + response);
-            }
-        } catch (IOException e) {
-            logger.log(Level.WARNING, "IOException at Client waitingForResponse!", e);
-        }
-    }
 
     public void sendUpdate(Object update) {
         try {

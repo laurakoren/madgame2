@@ -35,8 +35,6 @@ public class Server extends Thread {
     private int port;
     private String ip;
     private List<EchoClient> clients;
-    private int maxPlayer = 3;
-    private int joinedPlayers = 0;
     private static boolean serverRunning = false;
     private static Logger logger = Logger.getLogger("global");
     private boolean gameStarted = false;
@@ -68,7 +66,8 @@ public class Server extends Thread {
     @Override
     public void run() {
         setServerRunning(true);
-        while (joinedPlayers < maxPlayer && !serverSocket.isClosed() && !gameStarted) {
+        int count;
+        while (!serverSocket.isClosed() && !gameStarted && clients.size() <= 3) {
             try {
                 Socket clientSocket = null;
                 clientSocket = serverSocket.accept();
@@ -77,21 +76,24 @@ public class Server extends Thread {
                     EchoClient eClient = new EchoClient(clientSocket);
                     eClient.start();
                     Thread.sleep(2000);
-                    clients.add(eClient);
+                    count = 0;
+                    while(clients.size() > 0 && clients == null){
+                        count++;
+                    }
+                    clients.add(count,eClient);
+
                     MultiplayerLobbyActivity multiLobby = (MultiplayerLobbyActivity) ActivityUtils.getCurrentActivity();
                     while (eClient.getPlayername() == "") {
                         Thread.sleep(100);
                     }
 
-                    multiLobby.updateNames(joinedPlayers + 1, eClient.getPlayername());
+                    multiLobby.updateNames(count + 1, eClient.getPlayername(), false);
                     for (EchoClient c : clients) {
                         c.sendString(getPlayerName());
                         for (int i = 0; i < clients.size(); i++) {
                             c.sendString(clients.get(i).getPlayername());
                         }
                     }
-
-                    joinedPlayers++;
                 }
             } catch (Exception e) {
                 logger.log(Level.WARNING, "Exception at Server Thread run!", e);
@@ -128,14 +130,6 @@ public class Server extends Thread {
 
     public void setIp(String ip) {
         this.ip = ip;
-    }
-
-    public int getJoinedPlayers() {
-        return joinedPlayers;
-    }
-
-    public void setJoinedPlayers(int joinedPlayers) {
-        this.joinedPlayers = joinedPlayers;
     }
 
     public List getClients() {
@@ -208,6 +202,13 @@ public class Server extends Thread {
     public void startGame() {
         new StartGame().execute();
         ActivityUtils.getCurrentActivity().startActivity(new Intent(ActivityUtils.getCurrentActivity(), TestActivity.class));
+    }
+
+    public void kickPlayer(int id){
+        clients.get(id-1).shutdown();
+        clients.remove(id-1);
+        ((MultiplayerLobbyActivity) ActivityUtils.getCurrentActivity()).updateNames(id,"", true);
+
     }
 
 
