@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.laura.madgame2.multiplayer.AsyncServerTask;
+import com.example.laura.madgame2.multiplayer.Client;
 import com.example.laura.madgame2.multiplayer.Role;
 import com.example.laura.madgame2.multiplayer.Server;
+import com.example.laura.madgame2.multiplayer.Update;
 import com.example.laura.madgame2.utils.ActivityUtils;
 
 public class MultiplayerLobbyActivity extends AppCompatActivity {
@@ -41,7 +44,9 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
         } else {
             role = Role.Client;
         }
-
+        if(role.equals(Role.Client)) {
+            findViewById(R.id.btnStart).setVisibility(View.INVISIBLE);
+        }
     }
 
     public void doCancel(View view) {
@@ -57,7 +62,7 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                for(int i =0; i<names.length; i++) {
+                for (int i = 0; i < names.length; i++) {
                     playerNames[i].setText(names[i]);
                 }
             }
@@ -72,9 +77,10 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
                 playerNames[pos].setText(name);
             }
         });
-
-
     }
 
+    public void startGame(View view) {
+        Server.getInstance().startGame();
+    }
 
 }

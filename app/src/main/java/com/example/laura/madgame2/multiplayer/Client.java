@@ -1,14 +1,18 @@
 package com.example.laura.madgame2.multiplayer;
 
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.example.laura.madgame2.MultiplayerLobbyActivity;
+import com.example.laura.madgame2.TestActivity;
 import com.example.laura.madgame2.utils.ActivityUtils;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Random;
 import java.util.logging.Level;
@@ -26,10 +30,13 @@ public class Client extends Thread {
     private Socket clientSocket;
     private DataInputStream in;
     private DataOutputStream out;
+    private ObjectOutputStream objectOut;
+    private ObjectInputStream objectIn;
     private int port;
     private String ip;
     private static Client instance;
     private boolean gameStarted = false;
+    private Object update;
     private Logger logger = Logger.getLogger("global");
 
     public Client(String ip, int port) {
@@ -39,8 +46,11 @@ public class Client extends Thread {
             clientSocket = new Socket(ip, port);
             in = new DataInputStream(clientSocket.getInputStream());
             out = new DataOutputStream(clientSocket.getOutputStream());
+            objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
+            objectIn = new ObjectInputStream(clientSocket.getInputStream());
+            instance = this;
         } catch (IOException e) {
-           logger.log(Level.WARNING, "IOException at Client instantiation!" ,e);
+            logger.log(Level.WARNING, "IOException at Client instantiation!", e);
         }
     }
 
@@ -66,24 +76,45 @@ public class Client extends Thread {
             out.writeUTF(getPlayerName());
             out.flush();
         } catch (IOException e) {
-            logger.log(Level.WARNING, "IOException at Client Thread run!" ,e);
+            logger.log(Level.WARNING, "IOException at Client Thread run!", e);
         }
         Log.d(TAG, "playername send");
 
 
         int count = 0;
+        String input;
         while (!gameStarted) {
             try {
                 Thread.sleep(500);
-                playerNames[count] = in.readUTF();
+                input = in.readUTF();
+                Log.d(TAG, input);
+                if(input.equals("start")){
+                    gameStarted = true;
+                    ActivityUtils.getCurrentActivity().startActivity(new Intent(ActivityUtils.getCurrentActivity(), TestActivity.class));
+                    break;
+                }
+                playerNames[count] = input;
                 count++;
                 ((MultiplayerLobbyActivity) ActivityUtils.getCurrentActivity()).updateNames(playerNames);
-
             } catch (IOException e) {
-                logger.log(Level.WARNING, "IOException at Client Thread run!" ,e);
+                logger.log(Level.WARNING, "IOException at Client Thread run!", e);
             } catch (InterruptedException e) {
-                logger.log(Level.WARNING, "Interrupted at Client Thread run!" ,e);
+                logger.log(Level.WARNING, "Interrupted at Client Thread run!", e);
                 Thread.currentThread().interrupt();
+            }
+
+        }
+
+        while (gameStarted) {
+            try {
+                Log.d(TAG, "start reading");
+                update = (Update) objectIn.readObject();
+                Log.d(TAG, "got update");
+                Log.d(TAG, update.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
         }
 
@@ -109,7 +140,7 @@ public class Client extends Thread {
             out.writeUTF(msg);
             out.flush();
         } catch (IOException e) {
-            logger.log(Level.WARNING, "IOException at Client sendingString!" ,e);
+            logger.log(Level.WARNING, "IOException at Client sendingString!", e);
         }
 
     }
@@ -133,12 +164,21 @@ public class Client extends Thread {
             String temp = in.readUTF();
             String[] response = temp.split(";");
             if (response.equals(UpdateTyp.TOAST.toString())) {
-                Log.d(TAG,"GOT "+response);
+                Log.d(TAG, "GOT " + response);
             }
         } catch (IOException e) {
-            logger.log(Level.WARNING, "IOException at Client waitingForResponse!" ,e);
+            logger.log(Level.WARNING, "IOException at Client waitingForResponse!", e);
         }
     }
 
+    public void sendUpdate(Object update) {
+        try {
+            objectOut.writeObject(update);
+            Log.d(TAG, "sended Object");
+            objectOut.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

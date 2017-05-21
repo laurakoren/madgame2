@@ -1,10 +1,14 @@
 package com.example.laura.madgame2.multiplayer;
 
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.laura.madgame2.MultiplayerLobbyActivity;
+import com.example.laura.madgame2.TestActivity;
 import com.example.laura.madgame2.utils.ActivityUtils;
+
 import java.io.IOException;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
@@ -35,6 +39,7 @@ public class Server extends Thread {
     private int joinedPlayers = 0;
     private static boolean serverRunning = false;
     private static Logger logger = Logger.getLogger("global");
+    private boolean gameStarted = false;
 
 
     private Server() {
@@ -47,7 +52,7 @@ public class Server extends Thread {
 
             start();
         } catch (IOException e) {
-            logger.log(Level.WARNING, "IOException at Server instantiation!" ,e);
+            logger.log(Level.WARNING, "IOException at Server instantiation!", e);
         }
 
     }
@@ -63,7 +68,7 @@ public class Server extends Thread {
     @Override
     public void run() {
         setServerRunning(true);
-        while (joinedPlayers < maxPlayer && !serverSocket.isClosed()) {
+        while (joinedPlayers < maxPlayer && !serverSocket.isClosed() && !gameStarted) {
             try {
                 Socket clientSocket = null;
                 clientSocket = serverSocket.accept();
@@ -89,11 +94,11 @@ public class Server extends Thread {
                     joinedPlayers++;
                 }
             } catch (Exception e) {
-                logger.log(Level.WARNING, "Exception at Server Thread run!" ,e);
+                logger.log(Level.WARNING, "Exception at Server Thread run!", e);
             }
 
         }
-        while (!serverSocket.isClosed()) {
+        while (!serverSocket.isClosed() && gameStarted) {
             //Do something with the clients
         }
     }
@@ -104,7 +109,7 @@ public class Server extends Thread {
             setServerRunning(false);
             serverSocket.close();
         } catch (IOException e) {
-            logger.log(Level.WARNING, "IOException at Client instantiation!" ,e);
+            logger.log(Level.WARNING, "IOException at Client instantiation!", e);
         }
 
     }
@@ -157,7 +162,7 @@ public class Server extends Thread {
                 }
             }
         } catch (SocketException e) {
-            logger.log(Level.WARNING, "SocketException at Server getLocapIp!" ,e);
+            logger.log(Level.WARNING, "SocketException at Server getLocapIp!", e);
         }
         return null;
     }
@@ -193,6 +198,29 @@ public class Server extends Thread {
     public void sendStrings(String msg) {
         for (EchoClient c : clients) {
             c.sendString(msg);
+        }
+    }
+
+    public void sendBroadcastUpdate(Object update) {
+        new AsyncServerTask().execute(new Update("yyy"));
+    }
+
+    public void startGame() {
+        new StartGame().execute();
+        ActivityUtils.getCurrentActivity().startActivity(new Intent(ActivityUtils.getCurrentActivity(), TestActivity.class));
+    }
+
+
+    class StartGame extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            gameStarted = true;
+            for (EchoClient ec : clients) {
+                ec.startGame();
+
+            }
+            return null;
         }
     }
 }
