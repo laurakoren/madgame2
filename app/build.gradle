@@ -1,6 +1,8 @@
+/*
 plugins {
     id "org.sonarqube" version "2.2.1"
 }
+*/
 
 apply plugin: 'com.android.application'
 
@@ -84,6 +86,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: "test") {
     }
 }
 
+/*
 sonarqube {
     properties {
         property "sonar.projectName", "MADNgame"
@@ -93,3 +96,4 @@ sonarqube {
         property "sonar.sourceEncoding", "UTF-8"
     }
 }
+*/
