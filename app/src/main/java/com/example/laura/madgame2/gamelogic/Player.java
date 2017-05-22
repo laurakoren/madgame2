@@ -1,4 +1,4 @@
-package com.example.laura.madgame2.gameLogic;
+package com.example.laura.madgame2.gamelogic;
 
 import java.util.List;
 
@@ -38,16 +38,8 @@ public class Player {
             return figures.get(figureNr);
     }
 
-    public List<Figure> getFigures() {
-        return figures;
-    }
-
     void setFigures(List<Figure> figures) {
         this.figures = figures;
-    }
-
-    public boolean equals(Player that) {
-        return this.getPlayerNr() == that.getPlayerNr();
     }
 }
 

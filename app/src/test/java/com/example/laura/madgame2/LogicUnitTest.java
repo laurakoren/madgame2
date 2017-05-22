@@ -1,7 +1,7 @@
 package com.example.laura.madgame2;
 
-import com.example.laura.madgame2.gameLogic.Field;
-import com.example.laura.madgame2.gameLogic.Figure;
+import com.example.laura.madgame2.gamelogic.Field;
+import com.example.laura.madgame2.gamelogic.Figure;
 
 import org.junit.Assert;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package com.example.laura.madgame2.gameLogic;
+package com.example.laura.madgame2.gamelogic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +18,16 @@ public class GameLogic {
         this.players = players;
         this.movingEntity = movingEntity;
 
+        initFigures();
+
+        createBoardPath(numFields);
+    }
+
+    /**
+     * Initializes the {@link com.example.laura.madgame2.gamelogic.Figure Figures} and associates them with Player Objects. <hr />
+     * Note: Figures may be accessed via the {@link com.example.laura.madgame2.gamelogic.Player#getFigure(int) getFigure(int figureNr)} method of the {@link com.example.laura.madgame2.gamelogic.Player Player} class.
+     */
+    private void initFigures() {
         Player tmpPlayer;
         List<Figure> tmpFigures;
 
@@ -30,18 +40,15 @@ public class GameLogic {
 
             tmpPlayer.setFigures(tmpFigures);
         }
-
-        createBoardPath(numFields, players);
     }
 
     /**
      * Initializes the linked list of fields also referred to as the "game path".
-     * Outsourced to avoid one confusingly long constructor method.
+     * Moved out of constructor to avoid too long method declarations as this code is mostly independent.
      *
      * @param numFields the number of fields in the game path circle
-     * @param players a list of players participating in the game
      */
-    private void createBoardPath(int numFields, List<Player> players) {
+    private void createBoardPath(int numFields) {
         Field dummy = new Field(-1);
         Field current = dummy;
         Field tmpField;
@@ -51,13 +58,18 @@ public class GameLogic {
             current.setNext(new Field(fieldId));
             current = current.next(null);
 
+            /* fetch the owner of the startfield/finish-path-fork.
+             * startfields are on fields 0, 10, 20, 30
+             * and finish-path-forks on fields 39, 9, 19, 29
+             * for players 0, 1, 2 and 3 respectively */
+            tmpPlayer = players.get(((fieldId + 1) / 10) % NUM_PLAYERS);
+
             // declare start fields
-            if (fieldId % 10 == 0 && players.get(fieldId / 10) != null) {
-                players.get(fieldId / 10).setStartField(current);
+            if (fieldId % 10 == 0 && tmpPlayer != null) {
+                tmpPlayer.setStartField(current);
 
                 // declare finish fields
-            } else if (fieldId % 10 == 9 && players.get(((fieldId + 1) / 10) % NUM_PLAYERS) != null) {
-                tmpPlayer = players.get(((fieldId + 1) / 10) % NUM_PLAYERS);
+            } else if (fieldId % 10 == 9 && tmpPlayer != null) {
                 // create first finish field
                 tmpField = new Field(0, tmpPlayer);
                 // connect finish to path
@@ -81,32 +93,55 @@ public class GameLogic {
      * Returns the winner of this game, or null if no one has won yet.
      * If more than one player fulfill the winning condition, the one with the lowest playerNr will be returned.
      *
-     * @return the winner
+     * @return the winner, or null if there is none
      */
     public Player getWinner() {
         Player player;
-        boolean hasWon;
 
         for (int playerNr = 0; playerNr < NUM_PLAYERS; playerNr++) {
             player = players.get(playerNr);
-            if (player != null) {
-                hasWon = true;
-
-                // if all figures of a player are on finish fields...
-                for (int figure = 0; figure < NUM_FIGURES; figure++) {
-                    if (!player.getFigure(figure).getField().isFinishField()) {
-                        hasWon = false;
-                        break;
-                    }
-                }
-
-                // ...he wins
-                if (hasWon)
-                    return player;
-            }
+            if (player != null && hasWon(player))
+                return player;
         }
 
         return null;
+    }
+
+    /**
+     * Checks whether a Player fulfills the winning condition, i.e. all of his Figures are on finish fields.
+     *
+     * @param player the Player to check
+     * @return true if the player has won
+     */
+    private boolean hasWon(Player player) {
+        if (player == null)
+            return false;
+
+        // if all figures of a player are on finish fields...
+        for (int figure = 0; figure < NUM_FIGURES; figure++)
+            if (!player.getFigure(figure).getField().isFinishField())
+                return false;
+
+        // ...he wins
+        return true;
+    }
+
+    /**
+     * Checks whether a given player has no Figures on the Field, i.e. all of his Figures are on "out fields".
+     *
+     * @param player the Player to check for
+     * @return true if all the Player's Figures are on out fields
+     */
+    public boolean hasNoFiguresOnField(Player player) {
+        if (player == null)
+            return false;
+
+        for (int i = 0; i < NUM_FIGURES; i++) {
+            if (player.getFigure(i).getField() != null)
+                return false;
+        }
+
+        return true;
     }
 
     /**
@@ -127,7 +162,10 @@ public class GameLogic {
         if (current == null) {
             // figure is in the out area
             // if player rolled 6, then make the move, else return false
-            return distance == 6 && moveFigureToStartField(figure);
+            if (distance == 6)
+                return moveFigureToStartField(figure);
+            else
+                return false;
         } else {
             // figure is somewhere on the game board
             current = current.next(player, distance);
@@ -142,25 +180,14 @@ public class GameLogic {
         Field current = figure.getField();
         Player player = figure.getPlayer();
 
+        if (current == null)
+            return player.getStartField().getFieldNr();
 
-        if (current == null) {
-            switch(player.getPlayerNr()){
-
-                case 0: return 0;
-                case 1: return 10;
-                case 2: return 20;
-                case 3: return 30;
-            }
-
-            return 0;
-        }
-            // figure is somewhere on the game board
-            for (int i = 0; i < distance; i++)
-                current = current.next(player);
-            return current.getFieldNr();
-
-
-        }
+        // figure is somewhere on the game board
+        for (int i = 0; i < distance; i++)
+            current = current.next(player);
+        return current.getFieldNr();
+    }
 
 
     /**
@@ -171,11 +198,15 @@ public class GameLogic {
      * @return true on success, false otherwise
      */
     private boolean moveFigure(Figure figure, Field field) {
+        if (figure == null)
+            return false;
+        if (field == null)
+            return moveFigureToOutField(figure);
         if (field.hasFigure()) {
             // another figure is blocking the path
             Figure otherFigure = field.getFigure();
 
-            if (figure.getPlayer().equals(otherFigure.getPlayer()))
+            if (figure.getPlayer() == otherFigure.getPlayer())
                 // cant kick own figures, move is impossible
                 return false;
             else
@@ -200,9 +231,14 @@ public class GameLogic {
      *
      * @param figure the figure to be kicked
      */
-    private void moveFigureToOutField(Figure figure) {
-        figure.setField(null);
-        movingEntity.moveFigureToOutField(figure.getPlayer().getPlayerNr(), figure.getFigureNr());
+    private boolean moveFigureToOutField(Figure figure) {
+        if (figure != null) {
+            figure.setField(null);
+            movingEntity.moveFigureToOutField(figure.getPlayer().getPlayerNr(), figure.getFigureNr());
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -212,6 +248,8 @@ public class GameLogic {
      * @return true on success, false otherwise
      */
     private boolean moveFigureToStartField(Figure figure) {
+        if (figure == null)
+            return false;
         return moveFigure(figure, figure.getPlayer().getStartField());
     }
 }

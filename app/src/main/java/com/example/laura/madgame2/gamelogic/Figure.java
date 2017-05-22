@@ -1,4 +1,4 @@
-package com.example.laura.madgame2.gameLogic;
+package com.example.laura.madgame2.gamelogic;
 
 /**
  * A single game figure/piece. Belongs to a player and is placed on a field.
@@ -8,7 +8,7 @@ public class Figure {
     private int figureNr;
 
     /**
-     * the Field this Figure is occupying. if this Figure is in the out area field is set to null.
+     * The Field this Figure is occupying. If this Figure is in the "out area", field is set to null.
      */
     private Field field;
 

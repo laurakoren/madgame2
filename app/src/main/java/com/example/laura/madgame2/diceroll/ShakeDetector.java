@@ -1,4 +1,4 @@
-package com.example.laura.madgame2.diceRoll;
+package com.example.laura.madgame2.diceroll;
 /**
  * Created by Michi on 12.04.2017.
  */
@@ -41,7 +41,7 @@ public class ShakeDetector implements SensorEventListener {
             float gZ = z / SensorManager.GRAVITY_EARTH;
 
             // wenn keine Bewegung wahrgenommen wird, dann ist gFoce nahe bei 1
-            float gForce = (float)Math.sqrt(gX * gX + gY * gY + gZ * gZ);
+            float gForce = (float) Math.sqrt(gX * gX + gY * gY + gZ * gZ);
 
             //wenn gForce größer als der min. Threshold ist, dann liegt ein Shake vor
             if (gForce > SHAKE_THRESHOLD_GRAVITY) {
@@ -64,9 +64,6 @@ public class ShakeDetector implements SensorEventListener {
             }
         }
     }
-
-
-
 
 
 }

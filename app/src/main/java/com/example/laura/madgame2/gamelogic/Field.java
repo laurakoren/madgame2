@@ -1,4 +1,4 @@
-package com.example.laura.madgame2.gameLogic;
+package com.example.laura.madgame2.gamelogic;
 
 /**
  * A single field on the game board. Can be occupied by a player's figure.
@@ -15,9 +15,9 @@ public class Field {
 
     private Field fork;
 
-    Field(int fieldNr, Player finishFieldForPlayer) {
+    Field(int fieldNr, Player finishFieldOwner) {
         this.fieldNr = fieldNr;
-        this.finishFieldForPlayer = finishFieldForPlayer;
+        this.finishFieldForPlayer = finishFieldOwner;
         this.figure = null;
         this.fork = null;
     }
@@ -30,18 +30,30 @@ public class Field {
      * Returns the next Field for the given Player.
      * That is, if the Player were to move a piece from this Field with a dice roll of one, the Field the piece would land on matches this methods return value.
      * If called with argument null, finish fields are ignored.
+     *
+     * @param player the Player whose move this is
+     * @return the Field that results from this part of the move
+     * @see #next(Player, int)
      */
     Field next(Player player) {
         if (player == null)
             return next;
 
         // if this is the last field before the player's finish go there
-        if (fork != null && player.equals(fork.getFinishFieldOwner()))
+        if (fork != null && player == fork.getFinishFieldOwner())
             return fork;
 
         return next;
     }
 
+    /**
+     * Returns the Field that results from moving a given distance from this field.
+     * i.e. returns the result of calling {@link #next(Player) next()} on this Field for a given number of times.
+     *
+     * @param player the Player whose move this is
+     * @param times  the number of Fields to progress
+     * @return the Field that results from this move
+     */
     Field next(Player player, int times) {
         if (times < 0)
             return null;
@@ -72,7 +84,7 @@ public class Field {
 
     /**
      * Puts a Figure on this Field.
-     * Note: It is recommended to do this by calling moveTo on a given Figure.
+     * Note: It is recommended to do this by calling {@link com.example.laura.madgame2.gamelogic.Figure#setField(Field) moveTo()} on a given Figure.
      *
      * @param figure the Figure to place on this Field
      */

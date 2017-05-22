@@ -1,4 +1,4 @@
-package com.example.laura.madgame2.gameLogic;
+package com.example.laura.madgame2.gamelogic;
 
 public interface MovesFigures {
     void moveFigure(int playerNr, int figureNr, int fieldNr);

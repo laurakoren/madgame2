@@ -1,15 +1,15 @@
-package com.example.laura.madgame2.diceRoll;
+package com.example.laura.madgame2.diceroll;
 
-import android.content.Intent;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -77,7 +77,7 @@ public class RollDiceActivity extends AppCompatActivity {
         cheat_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View w) {
-                final CharSequence numbers[] = new CharSequence[] {"1", "2", "3", "4", "5", "6"};
+                final CharSequence[] numbers = new CharSequence[]{"1", "2", "3", "4", "5", "6"};
 
                 //DialogBox wo man eintragen kann welche Zahl man gerne würfeln würde.
                 AlertDialog.Builder builder = new AlertDialog.Builder(RollDiceActivity.this);
@@ -118,16 +118,17 @@ public class RollDiceActivity extends AppCompatActivity {
     }
 
     //Methode die den Würfel animiert und den Würfelsound abspielt
-    private void doAnimationAndSound(){
+    private void doAnimationAndSound() {
         changePicture(rolledNumber);
         Animation animateDice = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animatedice);
         mp.start();
         dice_view.startAnimation(animateDice);
 
     }
+
     //Methode die dem Würfelergebnis das richtige Bild zuordnet
-    private void changePicture(int wurf){
-        switch(wurf){
+    private void changePicture(int wurf) {
+        switch (wurf) {
             case 1:
                 dice_view.setImageResource(R.drawable.one);
                 break;
@@ -153,20 +154,20 @@ public class RollDiceActivity extends AppCompatActivity {
     }
 
     //Buttons sind nach 1-maligem Würfeln nicht mehr klickbar!
-    private void setButtonsOff(){
+    private void setButtonsOff() {
         this.cheat_button.setClickable(false);
         this.roll_button.setClickable(false);
     }
 
     //Methode um einen Rückgabewert der Acitivity zu setzen
-    private void sendData(){
+    private void sendData() {
         //Fenster soll erst nach gewisser Zeit (hier 3 sek.) geschlossen werden!
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("result",getRolledNumber());
-                setResult(RESULT_OK,returnIntent);
+                returnIntent.putExtra("result", getRolledNumber());
+                setResult(RESULT_OK, returnIntent);
                 //Fenster schließen nach dem Würfeln
                 finish();
 
@@ -176,11 +177,11 @@ public class RollDiceActivity extends AppCompatActivity {
     }
 
 
-    public int getRolledNumber(){
+    public int getRolledNumber() {
         return this.rolledNumber;
     }
 
-    public boolean getCheat(){
+    public boolean getCheat() {
         return this.cheated;
     }
 
@@ -197,8 +198,6 @@ public class RollDiceActivity extends AppCompatActivity {
         mSensorManager.unregisterListener(mShakeDetector);
         super.onPause();
     }
-
-
 
 
 }

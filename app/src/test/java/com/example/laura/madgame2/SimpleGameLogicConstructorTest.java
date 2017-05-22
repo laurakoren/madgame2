@@ -1,8 +1,8 @@
 package com.example.laura.madgame2;
 
-import com.example.laura.madgame2.gameLogic.GameLogic;
-import com.example.laura.madgame2.gameLogic.MovesFigures;
-import com.example.laura.madgame2.gameLogic.Player;
+import com.example.laura.madgame2.gamelogic.GameLogic;
+import com.example.laura.madgame2.gamelogic.MovesFigures;
+import com.example.laura.madgame2.gamelogic.Player;
 
 import junit.framework.Assert;
 

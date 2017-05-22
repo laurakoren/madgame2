@@ -6,20 +6,16 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.laura.madgame2.diceRoll.RollDiceActivity;
-import com.example.laura.madgame2.gameLogic.GameLogic;
-import com.example.laura.madgame2.gameLogic.MovesFigures;
-import com.example.laura.madgame2.gameLogic.Player;
+import com.example.laura.madgame2.diceroll.RollDiceActivity;
+import com.example.laura.madgame2.gamelogic.GameLogic;
+import com.example.laura.madgame2.gamelogic.MovesFigures;
+import com.example.laura.madgame2.gamelogic.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.logging.Handler;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -117,8 +113,8 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
                     Toast.LENGTH_SHORT).show();
         }
 
-        int fieldreturn = gameLogic.highlight(players.get(Integer.parseInt(m.group(2))).getFigure(Integer.parseInt(m.group(4))),5);
-        final View img = getViewById("iv_field"+fieldreturn);
+        int fieldreturn = gameLogic.highlight(players.get(Integer.parseInt(m.group(2))).getFigure(Integer.parseInt(m.group(4))), 5);
+        final View img = getViewById("iv_field" + fieldreturn);
         img.setBackgroundResource(R.drawable.fig_empty);
 
         new CountDownTimer(2000, 1000) {
@@ -127,7 +123,7 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
             }
 
             public void onTick(long millisUntilFinished) {
-
+                // unused
             }
         }.start();
 
@@ -196,7 +192,7 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
     /**
      * Helper function to move a view to the location of another view
      *
-     * @param target to view to move
+     * @param target      to view to move
      * @param destination the view to move it to
      */
     private void moveTo(View target, View destination) {
