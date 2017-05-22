@@ -116,10 +116,10 @@ public class Client extends Thread {
                 Log.d(TAG, "got update");
                 Log.d(TAG, update.toString());
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.log(Level.WARNING, "IOException occurred at Client Thread run!", e);
                 killMe();
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                logger.log(Level.WARNING, "ClassNotFoundException occurred at Client Thread run!", e);
             }
         }
 
@@ -128,7 +128,7 @@ public class Client extends Thread {
 
     private void killMe(){
         killThread = true;
-        instance = null;
+        setInstance(null);
         ActivityUtils.getCurrentActivity().startActivity(new Intent(ActivityUtils.getCurrentActivity(), MultiplayerActivity.class));
         Looper.prepare();
         Toast.makeText(ActivityUtils.getCurrentActivity(),"You have been kicked", Toast.LENGTH_SHORT).show();
@@ -177,7 +177,7 @@ public class Client extends Thread {
             Log.d(TAG, "sended Object");
             objectOut.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.WARNING, "IOException occurred at Client Thread run!", e);
         }
     }
 

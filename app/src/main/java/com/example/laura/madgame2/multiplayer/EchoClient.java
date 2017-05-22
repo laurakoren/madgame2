@@ -65,9 +65,9 @@ public class EchoClient extends Thread {
                 Log.d(TAG, "got update");
                 Log.d(TAG, update.toString());
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.log(Level.WARNING, "IOException occurred at Client Thread run!", e);
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                logger.log(Level.WARNING, "ClassNotFoundException occurred at Client Thread run!", e);
             }
         }
 
@@ -135,7 +135,7 @@ public class EchoClient extends Thread {
             Log.d(TAG, "sended Object");
             objectOut.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.WARNING, "IOException occurred at Client Thread run!", e);
         }
     }
 
