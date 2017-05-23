@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.example.laura.madgame2.MultiplayerLobbyActivity;
 import com.example.laura.madgame2.TestActivity;
+import com.example.laura.madgame2.multiplayer.update.Update;
 import com.example.laura.madgame2.utils.ActivityUtils;
 
 import java.io.IOException;
@@ -195,8 +196,8 @@ public class Server extends Thread {
         }
     }
 
-    public void sendBroadcastUpdate(Object update) {
-        new AsyncServerTask().execute(new Update("yyy"));
+    public void sendBroadcastUpdate(Update update) {
+        new AsyncServerTask().execute(update);
     }
 
     public void startGame() {
@@ -208,18 +209,15 @@ public class Server extends Thread {
         clients.get(id-1).shutdown();
         clients.remove(id-1);
         ((MultiplayerLobbyActivity) ActivityUtils.getCurrentActivity()).updateNames(id,"", true);
-
     }
 
 
     class StartGame extends AsyncTask<Void, Void, Void> {
-
         @Override
         protected Void doInBackground(Void... params) {
             gameStarted = true;
             for (EchoClient ec : clients) {
                 ec.startGame();
-
             }
             return null;
         }

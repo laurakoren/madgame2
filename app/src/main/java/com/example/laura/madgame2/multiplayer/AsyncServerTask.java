@@ -2,6 +2,8 @@ package com.example.laura.madgame2.multiplayer;
 
 import android.os.AsyncTask;
 
+import com.example.laura.madgame2.multiplayer.update.Update;
+
 /**
  * Created by Philipp on 16.05.17.
  */

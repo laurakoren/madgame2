@@ -2,15 +2,13 @@ package com.example.laura.madgame2.multiplayer;
 
 import android.util.Log;
 
-import java.io.BufferedReader;
+import com.example.laura.madgame2.multiplayer.update.Update;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,7 +29,7 @@ public class EchoClient extends Thread {
     private boolean gameStarted = false;
     private ObjectOutputStream objectOut;
     private ObjectInputStream objectIn;
-    private Object update;
+    private Update update;
     private boolean killThread = false;
 
     public EchoClient(Socket socket) {
@@ -129,10 +127,10 @@ public class EchoClient extends Thread {
         }
     }
 
-    public void sendUpdate(Object update){
+    public void sendUpdate(Update update){
         try {
             objectOut.writeObject(update);
-            Log.d(TAG, "sended Object");
+            Log.d(TAG, "send Object");
             objectOut.flush();
         } catch (IOException e) {
             logger.log(Level.WARNING, "IOException occurred at Client Thread run!", e);

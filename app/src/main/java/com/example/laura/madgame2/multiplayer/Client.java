@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.example.laura.madgame2.MultiplayerActivity;
 import com.example.laura.madgame2.MultiplayerLobbyActivity;
 import com.example.laura.madgame2.TestActivity;
+import com.example.laura.madgame2.multiplayer.update.Update;
 import com.example.laura.madgame2.utils.ActivityUtils;
 
 import java.io.DataInputStream;
@@ -38,7 +39,7 @@ public class Client extends Thread {
     private String ip;
     private static Client instance;
     private boolean gameStarted = false;
-    private Object update;
+    private Update update;
     private Logger logger = Logger.getLogger("global");
     private boolean killThread = false;
 
@@ -171,7 +172,7 @@ public class Client extends Thread {
     }
 
 
-    public void sendUpdate(Object update) {
+    public void sendUpdate(Update update) {
         try {
             objectOut.writeObject(update);
             Log.d(TAG, "sended Object");
