@@ -25,6 +25,6 @@ class MyTurnPreDiceRollState extends AbstractState {
     void diceRollResult(Controller context, int result, boolean hasCheated) {
         // TODO continue to next state
 
-        context.setState(new MyTurnSelectFigureState(result, playerHasCheatedThisTurn));
+        context.setState(new MyTurnSelectFigureState(result, playerHasCheatedThisTurn, -1));
     }
 }
