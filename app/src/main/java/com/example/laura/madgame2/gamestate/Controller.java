@@ -42,7 +42,7 @@ public class Controller {
 
     // singleton
 
-    public Controller getInstance() {
+    public static Controller getInstance() {
         if (instance == null)
             return instance = new Controller();
         else

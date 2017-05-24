@@ -6,6 +6,7 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +14,7 @@ import com.example.laura.madgame2.diceroll.RollDiceActivity;
 import com.example.laura.madgame2.gamelogic.GameLogic;
 import com.example.laura.madgame2.gamelogic.MovesFigures;
 import com.example.laura.madgame2.gamelogic.Player;
+import com.example.laura.madgame2.gamestate.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,6 +98,12 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
         onPause();
         intent = new Intent(this, RollDiceActivity.class);
         startActivityForResult(intent, NUMBER_IDENTIFIER);
+    }
+
+    public void testState(View view){
+        Controller cont = Controller.getInstance();
+
+
     }
 
     /**
