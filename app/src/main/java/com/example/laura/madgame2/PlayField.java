@@ -39,7 +39,9 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
     private List<List<View>> finishFieldViews;
     private List<List<View>> figureViews;
     private List<List<ViewGroup.LayoutParams>> outFields;
-    TextView outPutText;
+    private TextView outPutText;
+    private SharedPreferences sharedPref;
+    private SharedPreferences.Editor edit;
 
     private static final int NUM_FIELDS = 40;
 
@@ -49,10 +51,17 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_field);
+
+        sharedPref = getSharedPreferences("Highscore",Context.MODE_PRIVATE);
+        edit = sharedPref.edit();
+
         //Felder fürs Speichern von Highscores initialisieren
         if(initialized==false) {
             initializeValues();
         }
+
+
+
         countTurn = 0;
         outPutText = (TextView) getViewById("PlayerTurn");
         outPutText.setText("Spieler 0 starte Spiel!");
@@ -234,8 +243,6 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
 
     //muss aufgerufen werden, wenn ein Spieler gewonnen hat.
     private void saveAmountGamesWon(){
-        SharedPreferences sharedPref = getSharedPreferences("Highscore", Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = sharedPref.edit();
         int amount = Integer.parseInt(sharedPref.getString("gamesWon", "100"));
         amount++;
         edit.putString("gamesWon",amount+"");
@@ -244,8 +251,6 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
 
 
     private void saveAmountDiceRolls(){
-        SharedPreferences sharedPref = getSharedPreferences("Highscore", Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = sharedPref.edit();
         int amount = Integer.parseInt(sharedPref.getString("amountDiceRolls", "100"));
         amount++;
         edit.putString("amountDiceRolls",amount+"");
@@ -255,8 +260,6 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
 
     private void initializeValues(){
         initialized=true;
-        SharedPreferences sharedPref = getSharedPreferences("Highscore", Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = sharedPref.edit();
         edit.putString("gamesWon","0");
         edit.putString("amountDiceRolls","0");
         edit.apply();

@@ -20,9 +20,11 @@ import org.w3c.dom.Text;
 
 public class HighscoreActivity extends AppCompatActivity {
 
-    TextView tv_setGamesWon;
-    TextView tv_setAmountDiceRolls;
-    Button btn_Reset;
+    private  TextView tv_setGamesWon;
+    private  TextView tv_setAmountDiceRolls;
+    private  Button btn_Reset;
+    private SharedPreferences sharedPref;
+    private   SharedPreferences.Editor edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,8 @@ public class HighscoreActivity extends AppCompatActivity {
         tv_setAmountDiceRolls = (TextView)findViewById(R.id.tv_setAmountDiceRolls);
         btn_Reset = (Button)findViewById(R.id.btn_Reset);
 
+        sharedPref = getSharedPreferences("Highscore", Context.MODE_PRIVATE);
+        edit = sharedPref.edit();
 
 
         btn_Reset.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +66,6 @@ public class HighscoreActivity extends AppCompatActivity {
 
     private void showScores(){
         if(getSharedPreferences("Highscore", Context.MODE_PRIVATE)!=null){
-            SharedPreferences sharedPref = getSharedPreferences("Highscore", Context.MODE_PRIVATE);
             String number1 = sharedPref.getString("gamesWon","0");
             tv_setGamesWon.setText(number1);
             String number2 = sharedPref.getString("amountDiceRolls","0");
@@ -71,10 +74,8 @@ public class HighscoreActivity extends AppCompatActivity {
     }
 
     private void clearScores(){
-        SharedPreferences sharedPref = getSharedPreferences("Highscore", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.clear();
-        editor.commit();
+        edit.clear();
+        edit.commit();
         initialDefaultValues();
     }
 
