@@ -32,6 +32,7 @@
         <activity android:name=".MultiplayerActivity" />
         <activity android:name=".MultiplayerLobbyActivity" />
         <activity android:name=".PlayField" />
+        <activity android:name=".highscore.HighscoreActivity" />
     </application>
 
 </manifest>

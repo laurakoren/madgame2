@@ -1,6 +1,8 @@
 package com.example.laura.madgame2;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +30,7 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
     private static final int NUMBER_IDENTIFIER = 1;
 
     private int numberRolled;
+    private static boolean initialized = false;
 
     private GameLogic gameLogic;
     private List<Player> players;
@@ -46,10 +49,14 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_field);
-
+        //Felder fürs Speichern von Highscores initialisieren
+        if(initialized==false) {
+            initializeValues();
+        }
         countTurn = 0;
         outPutText = (TextView) getViewById("PlayerTurn");
         outPutText.setText("Spieler 0 starte Spiel!");
+
 
         players = new ArrayList<>();
         players.add(new Player(0));
@@ -98,6 +105,7 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
         onPause();
         intent = new Intent(this, RollDiceActivity.class);
         startActivityForResult(intent, NUMBER_IDENTIFIER);
+
     }
 
     public void testState(View view){
@@ -163,9 +171,11 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
                     countTurn++;
                     countTurn %= 4;
                     outPutText.setText("Spieler " + countTurn + ", du bist dran!");
+                    saveAmountDiceRolls();
                 } else {
                     gameLogic.draw(players.get(player).getFigure(0), this.numberRolled);
                     outPutText.setText("Spieler " + countTurn + ", du darfst erneut würfeln!");
+                    saveAmountDiceRolls();
                 }
 
 
@@ -216,4 +226,42 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
     public void toast(String s) {
         Toast.makeText(getApplication(), s, Toast.LENGTH_SHORT).show();
     }
+
+    /**
+     * Functions to save the highscores in the Highscores file
+     */
+
+
+    //muss aufgerufen werden, wenn ein Spieler gewonnen hat.
+    private void saveAmountGamesWon(){
+        SharedPreferences sharedPref = getSharedPreferences("Highscore", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = sharedPref.edit();
+        int amount = Integer.parseInt(sharedPref.getString("gamesWon", "100"));
+        amount++;
+        edit.putString("gamesWon",amount+"");
+        edit.apply();
+    }
+
+
+    private void saveAmountDiceRolls(){
+        SharedPreferences sharedPref = getSharedPreferences("Highscore", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = sharedPref.edit();
+        int amount = Integer.parseInt(sharedPref.getString("amountDiceRolls", "100"));
+        amount++;
+        edit.putString("amountDiceRolls",amount+"");
+        edit.apply();
+    }
+
+
+    private void initializeValues(){
+        initialized=true;
+        SharedPreferences sharedPref = getSharedPreferences("Highscore", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = sharedPref.edit();
+        edit.putString("gamesWon","0");
+        edit.putString("amountDiceRolls","0");
+        edit.apply();
+    }
+
+
+
 }

@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.example.laura.madgame2.diceroll.RollDiceActivity;
+import com.example.laura.madgame2.highscore.HighscoreActivity;
 
 public class MainActivity extends AppCompatActivity {
     private Intent intent;
@@ -37,4 +38,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void onClickShowHighscores(View view){
+        intent = new Intent(this, HighscoreActivity.class);
+        startActivity(intent);
+    }
 }
