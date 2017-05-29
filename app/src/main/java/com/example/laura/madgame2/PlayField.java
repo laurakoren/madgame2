@@ -23,6 +23,21 @@ import java.util.regex.Pattern;
 
 public class PlayField extends AppCompatActivity implements MovesFigures {
 
+    /*
+    int s0=0;
+    public void setS0(int S0){S0=s0;}
+    int s1=0;
+    int s2=0;
+    int s3=0;
+    public void setS1(int S1){S1=s1;}
+    public void setS2(int S2){S2=s2;}
+    public void setS3(int S3){S3=s3;}
+    public int getS0(){return s0;}
+    public int getS1(){return s1;}
+    public int getS2(){return s2;}
+    public int getS3(){return s3;}
+    */
+
     private static final int NUMBER_IDENTIFIER = 1;
 
     private static boolean initialized = false;
@@ -52,7 +67,6 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
         //Felder fürs Speichern von Highscores initialisieren
         if (!initialized)
             initializeValues();
-
 
         countTurn = 0;
         outPutText = (TextView) getViewById("PlayerTurn");
@@ -141,7 +155,6 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
         */
     }
 
-
     /**
      * Returns the associated UI element (view) for the given id.
      *
@@ -169,24 +182,67 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
                 int player = countTurn;
                 this.numberRolled = data.getIntExtra("result", -1);
 
-                if (this.numberRolled != 6) {
+                if (this.numberRolled != 6 && player==0 ) {
                     gameLogic.draw(players.get(player).getFigure(0), this.numberRolled);
                     countTurn++;
                     countTurn %= 4;
                     outPutText.setText("Spieler " + countTurn + ", du bist dran!");
+                } else if(player==0){
+                    gameLogic.draw(players.get(player).getFigure(s0), this.numberRolled);
+                    outPutText.setText("Spieler " + countTurn + ", du darfst erneut würfeln!");
+                    s0=s0+1;
+
+                    if(s0==5){
+                        s0=0;
+                    }}
+                if (this.numberRolled != 6 && player==1 ) {
                     saveAmountDiceRolls();
                 } else {
                     gameLogic.draw(players.get(player).getFigure(0), this.numberRolled);
+                    countTurn++;
+                    countTurn %= 4;
+                    outPutText.setText("Spieler " + countTurn + ", du bist dran!");
+                } else if (player==1){
+                    gameLogic.draw(players.get(player).getFigure(s1), this.numberRolled);
                     outPutText.setText("Spieler " + countTurn + ", du darfst erneut würfeln!");
                     saveAmountDiceRolls();
+                    s1=s1+1;
+                    if(s1==5){
+                        s1=0;
+                    }
                 }
+                if (this.numberRolled != 6 && player==2 ) {
+                    gameLogic.draw(players.get(player).getFigure(0), this.numberRolled);
+                    countTurn++;
+                    countTurn %= 4;
+                    outPutText.setText("Spieler " + countTurn + ", du bist dran!");
+                } else if(player==2) {
+                    gameLogic.draw(players.get(player).getFigure(s2), this.numberRolled);
+                    outPutText.setText("Spieler " + countTurn + ", du darfst erneut würfeln!");
+                    s2=s2+1;
 
+                    if(s2==5){
+                        s2=0;
+                    }}
+                if (this.numberRolled != 6 && player==3 ) {
+                    gameLogic.draw(players.get(player).getFigure(0), this.numberRolled);
+                    countTurn++;
+                    countTurn %= 4;
+                    outPutText.setText("Spieler " + countTurn + ", du bist dran!");
+                } else if(player==3) {
+                    gameLogic.draw(players.get(player).getFigure(s3), this.numberRolled);
+                    outPutText.setText("Spieler " + countTurn + ", du darfst erneut würfeln!");
+                    s3 = s3 + 1;
+
+                    if (s3 == 5) {
+                        s3 = 0;
+                    }
+                }
 
                 //   this.numberRolled=data.getIntExtra("result",-1);
                 //  gameLogic.draw(players.get(0).getFigure(0), this.numberRolled);
             }
         }
-
         */
     }
 
@@ -236,7 +292,6 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
      * Functions to save the highscores in the Highscores file
      */
 
-
     //muss aufgerufen werden, wenn ein Spieler gewonnen hat.
     private void saveAmountGamesWon() {
         int amount = Integer.parseInt(sharedPref.getString("gamesWon", "100"));
@@ -245,7 +300,6 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
         edit.apply();
     }
 
-
     private void saveAmountDiceRolls() {
         int amount = Integer.parseInt(sharedPref.getString("amountDiceRolls", "100"));
         amount++;
@@ -253,13 +307,10 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
         edit.apply();
     }
 
-
     private synchronized void initializeValues() {
         initialized = true;
         edit.putString("gamesWon", "0");
         edit.putString("amountDiceRolls", "0");
         edit.apply();
     }
-
-
 }
