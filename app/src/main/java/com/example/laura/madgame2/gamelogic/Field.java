@@ -92,6 +92,7 @@ public class Field {
         this.figure = figure;
     }
 
+
     int getFieldNr() {
         return fieldNr;
     }

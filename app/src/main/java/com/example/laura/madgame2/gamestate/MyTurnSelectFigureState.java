@@ -30,8 +30,8 @@ class MyTurnSelectFigureState extends AbstractState {
                 if (diceRollResult == 6)
                     // player has rolled 6, he may roll another time
                     context.setState(new MyTurnPreDiceRollState(playerHasCheatedThisTurn));
-                else
-                    context.setState(new OtherPlayersTurnState());
+               // else
+                 //   context.setState(new OtherPlayersTurnState());
             } else {
                 // player has changed the figure
                 selectedFigure = figureNr;

@@ -89,6 +89,13 @@ public class GameLogic {
         current.setNext(first);
     }
 
+/*
+    public selectfigure(Figure figure){
+        figure = findViewById(R.id.Figur);
+
+    }
+*/
+
     /**
      * Returns the winner of this game, or null if no one has won yet.
      * If more than one player fulfill the winning condition, the one with the lowest playerNr will be returned.
@@ -162,10 +169,7 @@ public class GameLogic {
         if (current == null) {
             // figure is in the out area
             // if player rolled 6, then make the move, else return false
-            if (distance == 6)
-                return moveFigureToStartField(figure);
-            else
-                return false;
+            return distance == 6 && moveFigureToStartField(figure);
         } else {
             // figure is somewhere on the game board
             current = current.next(player, distance);
@@ -215,7 +219,10 @@ public class GameLogic {
         }
 
         // move figure in model (gamelogic)
-        figure.setField(field);
+        int i = 0;
+
+        //figure.setFigureNr(i);
+      //  figure.setField(field);
 
         // move figure in view (playfield)
         if (field.isFinishField())
