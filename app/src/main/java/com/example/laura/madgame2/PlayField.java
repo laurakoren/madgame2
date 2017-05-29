@@ -4,16 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.laura.madgame2.diceroll.RollDiceActivity;
-import com.example.laura.madgame2.gamelogic.GameLogic;
 import com.example.laura.madgame2.gamelogic.MovesFigures;
 import com.example.laura.madgame2.gamelogic.Player;
 import com.example.laura.madgame2.gamestate.Controller;
@@ -25,15 +23,11 @@ import java.util.regex.Pattern;
 
 public class PlayField extends AppCompatActivity implements MovesFigures {
 
-    private Intent intent;
-
     private static final int NUMBER_IDENTIFIER = 1;
 
-    private int numberRolled;
     private static boolean initialized = false;
 
-    private GameLogic gameLogic;
-    private List<Player> players;
+    private Controller controller;
 
     private List<View> fieldViews;
     private List<List<View>> finishFieldViews;
@@ -52,14 +46,12 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_field);
 
-        sharedPref = getSharedPreferences("Highscore",Context.MODE_PRIVATE);
+        sharedPref = getSharedPreferences("Highscore", Context.MODE_PRIVATE);
         edit = sharedPref.edit();
 
         //Felder fürs Speichern von Highscores initialisieren
-        if(initialized==false) {
+        if (!initialized)
             initializeValues();
-        }
-
 
 
         countTurn = 0;
@@ -67,11 +59,9 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
         outPutText.setText("Spieler 0 starte Spiel!");
 
 
-        players = new ArrayList<>();
-        players.add(new Player(0));
-        players.add(new Player(1));
-        players.add(new Player(2));
-        players.add(new Player(3));
+        List<Player> players = new ArrayList<>();
+        for (int i = 0; i < 4; i++)
+            players.add(new Player(i));
 
         // save fieldViews into list
         fieldViews = new ArrayList<>();
@@ -107,20 +97,18 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
             outFields.add(tmpLayoutParams);
         }
 
-        gameLogic = new GameLogic(players, NUM_FIELDS, this);
+        controller = Controller.getInstance();
+        controller.setPlayers(players, 0, 0); // TODO remove this statement when connecting to multiplayer classes
+        if (!controller.init(this))
+            Log.d("Debug", "Failed to initialize state controller");
     }
 
     public void diceRoll(View view) {
-        onPause();
-        intent = new Intent(this, RollDiceActivity.class);
-        startActivityForResult(intent, NUMBER_IDENTIFIER);
-
-    }
-
-    public void testState(View view){
-        Controller cont = Controller.getInstance();
-
-
+        if (controller.rollDice()) {
+            onPause();
+            Intent intent = new Intent(this, RollDiceActivity.class);
+            startActivityForResult(intent, NUMBER_IDENTIFIER);
+        }
     }
 
     /**
@@ -130,14 +118,13 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
 
         String idOut = viewIn.getResources().getResourceEntryName(viewIn.getId());
 
-        Pattern p = Pattern.compile("(.*)(\\d+)(.*)(\\d+)");
+        Pattern p = Pattern.compile("iv_player(\\d)_figure(\\d)");
         Matcher m = p.matcher(idOut);
 
-        if (m.matches()) {
-            Toast.makeText(getApplication(), "Player: " + m.group(2) + " " + "Figure: " + m.group(4),
-                    Toast.LENGTH_SHORT).show();
-        }
+        if (m.matches())
+            controller.chooseFigure(Integer.valueOf(m.group(1)), Integer.valueOf(m.group(2)));
 
+        /*
         int fieldreturn = gameLogic.highlight(players.get(Integer.parseInt(m.group(2))).getFigure(Integer.parseInt(m.group(4))), 5);
         final View img = getViewById("iv_field" + fieldreturn);
         img.setBackgroundResource(R.drawable.fig_empty);
@@ -151,7 +138,7 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
                 // unused
             }
         }.start();
-
+        */
     }
 
 
@@ -168,6 +155,13 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == NUMBER_IDENTIFIER && resultCode == RESULT_OK) {
+            controller.diceRollResult(data.getIntExtra("result", -1), data.getBooleanExtra("hasCheated", false));
+            saveAmountDiceRolls();
+        }
+
+        /*
         if (requestCode == NUMBER_IDENTIFIER) {
             if (resultCode == RESULT_OK) {
 
@@ -192,6 +186,8 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
                 //  gameLogic.draw(players.get(0).getFigure(0), this.numberRolled);
             }
         }
+
+        */
     }
 
     /**
@@ -242,29 +238,28 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
 
 
     //muss aufgerufen werden, wenn ein Spieler gewonnen hat.
-    private void saveAmountGamesWon(){
+    private void saveAmountGamesWon() {
         int amount = Integer.parseInt(sharedPref.getString("gamesWon", "100"));
         amount++;
-        edit.putString("gamesWon",amount+"");
+        edit.putString("gamesWon", Integer.toString(amount));
         edit.apply();
     }
 
 
-    private void saveAmountDiceRolls(){
+    private void saveAmountDiceRolls() {
         int amount = Integer.parseInt(sharedPref.getString("amountDiceRolls", "100"));
         amount++;
-        edit.putString("amountDiceRolls",amount+"");
+        edit.putString("amountDiceRolls", Integer.toString(amount));
         edit.apply();
     }
 
 
-    private void initializeValues(){
-        initialized=true;
-        edit.putString("gamesWon","0");
-        edit.putString("amountDiceRolls","0");
+    private synchronized void initializeValues() {
+        initialized = true;
+        edit.putString("gamesWon", "0");
+        edit.putString("amountDiceRolls", "0");
         edit.apply();
     }
-
 
 
 }

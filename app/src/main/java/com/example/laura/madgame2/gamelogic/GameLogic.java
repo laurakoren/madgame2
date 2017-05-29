@@ -129,12 +129,11 @@ public class GameLogic {
     /**
      * Checks whether a given player has no Figures on the Field, i.e. all of his Figures are on "out fields".
      *
-     * @param player the Player to check for
+     * @param playerNr the number of the player to check for
      * @return true if all the Player's Figures are on out fields
      */
-    public boolean hasNoFiguresOnField(Player player) {
-        if (player == null)
-            return false;
+    public boolean hasNoFiguresOnField(int playerNr) {
+        Player player = players.get(playerNr);
 
         for (int i = 0; i < NUM_FIGURES; i++) {
             if (player.getFigure(i).getField() != null)
@@ -147,16 +146,18 @@ public class GameLogic {
     /**
      * Moves a figure for a given distance over the board. Returns true if the move is valid and was executed and returns false else. If false is returned, the board remains unchanged.
      *
-     * @param figure   the figure to move
+     * @param playerNr the number of the player who owns the figure
+     * @param figureNr the number of the figure
      * @param distance the distance to move it
      * @return true on success, false otherwise
      */
-    public boolean draw(Figure figure, int distance) {
-        if (figure == null || distance < 0 || distance > 6)
+    public boolean draw(int playerNr, int figureNr, int distance) {
+        if (distance < 0 || distance > 6)
             return false;
 
+        Player player = players.get(playerNr);
+        Figure figure = player.getFigure(figureNr);
         Field current = figure.getField();
-        Player player = figure.getPlayer();
 
         // determine where the figure is
         if (current == null) {

@@ -1,7 +1,7 @@
 package com.example.laura.madgame2.gamestate;
 
 /**
- * State that is active during this Player's turn. In this state the Player may roll his dice.
+ * State that is active during this Player's turn. In this state the Player may select one of his figures to move.
  */
 class MyTurnSelectFigureState extends AbstractState {
 
@@ -18,20 +18,26 @@ class MyTurnSelectFigureState extends AbstractState {
     @Override
     void chooseFigure(Controller context, int playerNr, int figureNr) {
 
+        // TODO Check if the player cant make any move (e.g. because a few of his figures are in the finish, but the rest cant follow up) and inform him
 
-        // TODO if all figures are in "out fields" then the player may roll up to three times or until he rolls a 6
-
-        if (playerNr == context.myPlayerNr()) {
+        if (playerNr == context.currPlayerNr()) {
             if (figureNr == selectedFigure) {
                 // player has confirmed his selection
 
-                // TODO move figure
+                if (context.logic().draw(playerNr,figureNr,diceRollResult)) {
+                    // move executed, continue with next state
 
-                if (diceRollResult == 6)
-                    // player has rolled 6, he may roll another time
-                    context.setState(new MyTurnPreDiceRollState(playerHasCheatedThisTurn));
-                else
-                    context.setState(new OtherPlayersTurnState());
+                    if (diceRollResult == 6)
+                        // player has rolled 6, he may roll another time
+                        // TODO display message
+                        context.setState(new MyTurnPreDiceRollState(playerHasCheatedThisTurn));
+                    else
+                        // the players move is over
+                        context.endTurn();
+                } else {
+                    // cannot do that move
+                    // TODO display message
+                }
             } else {
                 // player has changed the figure
                 selectedFigure = figureNr;
@@ -39,15 +45,14 @@ class MyTurnSelectFigureState extends AbstractState {
                 // TODO highlight result field
             }
         } else {
-            // player has chosen another Player's figure
+            // player has selected another Player's figure
+            // TODO display message
         }
-
-
     }
 
     @Override
-    void rollDice(Controller context) {
-        // ignore action
+    boolean rollDice(Controller context) {
+        return false; // ignore action
     }
 
     @Override

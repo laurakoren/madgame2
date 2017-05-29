@@ -22,7 +22,7 @@ public class LogicUnitTest extends LogicAbstractUnitTest {
     @Test
     public void rollingSixMovesFigureFromOutToStartField() {
         for (int i = 0; i < NUM_PLAYERS; i++) {
-            logic.draw(players.get(i).getFigure(0), 6);
+            logic.draw(i, 0, 6);
 
             Assert.assertEquals(players.get(i).getFigure(0).getField(), players.get(i).getStartField());
         }
@@ -33,7 +33,7 @@ public class LogicUnitTest extends LogicAbstractUnitTest {
         Random random = new Random(System.currentTimeMillis());
 
         for (int i = 1; i < 100; i++) {
-            logic.draw(players.get(0).getFigure(0), random.nextInt(5) + 1);
+            logic.draw(0, 0, random.nextInt(5) + 1);
 
             Assert.assertNull(players.get(0).getFigure(0).getField());
         }
@@ -44,13 +44,13 @@ public class LogicUnitTest extends LogicAbstractUnitTest {
         Figure a = players.get(0).getFigure(0);
         Figure b = players.get(1).getFigure(0);
 
-        logic.draw(b, 6);
+        logic.draw(1, 0, 6);
 
         Field f = b.getField();
 
-        logic.draw(a, 6);
-        logic.draw(a, 6);
-        logic.draw(a, 4);
+        logic.draw(0, 0, 6);
+        logic.draw(0, 0, 6);
+        logic.draw(0, 0, 4);
 
         Assert.assertNull(b.getField());
         Assert.assertEquals(a.getField(), f);
@@ -61,13 +61,13 @@ public class LogicUnitTest extends LogicAbstractUnitTest {
         Figure a = players.get(0).getFigure(0);
         Figure b = players.get(1).getFigure(0);
 
-        logic.draw(a, 6);
-        logic.draw(a, 6);
-        logic.draw(a, 4);
+        logic.draw(0, 0, 6);
+        logic.draw(0, 0, 6);
+        logic.draw(0, 0, 4);
 
         Field f = a.getField();
 
-        logic.draw(b, 6);
+        logic.draw(1, 0, 6);
 
         Assert.assertNull(a.getField());
         Assert.assertEquals(b.getField(), f);

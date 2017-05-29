@@ -6,9 +6,11 @@ package com.example.laura.madgame2.gamestate;
 class MyTurnPreDiceRollState extends AbstractState {
 
     private boolean playerHasCheatedThisTurn;
+    private int unluckyThrowsCount;
 
     MyTurnPreDiceRollState(boolean playerHasCheatedThisTurn) {
         this.playerHasCheatedThisTurn = playerHasCheatedThisTurn;
+        this.unluckyThrowsCount = 0;
     }
 
     @Override
@@ -17,14 +19,27 @@ class MyTurnPreDiceRollState extends AbstractState {
     }
 
     @Override
-    void rollDice(Controller context) {
-        // TODO initiate diceRoll and ensure that player doesn't cheat more than once a turn
+    boolean rollDice(Controller context) {
+        return true;
     }
 
     @Override
     void diceRollResult(Controller context, int result, boolean hasCheated) {
-        // TODO continue to next state
 
-        context.setState(new MyTurnSelectFigureState(result, playerHasCheatedThisTurn, -1));
+        if (result != 6 && context.logic().hasNoFiguresOnField(context.currPlayerNr())) {
+            // player has no figures on field
+
+            if (++unluckyThrowsCount < 3) {
+                // he may roll again (up to 3 times)
+                // TODO display message
+            } else {
+                // player has used up his 3 rolls
+                // TODO display message
+                context.endTurn();
+            }
+        } else {
+            // normal procedure: continue to next state
+            context.setState(new MyTurnSelectFigureState(result, playerHasCheatedThisTurn, -1));
+        }
     }
 }

@@ -18,7 +18,7 @@ abstract class AbstractState {
     /**
      * The player wants to roll the dice
      */
-    abstract void rollDice(Controller context);
+    abstract boolean rollDice(Controller context);
 
     /**
      * The die has been cast. The results must be honored.
