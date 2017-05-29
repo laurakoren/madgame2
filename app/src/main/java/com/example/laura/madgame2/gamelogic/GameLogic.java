@@ -170,7 +170,10 @@ public class GameLogic {
         if (current == null) {
             // figure is in the out area
             // if player rolled 6, then make the move, else return false
-            return distance == 6 && moveFigureToStartField(figure);
+            if (distance == 6)
+                return moveFigureToStartField(figure);
+            else
+                return false;
         } else {
             // figure is somewhere on the game board
             current = current.next(player, distance);
@@ -220,10 +223,7 @@ public class GameLogic {
         }
 
         // move figure in model (gamelogic)
-        int i = 0;
-
-        //figure.setFigureNr(i);
-      //  figure.setField(field);
+        figure.setField(field);
 
         // move figure in view (playfield)
         if (field.isFinishField())
