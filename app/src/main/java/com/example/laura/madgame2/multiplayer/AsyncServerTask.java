@@ -12,7 +12,9 @@ public class AsyncServerTask extends AsyncTask<Update, Void, Void> {
 
     @Override
     protected Void doInBackground(Update... params) {
-        Server.getInstance().sendBroadcastUpdate(params[0]);
+        for (EchoClient ec : Server.getInstance().getClients()) {
+            ec.sendUpdate(params[0]);
+        }
         return null;
     }
 }

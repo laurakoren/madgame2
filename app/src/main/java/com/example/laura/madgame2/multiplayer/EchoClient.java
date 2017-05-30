@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,28 +41,30 @@ public class EchoClient extends Thread {
             objectOut = new ObjectOutputStream(socket.getOutputStream());
             objectIn = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
-            logger.log(Level.WARNING, "IOException at EchoClient instantiation!" ,e);
+            logger.log(Level.WARNING, "IOException at EchoClient instantiation!", e);
         }
     }
 
     @Override
     public void run() {
-        Log.d(TAG, "Started");
-        while(!gameStarted && !killThread){
-        try {
-            playername = in.readUTF();
-        } catch (IOException e) {
-            logger.log(Level.WARNING, "IOException at EchoClient Thread run!" ,e);
-        }
-        Log.d(TAG, "GOT: " + playername);
+        ServerNotificator serverNotificator = new ServerNotificator();
+        while (!gameStarted && !killThread) {
+            try {
+                playername = in.readUTF();
+                if (playername.equals("acceptStart")) {
+                    gameStarted = true;
+                    break;
+                }
+            } catch (IOException e) {
+                logger.log(Level.WARNING, "IOException at EchoClient Thread run!", e);
+            }
         }
 
-        while(gameStarted && !killThread){
+        while (gameStarted && !killThread) {
             try {
-                Log.d(TAG, "start reading");
                 update = (Update) objectIn.readObject();
-                Log.d(TAG, "got update");
                 Log.d(TAG, update.toString());
+                serverNotificator.notifyServer();
             } catch (IOException e) {
                 logger.log(Level.WARNING, "IOException occurred at Client Thread run!", e);
             } catch (ClassNotFoundException e) {
@@ -69,16 +72,19 @@ public class EchoClient extends Thread {
             }
         }
 
-        Log.d(TAG, "KILLED");
-
     }
 
+    /**
+     * sendet einen String an den dazugehörigen Client
+     *
+     * @param msg die Nachricht als String
+     */
     public void sendString(String msg) {
         try {
             out.writeUTF(msg);
             out.flush();
         } catch (IOException e) {
-            logger.log(Level.WARNING, "IOException at EchoClient sendString!" ,e);
+            logger.log(Level.WARNING, "IOException at EchoClient sendString!", e);
         }
     }
 
@@ -114,7 +120,11 @@ public class EchoClient extends Thread {
         this.out = out;
     }
 
-    public void shutdown(){
+
+    /**
+     * Schaltet den EchoClient ab und wirft ihm damit aus der Lobby
+     */
+    public void shutdown() {
         try {
             killThread = true;
             in.close();
@@ -127,17 +137,41 @@ public class EchoClient extends Thread {
         }
     }
 
-    public void sendUpdate(Update update){
+    /**
+     * Sendet ein Update an den Client
+     *
+     * @param update Das Update, doh.
+     */
+    public void sendUpdate(Update update) {
         try {
             objectOut.writeObject(update);
-            Log.d(TAG, "send Object");
             objectOut.flush();
         } catch (IOException e) {
             logger.log(Level.WARNING, "IOException occurred at Client Thread run!", e);
         }
     }
 
-    public void startGame(){
+    /**
+     * Startet das Spiel
+     */
+    public void startGame() {
         sendString("start");
     }
+
+    public class ServerNotificator extends Observable {
+
+
+        public ServerNotificator() {
+            this.addObserver(Server.getInstance());
+        }
+
+        /**
+         * Wird ein Update erhalten, wird der Server davon in Kenntnis gesetzt und erhält dieses.
+         */
+        public void notifyServer() {
+            setChanged();
+            notifyObservers(update);
+        }
+    }
+
 }

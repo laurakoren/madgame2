@@ -30,6 +30,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MultiplayerActivity" />
+        <activity android:name=".TestActivity" />
         <activity android:name=".MultiplayerLobbyActivity" />
         <activity android:name=".PlayField" />
         <activity android:name=".highscore.HighscoreActivity" />

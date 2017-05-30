@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.example.laura.madgame2.MultiplayerActivity;
 import com.example.laura.madgame2.MultiplayerLobbyActivity;
+import com.example.laura.madgame2.PlayField;
 import com.example.laura.madgame2.TestActivity;
 import com.example.laura.madgame2.multiplayer.update.Update;
 import com.example.laura.madgame2.utils.ActivityUtils;
@@ -67,6 +68,11 @@ public class Client extends Thread {
         instance = client;
     }
 
+    /**
+     * Gibt die laufende Instance des Clients zurück oder erstellt eine neue, falls es keine Instance gibt.
+     * DER CLIENT IST AUSSCHLIESSLICH ÜBER DIESE METHODE AUFZURUFEN!
+     * Siehe Singleton.
+     */
     public static synchronized Client getInstance() {
         return instance;
     }
@@ -82,7 +88,6 @@ public class Client extends Thread {
         } catch (IOException e) {
             logger.log(Level.WARNING, "IOException at Client Thread run!", e);
         }
-        Log.d(TAG, "playername send");
 
 
         int count = 0;
@@ -91,10 +96,10 @@ public class Client extends Thread {
             try {
                 Thread.sleep(500);
                 input = in.readUTF();
-                Log.d(TAG, input);
-                if(input.equals("start")){
+                if (input.equals("start")) {
                     gameStarted = true;
-                    ActivityUtils.getCurrentActivity().startActivity(new Intent(ActivityUtils.getCurrentActivity(), TestActivity.class));
+                    ActivityUtils.getCurrentActivity().startActivity(new Intent(ActivityUtils.getCurrentActivity(), PlayField.class));
+                    sendString("acceptStart");
                     break;
                 }
                 playerNames[count] = input;
@@ -112,10 +117,7 @@ public class Client extends Thread {
 
         while (gameStarted && !killThread) {
             try {
-                Log.d(TAG, "start reading");
                 update = (Update) objectIn.readObject();
-                Log.d(TAG, "got update");
-                Log.d(TAG, update.toString());
             } catch (IOException e) {
                 logger.log(Level.WARNING, "IOException occurred at Client Thread run!", e);
                 killMe();
@@ -127,12 +129,15 @@ public class Client extends Thread {
 
     }
 
-    private void killMe(){
+    /**
+     * Schaltet den Client ab und löscht die momentane Instance.
+     */
+    private void killMe() {
         killThread = true;
         setInstance(null);
         ActivityUtils.getCurrentActivity().startActivity(new Intent(ActivityUtils.getCurrentActivity(), MultiplayerActivity.class));
         Looper.prepare();
-        Toast.makeText(ActivityUtils.getCurrentActivity(),"You have been kicked", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ActivityUtils.getCurrentActivity(), "You have been kicked", Toast.LENGTH_SHORT).show();
         Looper.loop();
     }
 
@@ -149,6 +154,11 @@ public class Client extends Thread {
         return clientSocket.isConnected();
     }
 
+    /**
+     * Sendet einen String an den EchoClient
+     *
+     * @param msg Die Nachricht als String
+     */
     public void sendString(String msg) {
         try {
             out.writeUTF(msg);
@@ -156,7 +166,6 @@ public class Client extends Thread {
         } catch (IOException e) {
             logger.log(Level.WARNING, "IOException at Client sendingString!", e);
         }
-
     }
 
     public static String getPlayerName() {
@@ -171,11 +180,14 @@ public class Client extends Thread {
         Client.playerName = playerName;
     }
 
-
+    /**
+     * Sendet ein Update an den EchoClient.
+     *
+     * @param update Das Update, doh.
+     */
     public void sendUpdate(Update update) {
         try {
             objectOut.writeObject(update);
-            Log.d(TAG, "sended Object");
             objectOut.flush();
         } catch (IOException e) {
             logger.log(Level.WARNING, "IOException occurred at Client Thread run!", e);

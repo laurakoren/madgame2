@@ -12,6 +12,7 @@ public class UpdateRolledDice extends Update {
     public UpdateRolledDice(int playerNr, int diceResult) {
         super();
         this.diceResult = diceResult;
+        this.playerNr = playerNr;
     }
 
     public int getDiceResult() {
