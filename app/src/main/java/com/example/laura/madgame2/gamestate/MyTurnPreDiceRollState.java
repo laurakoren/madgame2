@@ -1,5 +1,8 @@
 package com.example.laura.madgame2.gamestate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * State that is active during this Player's turn. In this state the Player may roll his dice.
  */
@@ -14,7 +17,12 @@ class MyTurnPreDiceRollState extends AbstractState {
     }
 
     @Override
-    void chooseFigure(Controller context, int playerNr, int figureNr) {
+    List<Action> chooseFigure(Controller context, int playerNr, int figureNr) {
+        Action fig = new UpdatePlayerFigure(playerNr,figureNr);
+        ArrayList<Action> list = new ArrayList<>();
+        list.add(fig);
+        return list;
+
         // ignore action
     }
 
@@ -24,7 +32,7 @@ class MyTurnPreDiceRollState extends AbstractState {
     }
 
     @Override
-    void diceRollResult(Controller context, int result, boolean hasCheated) {
+    List<Action> diceRollResult(Controller context, int result, boolean hasCheated) {
 
         if (result != 6 && context.logic().hasNoFiguresOnField(context.currPlayerNr())) {
             // player has no figures on field
@@ -41,5 +49,10 @@ class MyTurnPreDiceRollState extends AbstractState {
             // normal procedure: continue to next state
             context.setState(new MyTurnSelectFigureState(result, playerHasCheatedThisTurn, -1));
         }
+
+        Action dice = new UpdateDiceRoll(result);
+        ArrayList<Action> list = new ArrayList<>();
+        list.add(dice);
+        return list;
     }
 }
