@@ -4,6 +4,8 @@ import com.example.laura.madgame2.gamelogic.GameLogic;
 import com.example.laura.madgame2.gamelogic.MovesFigures;
 import com.example.laura.madgame2.gamelogic.Player;
 import com.example.laura.madgame2.multiplayer.update.Update;
+import com.example.laura.madgame2.multiplayer.update.UpdatePlayersTurn;
+import com.example.laura.madgame2.multiplayer.update.UpdateRolledDice;
 
 import java.util.List;
 
@@ -94,7 +96,14 @@ public class Controller {
     // network accessor methods for states
 
     public void receiveUpdate(Update update) {
-        setState(new OtherPlayersTurnState());
+
+        if(update instanceof UpdatePlayersTurn){
+            setState(new MyTurnPreDiceRollState(false));
+        }
+
+        if(update instanceof UpdateRolledDice){
+            //TODO Notification
+        }
 
 
     }

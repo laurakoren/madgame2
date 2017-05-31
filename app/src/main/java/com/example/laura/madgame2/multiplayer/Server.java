@@ -8,7 +8,10 @@ import android.util.Log;
 import com.example.laura.madgame2.MultiplayerLobbyActivity;
 import com.example.laura.madgame2.PlayField;
 import com.example.laura.madgame2.TestActivity;
+import com.example.laura.madgame2.gamestate.Controller;
 import com.example.laura.madgame2.multiplayer.update.Update;
+import com.example.laura.madgame2.multiplayer.update.UpdateChooseFigure;
+import com.example.laura.madgame2.multiplayer.update.UpdatePlayersTurn;
 import com.example.laura.madgame2.multiplayer.update.UpdateRolledDice;
 import com.example.laura.madgame2.utils.ActivityUtils;
 
@@ -253,7 +256,15 @@ public class Server extends Thread implements Observer {
      */
     @Override
     public void update(Observable o, Object update) {
-        //do someting
+
+        Update up =(Update) update;
+
+        if(((Update) update).getPlayerNr()==0){
+            Controller.getInstance().receiveUpdate(up);
+
+        }else{
+            sendBroadcastUpdate(up);
+        }
 
     }
 

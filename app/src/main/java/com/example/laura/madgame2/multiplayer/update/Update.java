@@ -8,4 +8,6 @@ import java.io.Serializable;
 
 public abstract class Update implements Serializable{
 
+    public abstract int getPlayerNr();
+
 }
