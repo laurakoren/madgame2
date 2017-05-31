@@ -8,7 +8,7 @@ import android.widget.Toast;
 import com.example.laura.madgame2.MultiplayerActivity;
 import com.example.laura.madgame2.MultiplayerLobbyActivity;
 import com.example.laura.madgame2.PlayField;
-import com.example.laura.madgame2.TestActivity;
+//import com.example.laura.madgame2.TestActivity;
 import com.example.laura.madgame2.gamestate.Controller;
 import com.example.laura.madgame2.multiplayer.update.Update;
 import com.example.laura.madgame2.utils.ActivityUtils;

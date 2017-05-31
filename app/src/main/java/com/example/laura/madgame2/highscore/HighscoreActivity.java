@@ -18,13 +18,16 @@ import com.example.laura.madgame2.diceroll.RollDiceActivity;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class HighscoreActivity extends AppCompatActivity {
 
     private  TextView tv_setGamesWon;
     private  TextView tv_setAmountDiceRolls;
+    private  TextView tv_setAmountCheated;
     private  Button btn_Reset;
-    private SharedPreferences sharedPref;
-    private   SharedPreferences.Editor edit;
+    private List<TextView> tv_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +36,12 @@ public class HighscoreActivity extends AppCompatActivity {
 
         tv_setGamesWon = (TextView)findViewById(R.id.tv_setGamesWon);
         tv_setAmountDiceRolls = (TextView)findViewById(R.id.tv_setAmountDiceRolls);
+        tv_setAmountCheated = (TextView)findViewById(R.id.tv_setAmountCheated);
+        tv_list = new ArrayList<TextView>();
+        tv_list.add(tv_setAmountDiceRolls);
+        tv_list.add(tv_setGamesWon);
+        tv_list.add(tv_setAmountCheated);
         btn_Reset = (Button)findViewById(R.id.btn_Reset);
-
-        sharedPref = getSharedPreferences("Highscore", Context.MODE_PRIVATE);
-        edit = sharedPref.edit();
 
 
         btn_Reset.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +55,7 @@ public class HighscoreActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                        if(options[which].equals("Ja")){
-                           clearScores();
+                           ScoreEdit.clearScores(tv_list);
                            Toast.makeText(getApplication(), "Highscores wurden zurückgesetzt!",
                                    Toast.LENGTH_SHORT).show();
                        }
@@ -60,30 +65,9 @@ public class HighscoreActivity extends AppCompatActivity {
                             }
         });
 
-      showScores();
+      ScoreEdit.showScores(tv_list);
 
     }
-
-    private void showScores(){
-        if(getSharedPreferences("Highscore", Context.MODE_PRIVATE)!=null){
-            String number1 = sharedPref.getString("gamesWon","0");
-            tv_setGamesWon.setText(number1);
-            String number2 = sharedPref.getString("amountDiceRolls","0");
-            tv_setAmountDiceRolls.setText(number2);
-        }
-    }
-
-    private void clearScores(){
-        edit.clear();
-        edit.commit();
-        initialDefaultValues();
-    }
-
-    private void initialDefaultValues(){
-        tv_setGamesWon.setText("0");
-        tv_setAmountDiceRolls.setText("0");
-    }
-
 
 
 }

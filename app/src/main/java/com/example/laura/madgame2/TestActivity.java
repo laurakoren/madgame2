@@ -1,4 +1,4 @@
-package com.example.laura.madgame2;
+/*package com.example.laura.madgame2;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,3 +24,4 @@ public class TestActivity extends AppCompatActivity {
         Client.getInstance().sendUpdate(new UpdateRolledDice(6,6));
     }
 }
+*/

@@ -78,6 +78,23 @@
         </TableRow>
 
         <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_amountCheated"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Anzahl gecheatet:" />
+
+            <TextView
+                android:id="@+id/tv_setAmountCheated"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0" />
+        </TableRow>
+
+        <TableRow
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:layout_editor_absoluteX="4dp"
@@ -90,6 +107,7 @@
                 android:layout_weight="1"
 
                 android:text="Reset" />
+
         </TableRow>
 
     </TableLayout>

@@ -15,6 +15,7 @@ import com.example.laura.madgame2.diceroll.RollDiceActivity;
 import com.example.laura.madgame2.gamelogic.MovesFigures;
 import com.example.laura.madgame2.gamelogic.Player;
 import com.example.laura.madgame2.gamestate.Controller;
+import com.example.laura.madgame2.highscore.ScoreEdit;
 import com.example.laura.madgame2.multiplayer.Client;
 import com.example.laura.madgame2.multiplayer.Server;
 
@@ -42,8 +43,6 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
 
     private static final int NUMBER_IDENTIFIER = 1;
 
-    private static boolean initialized = false;
-
     private Controller controller;
 
     private List<View> fieldViews;
@@ -51,8 +50,6 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
     private List<List<View>> figureViews;
     private List<List<ViewGroup.LayoutParams>> outFields;
     private TextView outPutText;
-    private SharedPreferences sharedPref;
-    private SharedPreferences.Editor edit;
 
     private static final int NUM_FIELDS = 40;
 
@@ -63,12 +60,6 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_field);
 
-        sharedPref = getSharedPreferences("Highscore", Context.MODE_PRIVATE);
-        edit = sharedPref.edit();
-
-        //Felder fürs Speichern von Highscores initialisieren
-        if (!initialized)
-            initializeValues();
 
         countTurn = 0;
         outPutText = (TextView) getViewById("PlayerTurn");
@@ -180,7 +171,7 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
 
         if (requestCode == NUMBER_IDENTIFIER && resultCode == RESULT_OK) {
             controller.diceRollResult(data.getIntExtra("result", -1), data.getBooleanExtra("hasCheated", false));
-            saveAmountDiceRolls();
+            ScoreEdit.updateScore("amountDiceRolls");
         }
 
         /*
@@ -297,29 +288,5 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
         Toast.makeText(getApplication(), s, Toast.LENGTH_SHORT).show();
     }
 
-    /**
-     * Functions to save the highscores in the Highscores file
-     */
 
-    //muss aufgerufen werden, wenn ein Spieler gewonnen hat.
-    private void saveAmountGamesWon() {
-        int amount = Integer.parseInt(sharedPref.getString("gamesWon", "100"));
-        amount++;
-        edit.putString("gamesWon", Integer.toString(amount));
-        edit.apply();
-    }
-
-    private void saveAmountDiceRolls() {
-        int amount = Integer.parseInt(sharedPref.getString("amountDiceRolls", "100"));
-        amount++;
-        edit.putString("amountDiceRolls", Integer.toString(amount));
-        edit.apply();
-    }
-
-    private synchronized void initializeValues() {
-        initialized = true;
-        edit.putString("gamesWon", "0");
-        edit.putString("amountDiceRolls", "0");
-        edit.apply();
-    }
 }

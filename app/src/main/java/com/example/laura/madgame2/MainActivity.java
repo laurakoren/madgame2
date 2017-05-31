@@ -8,17 +8,20 @@ import android.view.View;
 
 import com.example.laura.madgame2.diceroll.RollDiceActivity;
 import com.example.laura.madgame2.highscore.HighscoreActivity;
+import com.example.laura.madgame2.highscore.ScoreEdit;
 
 public class MainActivity extends AppCompatActivity {
     private Intent intent;
     private static final int NUMBER_IDENTIFIER = 1;
     private int number;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        ScoreEdit.initializeFile("Highscore", this);
     }
 
     public void setRollDiceActivity(View view) {
@@ -42,4 +45,6 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(this, HighscoreActivity.class);
         startActivity(intent);
     }
+
+
 }
