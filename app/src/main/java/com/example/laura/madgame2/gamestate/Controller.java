@@ -1,5 +1,8 @@
 package com.example.laura.madgame2.gamestate;
 
+import android.view.View;
+import android.widget.TextView;
+
 import com.example.laura.madgame2.gamelogic.GameLogic;
 import com.example.laura.madgame2.gamelogic.MovesFigures;
 import com.example.laura.madgame2.gamelogic.Player;
@@ -19,6 +22,8 @@ import java.util.List;
  */
 public class Controller {
 
+
+    private TextView outputtext;
     private static Controller instance;
 
     private AbstractState state;
@@ -50,6 +55,15 @@ public class Controller {
 
     public List<Action> chooseFigure(int playerNr, int figureNr) {
         return state.chooseFigure(this, playerNr, figureNr);
+
+    }
+
+    public void setOutputtext (TextView view){
+        outputtext= view;
+    }
+
+    void putText(String text){
+        outputtext.setText(text);
 
     }
 

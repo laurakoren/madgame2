@@ -1,5 +1,7 @@
 package com.example.laura.madgame2.gamestate;
 
+import android.widget.TextView;
+
 import android.content.Context;
 
 import com.example.laura.madgame2.gamestate.action.Action;
@@ -18,6 +20,7 @@ class MyTurnSelectFigureState extends AbstractState {
     private int diceRollResult;
     private boolean playerHasCheatedThisTurn;
     private int selectedFigure;
+    public TextView outPutText;
 
     MyTurnSelectFigureState(int diceRollResult, boolean playerHasCheatedThisTurn, int selectedFigure) {
         this.diceRollResult = diceRollResult;
@@ -30,31 +33,35 @@ class MyTurnSelectFigureState extends AbstractState {
 
         // TODO Check if the player cant make any move (e.g. because a few of his figures are in the finish, but the rest cant follow up) and inform him
 
+
         ArrayList<Action> list = new ArrayList<>();
 
         if (playerNr == context.currPlayerNr()) {
             if (figureNr == selectedFigure) {
                 // player has confirmed his selection
 
-                if (context.logic().draw(playerNr,figureNr,diceRollResult)) {
+                if (context.logic().draw(playerNr, figureNr, diceRollResult)) {
                     // move executed, continue with next state
 
-                    if (diceRollResult == 6)
+                    if (diceRollResult == 6) {
                         // player has rolled 6, he may roll another time
-                        // TODO display message
+                        context.putText("Erneut würfeln ");
+
                         context.setState(new MyTurnPreDiceRollState(playerHasCheatedThisTurn));
-                    else
+                    } else {
                         // the players move is over
                         context.endTurn();
+                    }
                 } else {
                     // cannot do that move
-                    // TODO display message
+                    // outPutText = (TextView) getViewById("PlayerTurn");
+                    context.putText("Sie können diesen Zug nicht ziehen ");
                 }
             } else {
                 // player has changed the figure
                 selectedFigure = figureNr;
 
-                int fieldToHighlight = context.logic().highlight(selectedFigure,playerNr,diceRollResult);
+                int fieldToHighlight = context.logic().highlight(selectedFigure, playerNr, diceRollResult);
                 list.add(new HighlightAction(fieldToHighlight));
 
 
@@ -62,10 +69,10 @@ class MyTurnSelectFigureState extends AbstractState {
             }
         } else {
             // player has selected another Player's figure
-            // TODO display message
+            context.putText("Nicht Ihre Figur ");
         }
 
-        Action fig = new UpdatePlayerFigure(playerNr,figureNr);
+        Action fig = new UpdatePlayerFigure(playerNr, figureNr);
 
         list.add(fig);
         return list;

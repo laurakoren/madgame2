@@ -1,5 +1,7 @@
 package com.example.laura.madgame2.gamestate;
 
+import android.widget.TextView;
+
 import com.example.laura.madgame2.gamestate.action.Action;
 import com.example.laura.madgame2.gamestate.action.UpdateDiceRoll;
 import com.example.laura.madgame2.gamestate.action.UpdatePlayerFigure;
@@ -14,6 +16,7 @@ class MyTurnPreDiceRollState extends AbstractState {
 
     private boolean playerHasCheatedThisTurn;
     private int unluckyThrowsCount;
+    public TextView outPutText;
 
     MyTurnPreDiceRollState(boolean playerHasCheatedThisTurn) {
         this.playerHasCheatedThisTurn = playerHasCheatedThisTurn;
@@ -43,10 +46,11 @@ class MyTurnPreDiceRollState extends AbstractState {
 
             if (++unluckyThrowsCount < 3) {
                 // he may roll again (up to 3 times)
-                // TODO display message
+                context.putText("Sie können erneut würfeln");
+
             } else {
                 // player has used up his 3 rolls
-                // TODO display message
+                context.putText("Sie können nicht mehr würfeln");
                 context.endTurn();
             }
         } else {

@@ -120,8 +120,9 @@ public class Client extends Thread {
             try {
                 update = (Update) objectIn.readObject();
 
-                Controller.getInstance().receiveUpdate(update);
+                Controller.getInstance().receiveUpdate(update);  //
                 update=null;
+
             } catch (IOException e) {
                 logger.log(Level.WARNING, "IOException occurred at Client Thread run!", e);
                 killMe();

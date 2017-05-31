@@ -70,6 +70,7 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
         outPutText.setText("Spieler 0 starte Spiel!");
 
 
+
         List<Player> players = new ArrayList<>();
         for (int i = 0; i < 4; i++)
             players.add(new Player(i));
@@ -119,6 +120,8 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
 
         if (!controller.init(this))
             Log.d("Debug", "Failed to initialize state controller");
+
+        controller.setOutputtext(outPutText);
     }
 
     public void diceRoll(View view) {
