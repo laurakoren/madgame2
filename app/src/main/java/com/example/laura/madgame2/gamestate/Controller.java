@@ -1,8 +1,11 @@
 package com.example.laura.madgame2.gamestate;
 
+import android.util.Log;
+
 import com.example.laura.madgame2.gamelogic.GameLogic;
 import com.example.laura.madgame2.gamelogic.MovesFigures;
 import com.example.laura.madgame2.gamelogic.Player;
+import com.example.laura.madgame2.multiplayer.Client;
 import com.example.laura.madgame2.multiplayer.Server;
 import com.example.laura.madgame2.multiplayer.update.Update;
 import com.example.laura.madgame2.multiplayer.update.UpdateDraw;
@@ -86,11 +89,15 @@ public class Controller {
 
     void endTurn() {
         currentPlayerNr = (currentPlayerNr + 1) % 4;
-
-        if (this.isMultiplayerGame)
+        if (this.isMultiplayerGame) {
             // assume this only gets called by "MyTurn" states, as receiveUpdate will be responsible else
             state = new OtherPlayersTurnState();
-        else
+            if (Server.isServerRunning()) {
+                Server.getInstance().sendBroadcastUpdate(new UpdatePlayersTurn(currentPlayerNr));
+            } else {
+                Client.getInstance().sendUpdate(new UpdatePlayersTurn(currentPlayerNr));
+            }
+        } else
             // in local multiplayer mode, just increment
             state = new MyTurnPreDiceRollState(false);
     }
@@ -132,7 +139,8 @@ public class Controller {
             state = new OtherPlayersTurnState();
     }
 
-    public boolean startGame() {
+    public boolean startGame(List<Player> players) {
+        this.players = players;
         if (!isMP()) {
             return false;
         }

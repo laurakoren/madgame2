@@ -3,7 +3,7 @@ package com.example.laura.madgame2.multiplayer;
 import android.os.AsyncTask;
 
 import com.example.laura.madgame2.multiplayer.update.Update;
-import com.example.laura.madgame2.multiplayer.update.UpdateDraw;
+import com.example.laura.madgame2.multiplayer.update.UpdateChooseFigure;
 import com.example.laura.madgame2.multiplayer.update.UpdatePlayersTurn;
 
 /**
@@ -16,7 +16,7 @@ public class AsyncServerTask extends AsyncTask<Update, Void, Void> {
     protected Void doInBackground(Update... params) {
 
         if (params[0] instanceof UpdatePlayersTurn) {
-            Server.getInstance().getClient(((UpdateDraw)params[0]) .getPlayerNr()-1);
+            Server.getInstance().getClient(((UpdatePlayersTurn)params[0]) .getPlayerNr()-1).sendUpdate(params[0]);
             return null;
                     }
 

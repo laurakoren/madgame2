@@ -118,7 +118,7 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
             controller.setMP(true);
         }
 
-        if(!controller.startGame()){   // prüft ob es ein mutliplayer spiel ist
+        if(!controller.startGame(players)){   // prüft ob es ein mutliplayer spiel ist
             controller.setPlayers(players, 0, 0);
         }
 
