@@ -266,7 +266,6 @@ public class Server extends Thread implements Observer {
             sendBroadcastUpdate(up);
         }
 
-
     }
 
 
