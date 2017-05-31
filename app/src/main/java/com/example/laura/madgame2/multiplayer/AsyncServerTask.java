@@ -3,7 +3,6 @@ package com.example.laura.madgame2.multiplayer;
 import android.os.AsyncTask;
 
 import com.example.laura.madgame2.multiplayer.update.Update;
-import com.example.laura.madgame2.multiplayer.update.UpdateChooseFigure;
 import com.example.laura.madgame2.multiplayer.update.UpdatePlayersTurn;
 
 /**
