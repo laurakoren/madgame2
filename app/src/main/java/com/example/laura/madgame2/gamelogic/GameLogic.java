@@ -183,10 +183,13 @@ public class GameLogic {
         }
     }
 
-    public int highlight(Figure figure, int distance) {
+    public int highlight(int figureNr, int playerNr, int distance) {
+
+        Player player = players.get(playerNr);
+        Figure figure = player.getFigure(figureNr);
 
         Field current = figure.getField();
-        Player player = figure.getPlayer();
+
 
         if (current == null)
             return player.getStartField().getFieldNr();

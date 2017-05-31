@@ -1,5 +1,7 @@
 package com.example.laura.madgame2.gamestate;
 
+import com.example.laura.madgame2.gamestate.action.Action;
+
 import java.util.List;
 
 /**

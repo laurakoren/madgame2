@@ -1,10 +1,9 @@
 package com.example.laura.madgame2.gamestate;
 
-import android.util.Log;
-
 import com.example.laura.madgame2.gamelogic.GameLogic;
 import com.example.laura.madgame2.gamelogic.MovesFigures;
 import com.example.laura.madgame2.gamelogic.Player;
+import com.example.laura.madgame2.gamestate.action.Action;
 import com.example.laura.madgame2.multiplayer.Client;
 import com.example.laura.madgame2.multiplayer.Server;
 import com.example.laura.madgame2.multiplayer.update.Update;
@@ -49,8 +48,9 @@ public class Controller {
 
     // pass function calls to states
 
-    public void chooseFigure(int playerNr, int figureNr) {
-        state.chooseFigure(this, playerNr, figureNr);
+    public List<Action> chooseFigure(int playerNr, int figureNr) {
+        return state.chooseFigure(this, playerNr, figureNr);
+
     }
 
     public boolean rollDice() {
@@ -113,8 +113,6 @@ public class Controller {
         if(update instanceof UpdateDraw){
             logic.draw(update.getPlayerNr(),((UpdateDraw) update).getFigureNr(),((UpdateDraw) update).getDiceResult());
         }
-
-
 
 
     }

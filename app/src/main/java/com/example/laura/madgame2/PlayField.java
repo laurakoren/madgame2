@@ -1,9 +1,8 @@
 package com.example.laura.madgame2;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -14,7 +13,11 @@ import android.widget.Toast;
 import com.example.laura.madgame2.diceroll.RollDiceActivity;
 import com.example.laura.madgame2.gamelogic.MovesFigures;
 import com.example.laura.madgame2.gamelogic.Player;
+import com.example.laura.madgame2.gamestate.action.Action;
 import com.example.laura.madgame2.gamestate.Controller;
+import com.example.laura.madgame2.gamestate.action.HighlightAction;
+import com.example.laura.madgame2.gamestate.action.UpdateDiceRoll;
+import com.example.laura.madgame2.gamestate.action.UpdatePlayerFigure;
 import com.example.laura.madgame2.highscore.ScoreEdit;
 import com.example.laura.madgame2.multiplayer.Client;
 import com.example.laura.madgame2.multiplayer.Server;
@@ -50,6 +53,7 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
     private List<List<View>> figureViews;
     private List<List<ViewGroup.LayoutParams>> outFields;
     private TextView outPutText;
+
 
     private static final int NUM_FIELDS = 40;
 
@@ -135,8 +139,39 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
         Pattern p = Pattern.compile("iv_player(\\d)_figure(\\d)");
         Matcher m = p.matcher(idOut);
 
-        if (m.matches())
-            controller.chooseFigure(Integer.valueOf(m.group(1)), Integer.valueOf(m.group(2)));
+        if (m.matches()) {
+            List<Action> actions = controller.chooseFigure(Integer.valueOf(m.group(1)), Integer.valueOf(m.group(2)));
+            for (Action a:actions) {
+                if(a instanceof UpdatePlayerFigure){
+                    int figureNr =((UpdatePlayerFigure) a).getFigureNr();
+                }
+                else if(a instanceof UpdateDiceRoll){
+                    int diceResult=((UpdateDiceRoll) a).getDiceRollResult();
+                }
+
+                else if(a instanceof HighlightAction){
+                    int field=((HighlightAction) a).getHighlightedField();
+
+                    final View img = getViewById("iv_field" + field);
+                    img.setBackgroundResource(R.drawable.fig_empty);
+
+                    new CountDownTimer(2000, 1000) {
+                        public void onFinish() {
+                            img.setBackgroundResource(R.drawable.clear_circle);
+                        }
+
+                        public void onTick(long millisUntilFinished) {
+                            // unused
+                        }
+                    }.start();
+                }
+            }
+
+
+
+
+
+        }
 
         /*
         int fieldreturn = gameLogic.highlight(players.get(Integer.parseInt(m.group(2))).getFigure(Integer.parseInt(m.group(4))), 5);

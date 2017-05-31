@@ -1,5 +1,9 @@
 package com.example.laura.madgame2.gamestate;
 
+import com.example.laura.madgame2.gamestate.action.Action;
+import com.example.laura.madgame2.gamestate.action.UpdateDiceRoll;
+import com.example.laura.madgame2.gamestate.action.UpdatePlayerFigure;
+
 import java.util.ArrayList;
 import java.util.List;
 

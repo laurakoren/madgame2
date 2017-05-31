@@ -1,5 +1,12 @@
 package com.example.laura.madgame2.gamestate;
 
+import android.content.Context;
+
+import com.example.laura.madgame2.gamestate.action.Action;
+import com.example.laura.madgame2.gamestate.action.HighlightAction;
+import com.example.laura.madgame2.gamestate.action.UpdateDiceRoll;
+import com.example.laura.madgame2.gamestate.action.UpdatePlayerFigure;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +30,8 @@ class MyTurnSelectFigureState extends AbstractState {
 
         // TODO Check if the player cant make any move (e.g. because a few of his figures are in the finish, but the rest cant follow up) and inform him
 
+        ArrayList<Action> list = new ArrayList<>();
+
         if (playerNr == context.currPlayerNr()) {
             if (figureNr == selectedFigure) {
                 // player has confirmed his selection
@@ -45,6 +54,10 @@ class MyTurnSelectFigureState extends AbstractState {
                 // player has changed the figure
                 selectedFigure = figureNr;
 
+                int fieldToHighlight = context.logic().highlight(selectedFigure,playerNr,diceRollResult);
+                list.add(new HighlightAction(fieldToHighlight));
+
+
                 // TODO highlight result field
             }
         } else {
@@ -53,7 +66,7 @@ class MyTurnSelectFigureState extends AbstractState {
         }
 
         Action fig = new UpdatePlayerFigure(playerNr,figureNr);
-        ArrayList<Action> list = new ArrayList<>();
+
         list.add(fig);
         return list;
     }
