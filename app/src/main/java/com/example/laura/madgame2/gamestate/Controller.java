@@ -3,6 +3,7 @@ package com.example.laura.madgame2.gamestate;
 import com.example.laura.madgame2.gamelogic.GameLogic;
 import com.example.laura.madgame2.gamelogic.MovesFigures;
 import com.example.laura.madgame2.gamelogic.Player;
+import com.example.laura.madgame2.multiplayer.Server;
 import com.example.laura.madgame2.multiplayer.update.Update;
 import com.example.laura.madgame2.multiplayer.update.UpdatePlayersTurn;
 import com.example.laura.madgame2.multiplayer.update.UpdateRolledDice;
@@ -127,6 +128,21 @@ public class Controller {
         else
             state = new OtherPlayersTurnState();
     }
+
+    public boolean startGame() {
+        if (!isMP()) {
+            return false;
+        }
+            if (Server.isServerRunning()) {
+                state = new MyTurnPreDiceRollState(false);
+            } else {
+                state = new OtherPlayersTurnState();
+            }
+            return true;
+        }
+
+    
+
 
     public boolean init(MovesFigures movesFigures) {
         if (state == null)

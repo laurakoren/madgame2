@@ -15,6 +15,8 @@ import com.example.laura.madgame2.diceroll.RollDiceActivity;
 import com.example.laura.madgame2.gamelogic.MovesFigures;
 import com.example.laura.madgame2.gamelogic.Player;
 import com.example.laura.madgame2.gamestate.Controller;
+import com.example.laura.madgame2.multiplayer.Client;
+import com.example.laura.madgame2.multiplayer.Server;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,7 +114,14 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
         }
 
         controller = Controller.getInstance();
-        controller.setPlayers(players, 0, 0); // TODO remove this statement when connecting to multiplayer classes
+        if(Server.isServerRunning()|| Client.getInstance() !=null){
+            controller.setMP(true);
+        }
+
+        if(!controller.startGame()){   // prüft ob es ein mutliplayer spiel ist
+            controller.setPlayers(players, 0, 0);
+        }
+
         if (!controller.init(this))
             Log.d("Debug", "Failed to initialize state controller");
     }
