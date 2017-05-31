@@ -9,6 +9,7 @@ import com.example.laura.madgame2.MultiplayerActivity;
 import com.example.laura.madgame2.MultiplayerLobbyActivity;
 import com.example.laura.madgame2.PlayField;
 import com.example.laura.madgame2.TestActivity;
+import com.example.laura.madgame2.gamestate.Controller;
 import com.example.laura.madgame2.multiplayer.update.Update;
 import com.example.laura.madgame2.utils.ActivityUtils;
 
@@ -118,6 +119,9 @@ public class Client extends Thread {
         while (gameStarted && !killThread) {
             try {
                 update = (Update) objectIn.readObject();
+
+                Controller.getInstance().receiveUpdate(update);
+                update=null;
             } catch (IOException e) {
                 logger.log(Level.WARNING, "IOException occurred at Client Thread run!", e);
                 killMe();

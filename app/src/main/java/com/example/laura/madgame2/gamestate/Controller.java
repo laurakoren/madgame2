@@ -94,7 +94,9 @@ public class Controller {
     // network accessor methods for states
 
     public void receiveUpdate(Update update) {
-        // TODO process update
+        setState(new OtherPlayersTurnState());
+
+
     }
 
     // setter and init

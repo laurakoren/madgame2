@@ -9,6 +9,7 @@ import com.example.laura.madgame2.MultiplayerLobbyActivity;
 import com.example.laura.madgame2.PlayField;
 import com.example.laura.madgame2.TestActivity;
 import com.example.laura.madgame2.multiplayer.update.Update;
+import com.example.laura.madgame2.multiplayer.update.UpdateRolledDice;
 import com.example.laura.madgame2.utils.ActivityUtils;
 
 import java.io.IOException;
@@ -253,6 +254,7 @@ public class Server extends Thread implements Observer {
     @Override
     public void update(Observable o, Object update) {
         //do someting
+
     }
 
 
