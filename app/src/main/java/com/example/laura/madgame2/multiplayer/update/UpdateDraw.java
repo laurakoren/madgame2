@@ -4,12 +4,15 @@ package com.example.laura.madgame2.multiplayer.update;
  * Created by Philipp on 23.05.17.
  */
 
-public class UpdateChooseFigure extends Update {
+public class UpdateDraw extends Update {
 
     private int playerNr;
     private int figureNr;
+    private int diceResult;
 
-    public UpdateChooseFigure(int playerNr, int figureNr) {
+    public UpdateDraw(int playerNr, int figureNr, int diceResult) {
+        super();
+        this.diceResult = diceResult;
         this.playerNr = playerNr;
         this.figureNr = figureNr;
     }
@@ -30,11 +33,23 @@ public class UpdateChooseFigure extends Update {
         this.figureNr = figureNr;
     }
 
+    public int getDiceResult() {
+        return diceResult;
+    }
+
+    public void setDiceResult(int diceResult) {
+        this.diceResult = diceResult;
+    }
+
     @Override
     public String toString() {
-        return "UpdateChooseFigure{" +
+        return "UpdateDraw{" +
                 "playerNr=" + playerNr +
                 ", figureNr=" + figureNr +
                 '}';
     }
+
+
+
+
 }

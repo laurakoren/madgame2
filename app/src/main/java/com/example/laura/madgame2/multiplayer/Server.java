@@ -3,16 +3,11 @@ package com.example.laura.madgame2.multiplayer;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.example.laura.madgame2.MultiplayerLobbyActivity;
 import com.example.laura.madgame2.PlayField;
-import com.example.laura.madgame2.TestActivity;
 import com.example.laura.madgame2.gamestate.Controller;
 import com.example.laura.madgame2.multiplayer.update.Update;
-import com.example.laura.madgame2.multiplayer.update.UpdateChooseFigure;
-import com.example.laura.madgame2.multiplayer.update.UpdatePlayersTurn;
-import com.example.laura.madgame2.multiplayer.update.UpdateRolledDice;
 import com.example.laura.madgame2.utils.ActivityUtils;
 
 import java.io.IOException;
@@ -250,7 +245,7 @@ public class Server extends Thread implements Observer {
 
     /**
      * Sollte der EchoClient ein Update erhalten, landet es hier.
-     *
+     * Falls der Spieler 0 (der Server) am Zug ist, schickt er kein BroadcastUpdate raus
      * @param o
      * @param update Das empfangene Update
      */

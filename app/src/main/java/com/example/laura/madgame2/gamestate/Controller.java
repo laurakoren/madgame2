@@ -5,8 +5,9 @@ import com.example.laura.madgame2.gamelogic.MovesFigures;
 import com.example.laura.madgame2.gamelogic.Player;
 import com.example.laura.madgame2.multiplayer.Server;
 import com.example.laura.madgame2.multiplayer.update.Update;
+import com.example.laura.madgame2.multiplayer.update.UpdateDraw;
 import com.example.laura.madgame2.multiplayer.update.UpdatePlayersTurn;
-import com.example.laura.madgame2.multiplayer.update.UpdateRolledDice;
+
 
 import java.util.List;
 
@@ -102,9 +103,11 @@ public class Controller {
             setState(new MyTurnPreDiceRollState(false));
         }
 
-        if(update instanceof UpdateRolledDice){
-            //TODO Notification
+        if(update instanceof UpdateDraw){
+            logic.draw(update.getPlayerNr(),((UpdateDraw) update).getFigureNr(),((UpdateDraw) update).getDiceResult());
         }
+
+
 
 
     }
