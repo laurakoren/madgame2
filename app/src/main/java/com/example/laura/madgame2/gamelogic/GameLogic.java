@@ -190,13 +190,24 @@ public class GameLogic {
 
         Field current = figure.getField();
 
+        int count=0;
 
         if (current == null)
             return player.getStartField().getFieldNr();
 
         // figure is somewhere on the game board
-        for (int i = 0; i < distance; i++)
+        for (int i = 1; i <= distance; i++){
+
             current = current.next(player);
+            if(current.isFinishField()){
+                count++;
+            }
+
+        }
+
+        if(current.isFinishField()) {
+            return count-101;
+        }
         return current.getFieldNr();
     }
 

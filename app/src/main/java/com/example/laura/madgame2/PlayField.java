@@ -144,6 +144,7 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
 
         if (m.matches()) {
             List<Action> actions = controller.chooseFigure(Integer.valueOf(m.group(1)), Integer.valueOf(m.group(2)));
+
             for (Action a:actions) {
                 if(a instanceof UpdatePlayerFigure){
                     int figureNr =((UpdatePlayerFigure) a).getFigureNr();
@@ -154,7 +155,25 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
 
                 else if(a instanceof HighlightAction){
                     int field=((HighlightAction) a).getHighlightedField();
+                    int playerNr=Integer.valueOf(m.group(1));
 
+
+                    if(field<0){
+                        field=field+100;
+
+                        final View img = getViewById("iv_player"+playerNr+"_finish"+(field));       //"@+id/iv_player2_finish2"
+                        img.setBackgroundResource(R.drawable.fig_empty);
+
+                        new CountDownTimer(2000, 1000) {
+                            public void onFinish() {
+                                img.setBackgroundResource(R.drawable.clear_circle);
+                            }
+
+                            public void onTick(long millisUntilFinished) {
+                                // unused
+                            }
+                        }.start();
+                    }else{
                     final View img = getViewById("iv_field" + field);
                     img.setBackgroundResource(R.drawable.fig_empty);
 
@@ -167,6 +186,7 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
                             // unused
                         }
                     }.start();
+                    }
                 }
             }
 
