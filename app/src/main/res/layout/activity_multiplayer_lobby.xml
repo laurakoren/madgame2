@@ -40,12 +40,16 @@
 
     <Button
         android:id="@+id/btnCancel"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:backgroundTint="@android:color/holo_red_dark"
         android:onClick="doCancel"
         android:text="Cancel"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -53,28 +57,28 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tableLayout"
-        app:layout_constraintVertical_bias="0.223"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        app:layout_constraintVertical_bias="0.223" />
 
     <Button
         android:id="@+id/btnStart"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@android:color/holo_green_dark"
         android:onClick="startGame"
         android:text="Start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.72"
         app:layout_constraintLeft_toRightOf="@+id/btnCancel"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@+id/tableLayout"
-        app:layout_constraintVertical_bias="0.22000003"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        app:layout_constraintVertical_bias="0.22000003" />
 
     <TableLayout
         android:id="@+id/tableLayout"
