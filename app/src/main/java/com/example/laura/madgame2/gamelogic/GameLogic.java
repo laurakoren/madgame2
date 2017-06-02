@@ -195,6 +195,10 @@ public class GameLogic {
         if (current == null)
             return player.getStartField().getFieldNr();
 
+        if(current.isFinishField()){
+            return 110;
+        }
+
         // figure is somewhere on the game board
         for (int i = 1; i <= distance; i++){
 

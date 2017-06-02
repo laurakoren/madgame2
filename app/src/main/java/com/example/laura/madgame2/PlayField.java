@@ -133,7 +133,7 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
     }
 
     /**
-     * Onclick Methode für die einzelnen Spielfelder mit Figuren drauf
+     * Zeigt das Feld an, zu dem man mit dem Würfelergebnis fahren könnte
      */
     public void click(View viewIn) {
 
@@ -158,6 +158,7 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
                     int playerNr=Integer.valueOf(m.group(1));
 
 
+
                     if(field<0){
                         field=field+100;
 
@@ -173,6 +174,7 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
                                 // unused
                             }
                         }.start();
+                    }else if(field==110) {
                     }else{
                     final View img = getViewById("iv_field" + field);
                     img.setBackgroundResource(R.drawable.fig_empty);
@@ -196,21 +198,7 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
 
         }
 
-        /*
-        int fieldreturn = gameLogic.highlight(players.get(Integer.parseInt(m.group(2))).getFigure(Integer.parseInt(m.group(4))), 5);
-        final View img = getViewById("iv_field" + fieldreturn);
-        img.setBackgroundResource(R.drawable.fig_empty);
 
-        new CountDownTimer(2000, 1000) {
-            public void onFinish() {
-                img.setBackgroundResource(R.drawable.clear_circle);
-            }
-
-            public void onTick(long millisUntilFinished) {
-                // unused
-            }
-        }.start();
-        */
     }
 
     /**
