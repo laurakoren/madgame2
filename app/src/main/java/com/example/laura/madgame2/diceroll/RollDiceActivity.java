@@ -161,12 +161,13 @@ public class RollDiceActivity extends AppCompatActivity {
 
     //Methode um einen Rückgabewert der Acitivity zu setzen
     private void sendData() {
-        //Fenster soll erst nach gewisser Zeit (hier 3 sek.) geschlossen werden!
+        //Fenster soll erst nach gewisser Zeit (0,5 sek) geschlossen werden!
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("result", getRolledNumber());
+                returnIntent.putExtra("result", rolledNumber);
+                returnIntent.putExtra("hasCheated", cheated);
                 setResult(RESULT_OK, returnIntent);
                 //Fenster schließen nach dem Würfeln
                 finish();

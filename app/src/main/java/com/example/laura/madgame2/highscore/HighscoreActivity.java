@@ -26,6 +26,7 @@ public class HighscoreActivity extends AppCompatActivity {
     private  TextView tv_setGamesWon;
     private  TextView tv_setAmountDiceRolls;
     private  TextView tv_setAmountCheated;
+    private  TextView tv_setCheaterCaught;
     private  Button btn_Reset;
     private List<TextView> tv_list;
 
@@ -37,10 +38,13 @@ public class HighscoreActivity extends AppCompatActivity {
         tv_setGamesWon = (TextView)findViewById(R.id.tv_setGamesWon);
         tv_setAmountDiceRolls = (TextView)findViewById(R.id.tv_setAmountDiceRolls);
         tv_setAmountCheated = (TextView)findViewById(R.id.tv_setAmountCheated);
+        tv_setCheaterCaught = (TextView)findViewById(R.id.tv_setCheaterCaught);
         tv_list = new ArrayList<TextView>();
+        //in alphabetischer Reihenfolge in Liste hinzufügen
         tv_list.add(tv_setAmountDiceRolls);
-        tv_list.add(tv_setGamesWon);
+        tv_list.add(tv_setCheaterCaught);
         tv_list.add(tv_setAmountCheated);
+        tv_list.add(tv_setGamesWon);
         btn_Reset = (Button)findViewById(R.id.btn_Reset);
 
 

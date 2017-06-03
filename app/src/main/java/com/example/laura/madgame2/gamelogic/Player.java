@@ -8,6 +8,7 @@ import java.util.List;
 
 
 public class Player {
+    private boolean cheater;
 
     private int playerNr;
 
@@ -17,6 +18,7 @@ public class Player {
 
     public Player(int playerNr) {
         this.playerNr = playerNr;
+        cheater=false;
     }
 
     public int getPlayerNr() {
@@ -41,5 +43,13 @@ public class Player {
     void setFigures(List<Figure> figures) {
         this.figures = figures;
     }
+
+   public boolean getCheater(){
+       return cheater;
+   }
+
+   public  void setCheater(boolean cheat){
+       cheater=cheat;
+   }
 }
 

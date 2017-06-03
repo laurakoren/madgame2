@@ -2,6 +2,7 @@ package com.example.laura.madgame2.gamestate;
 
 import android.widget.TextView;
 
+import com.example.laura.madgame2.gamelogic.Player;
 import com.example.laura.madgame2.gamestate.action.Action;
 import com.example.laura.madgame2.gamestate.action.UpdateDiceRoll;
 import com.example.laura.madgame2.gamestate.action.UpdatePlayerFigure;
@@ -17,6 +18,8 @@ class MyTurnPreDiceRollState extends AbstractState {
     private boolean playerHasCheatedThisTurn;
     private int unluckyThrowsCount;
     public TextView outPutText;
+
+
 
     MyTurnPreDiceRollState(boolean playerHasCheatedThisTurn) {
         this.playerHasCheatedThisTurn = playerHasCheatedThisTurn;
@@ -63,4 +66,6 @@ class MyTurnPreDiceRollState extends AbstractState {
         list.add(dice);
         return list;
     }
+
+
 }

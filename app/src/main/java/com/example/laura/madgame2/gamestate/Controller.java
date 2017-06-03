@@ -1,6 +1,5 @@
 package com.example.laura.madgame2.gamestate;
 
-import android.view.View;
 import android.widget.TextView;
 
 import com.example.laura.madgame2.gamelogic.GameLogic;
@@ -34,6 +33,8 @@ public class Controller {
     private GameLogic logic;
     private int myPlayerNr;
     private int currentPlayerNr;
+    private Player playerBefore;
+    private boolean cheated;
 
     private Controller() {
         state = null;
@@ -41,6 +42,8 @@ public class Controller {
         logic = null;
         myPlayerNr = -1;
         isMultiplayerGame = false;
+        cheated=false;
+        playerBefore=null;
     }
 
     // singleton
@@ -72,6 +75,9 @@ public class Controller {
     }
 
     public void diceRollResult(int result, boolean hasCheated) {
+        if(hasCheated==true){
+            cheated = hasCheated;
+        }
         state.diceRollResult(this, result, hasCheated);
     }
 
@@ -102,7 +108,10 @@ public class Controller {
     }
 
     void endTurn() {
+        playerBefore = new Player(currentPlayerNr);
+        playerBefore.setCheater(cheated);
         currentPlayerNr = (currentPlayerNr + 1) % 4;
+
         if (this.isMultiplayerGame) {
             // assume this only gets called by "MyTurn" states, as receiveUpdate will be responsible else
             state = new OtherPlayersTurnState();
@@ -144,6 +153,7 @@ public class Controller {
         this.players = players;
         this.myPlayerNr = myPlayerNr;
         this.currentPlayerNr = startingPlayerNr;
+        this.playerBefore = new Player((players.size()-1)-startingPlayerNr);
 
         if (myPlayerNr == startingPlayerNr)
             state = new MyTurnPreDiceRollState(false);
@@ -173,4 +183,11 @@ public class Controller {
         logic = new GameLogic(players, 40, movesFigures);
         return true;
     }
+
+
+
+    public Player getPlayerBefore(){
+        return playerBefore;
+    }
+
 }

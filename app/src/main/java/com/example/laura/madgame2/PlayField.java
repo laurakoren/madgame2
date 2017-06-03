@@ -59,6 +59,7 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
 
     private int countTurn;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,6 +132,22 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
             startActivityForResult(intent, NUMBER_IDENTIFIER);
         }
     }
+
+    public void hasCheated(View view){
+
+       //hat der vorherige Spieler gecheatet?
+        boolean help = controller.getPlayerBefore().getCheater();
+
+        if(help) {
+            ScoreEdit.updateScore("cheaterCaught");
+            Toast.makeText(getApplication(), "Spieler "+controller.getPlayerBefore().getPlayerNr()+ " hat geschummelt und wird bestraft!",
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplication(), "Spieler "+controller.getPlayerBefore().getPlayerNr()+ " hat nicht geschummelt! Du wirst bestraft!",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     /**
      * Zeigt das Feld an, zu dem man mit dem Würfelergebnis fahren könnte
@@ -217,6 +234,9 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
 
         if (requestCode == NUMBER_IDENTIFIER && resultCode == RESULT_OK) {
             controller.diceRollResult(data.getIntExtra("result", -1), data.getBooleanExtra("hasCheated", false));
+            if(data.getBooleanExtra("hasCheated",false)){
+                ScoreEdit.updateScore("gamesCheated");
+            }
             ScoreEdit.updateScore("amountDiceRolls");
         }
 

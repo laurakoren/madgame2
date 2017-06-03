@@ -44,10 +44,11 @@ public class ScoreEdit {
 
 
     public static void showScores(List<TextView>tvs) {
-        Object[] a = sharedPref.getAll().values().toArray();
-        for (int i = 0; i < tvs.size(); i++) {
-            for (int j = 0; j < a.length; j++) {
-                tvs.get(i).setText(a[i].toString());
+       Object[] a = sharedPref.getAll().values().toArray();
+       for(int i = 0; i < a.length; i++){
+            for(int j = 0; j < tvs.size(); j++){
+                tvs.get(i).setText(a[j].toString());
+                i++;
             }
         }
     }
@@ -66,9 +67,10 @@ public class ScoreEdit {
     }
 
     private static void putValues(){
-        edit.putString("gamesWon", "0");
         edit.putString("amountDiceRolls", "0");
+        edit.putString("gamesWon", "0");
         edit.putString("gamesCheated", "0");
+        edit.putString("cheaterCaught","0");
         edit.apply();
     }
 
