@@ -1,7 +1,5 @@
 package com.example.laura.madgame2.gamelogic;
 
-import android.view.View;
-
 /**
  * A single game figure/piece. Belongs to a player and is placed on a field.
  */
@@ -38,9 +36,8 @@ public class Figure {
      */
     void setField(Field field) {
         // remove this from former field
-        if (this.field != null) {
+        if (this.field != null)
             this.field.setFigure(null);
-        }
 
         // assign new field
         this.field = field;
@@ -48,16 +45,7 @@ public class Figure {
         if (field != null)
             field.setFigure(this);
     }
-    void setFigureNr(Figure figureNr){
 
-    }
-
-    /*public int selectfigure (View.OnClickListener){
-        return figureNr;
-
-    }
-
-*/
     Player getPlayer() {
         return player;
     }

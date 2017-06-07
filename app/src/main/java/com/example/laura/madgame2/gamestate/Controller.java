@@ -1,11 +1,8 @@
 package com.example.laura.madgame2.gamestate;
 
-import android.util.Log;
 import android.widget.TextView;
 
-import com.example.laura.madgame2.PlayField;
 import com.example.laura.madgame2.gamelogic.GameLogic;
-import com.example.laura.madgame2.gamelogic.MovesFigures;
 import com.example.laura.madgame2.gamelogic.Player;
 import com.example.laura.madgame2.gamestate.action.Action;
 import com.example.laura.madgame2.multiplayer.Client;
@@ -15,7 +12,6 @@ import com.example.laura.madgame2.multiplayer.update.UpdateDraw;
 import com.example.laura.madgame2.multiplayer.update.UpdateMyNumber;
 import com.example.laura.madgame2.multiplayer.update.UpdatePlayersTurn;
 
-
 import java.util.List;
 
 /**
@@ -23,7 +19,6 @@ import java.util.List;
  * aka Context from StatePattern
  */
 public class Controller {
-
 
     private TextView outputtext;
     private static Controller instance;
@@ -45,8 +40,8 @@ public class Controller {
         logic = null;
         myPlayerNr = -1;
         isMultiplayerGame = false;
-        cheated=false;
-        playerBefore=null;
+        cheated = false;
+        playerBefore = null;
     }
 
     // singleton
@@ -64,13 +59,12 @@ public class Controller {
 
     }
 
-    public void setOutputtext (TextView view){
-        outputtext= view;
+    public void setOutputtext(TextView view) {
+        outputtext = view;
     }
 
-    void putText(String text){
+    void putText(String text) {
         outputtext.setText(text);
-
     }
 
     public boolean rollDice() {
@@ -78,7 +72,7 @@ public class Controller {
     }
 
     public void diceRollResult(int result, boolean hasCheated) {
-        if(hasCheated==true){
+        if (hasCheated) {
             cheated = hasCheated;
         }
         state.diceRollResult(this, result, hasCheated);
@@ -86,7 +80,7 @@ public class Controller {
 
     // accessor methods for states
 
-    boolean isMP() {
+    public boolean isMP() {
         return isMultiplayerGame;
     }
 
@@ -94,7 +88,7 @@ public class Controller {
         return players;
     }
 
-    GameLogic logic() {
+    public GameLogic logic() {
         return logic;
     }
 
@@ -110,7 +104,7 @@ public class Controller {
         this.state = state;
     }
 
-    void endTurn() {
+    void endTurn(boolean playerHasCheatedThisTurn) {
         playerBefore = new Player(currentPlayerNr);
         playerBefore.setCheater(cheated);
         currentPlayerNr = (currentPlayerNr + 1) % 4;
@@ -118,37 +112,45 @@ public class Controller {
         if (this.isMultiplayerGame) {
             // assume this only gets called by "MyTurn" states, as receiveUpdate will be responsible else
             state = new OtherPlayersTurnState();
-            if (Server.isServerRunning()) {
-                Server.getInstance().sendBroadcastUpdate(new UpdatePlayersTurn(currentPlayerNr));
-            } else {
-                Client.getInstance().sendUpdate(new UpdatePlayersTurn(currentPlayerNr));
-            }
+
+            // TODO send playerHasCheatedThisTurn to other instances
+            sendUpdate(new UpdatePlayersTurn(currentPlayerNr));
         } else
             // in local multiplayer mode, just increment
-            state = new MyTurnPreDiceRollState(false);
+            state = new MyTurnPreDiceRollState(playerHasCheatedThisTurn, false);
     }
 
     // network accessor methods for states
 
+    public void sendUpdate(Update update) {
+        if (this.isMultiplayerGame) {
+            if (Server.isServerRunning())
+                Server.getInstance().sendBroadcastUpdate(update);
+            else
+                Client.getInstance().sendUpdate(update);
+        }
+    }
+
     public void receiveUpdate(Update update) {
-        if(update instanceof UpdateMyNumber){
-         myPlayerNr = ((UpdateMyNumber) update).getMyNumber();
+        if (update instanceof UpdateMyNumber) {
+            myPlayerNr = ((UpdateMyNumber) update).getMyNumber();
         }
 
-        if(update instanceof UpdatePlayersTurn){
+        if (update instanceof UpdatePlayersTurn) {
+            // TODO receive playerHasCheatedThisTurn
             currentPlayerNr = myPlayerNr;
-            setState(new MyTurnPreDiceRollState(false));
+            setState(new MyTurnPreDiceRollState(false, false));
         }
 
         //TODO vielleich bessere Umsetzung um auf die Figur im View zu bewegen..
-        if(update instanceof UpdateDraw){
-            if(update.getPlayerNr() != myPlayerNr) {
+        if (update instanceof UpdateDraw) {
+            /*if (update.getPlayerNr() != myPlayerNr) {
                 MovesFigures p = logic.getMovingEntity();
                 ((PlayField) p).updateField((UpdateDraw) update);
-            }
+            }*/
+            UpdateDraw u = (UpdateDraw) update;
+            logic.draw(u.getPlayerNr(), u.getFigureNr(), u.getDiceResult());
         }
-
-
     }
 
     // setter and init
@@ -164,45 +166,38 @@ public class Controller {
         this.players = players;
         this.myPlayerNr = myPlayerNr;
         this.currentPlayerNr = startingPlayerNr;
-        this.playerBefore = new Player((players.size()-1)-startingPlayerNr);
+        this.playerBefore = new Player((players.size() - 1) - startingPlayerNr);
 
         if (myPlayerNr == startingPlayerNr)
-            state = new MyTurnPreDiceRollState(false);
+            state = new MyTurnPreDiceRollState(false, false);
         else
             state = new OtherPlayersTurnState();
     }
 
     public boolean startGame(List<Player> players) {
+        // TODO replace by setPlayers
         this.players = players;
         if (!isMP()) {
             return false;
         }
-            if (Server.isServerRunning()) {
-                myPlayerNr = 0;
-                state = new MyTurnPreDiceRollState(false);
-            } else {
-                state = new OtherPlayersTurnState();
-            }
-            return true;
+        if (Server.isServerRunning()) {
+            myPlayerNr = 0;
+            state = new MyTurnPreDiceRollState(false, false);
+        } else {
+            state = new OtherPlayersTurnState();
         }
-
-    
-
-
-    public boolean init(MovesFigures movesFigures) {
-        if (state == null)
-            return false;
-        logic = new GameLogic(players, 40, movesFigures);
         return true;
     }
 
+    public boolean init() {
+        if (state == null)
+            return false;
+        logic = new GameLogic(players, 40);
 
-
-    public Player getPlayerBefore(){
-        return playerBefore;
+        return true;
     }
 
-    public GameLogic getLogic() {
-        return logic;
+    public Player getPlayerBefore() {
+        return playerBefore;
     }
 }

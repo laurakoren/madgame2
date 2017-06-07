@@ -1,5 +1,9 @@
 package com.example.laura.madgame2.gamelogic;
 
+import com.example.laura.madgame2.gamestate.action.Action;
+import com.example.laura.madgame2.gamestate.action.KickFigureAction;
+import com.example.laura.madgame2.gamestate.action.MoveFigureAction;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,14 +16,11 @@ public class GameLogic {
     private static final int NUM_FIGURES = 4;
 
     private List<Player> players;
-    private MovesFigures movingEntity;
 
-    public GameLogic(List<Player> players, int numFields, MovesFigures movingEntity) {
+    public GameLogic(List<Player> players, int numFields) {
         this.players = players;
-        this.movingEntity = movingEntity;
 
         initFigures();
-
         createBoardPath(numFields);
     }
 
@@ -70,8 +71,11 @@ public class GameLogic {
 
                 // declare finish fields
             } else if (fieldId % 10 == 9 && tmpPlayer != null) {
+                List<Field> finishFields = new ArrayList<>();
+
                 // create first finish field
                 tmpField = new Field(0, tmpPlayer);
+                finishFields.add(tmpField);
                 // connect finish to path
                 current.setFork(tmpField);
 
@@ -79,8 +83,10 @@ public class GameLogic {
                 for (int j = 1; j < NUM_FIGURES; j++) {
                     tmpField.setNext(new Field(j, tmpPlayer));
                     tmpField = tmpField.next(null);
+                    finishFields.add(tmpField);
                 }
 
+                tmpPlayer.setFinishFields(finishFields);
             }
         }
 
@@ -88,13 +94,6 @@ public class GameLogic {
         Field first = dummy.next(null);
         current.setNext(first);
     }
-
-/*
-    public selectfigure(Figure figure){
-        figure = findViewById(R.id.Figur);
-
-    }
-*/
 
     /**
      * Returns the winner of this game, or null if no one has won yet.
@@ -151,135 +150,114 @@ public class GameLogic {
     }
 
     /**
-     * Moves a figure for a given distance over the board. Returns true if the move is valid and was executed and returns false else. If false is returned, the board remains unchanged.
+     * Checks whether a Player can move any Figure for a given distance.
+     * If that is not the case, the Player may be forced to end his turn.
      *
-     * @param playerNr the number of the player who owns the figure
-     * @param figureNr the number of the figure
-     * @param distance the distance to move it
-     * @return true on success, false otherwise
+     * @param playerNr the number of the Player for whom to check
+     * @param distance the distance to move Figures
+     * @return true if the Player can move any of his Figures for the given distance
      */
-    public boolean draw(int playerNr, int figureNr, int distance) {
-        if (distance < 0 || distance > 6)
-            return false;
+    public boolean hasValidMoves(int playerNr, int distance) {
+        // check for each figure whether getResultField returns null
+        for (int figureNr = 0; figureNr < NUM_FIGURES; figureNr++)
+            if (this.getResultField(playerNr, figureNr, distance) != null)
+                return true;
+
+        return false;
+    }
+
+    /**
+     * Returns the Position of a Figure if it were to be drawn over a given distance.
+     * This method does not move Figures on the board.
+     *
+     * @param playerNr the number of the Player that owns the Figure
+     * @param figureNr the number of the Figure
+     * @param distance the distance to hypothetically move the figure
+     * @return the field reached by the move
+     * @see #draw(int, int, int)
+     */
+    public Field getResultField(int playerNr, int figureNr, int distance) {
+        if (distance < 0)
+            return null;
 
         Player player = players.get(playerNr);
         Figure figure = player.getFigure(figureNr);
         Field current = figure.getField();
+        Field result;
 
         // determine where the figure is
         if (current == null) {
             // figure is in the out area
             // if player rolled 6, then make the move, else return false
             if (distance == 6)
-                return moveFigureToStartField(figure);
+                result = player.getStartField();
             else
-                return false;
+                return null;
         } else {
             // figure is somewhere on the game board
-            current = current.next(player, distance);
-
-            // move figure only if field is not null
-            return current != null && moveFigure(figure, current);
-        }
-    }
-
-    public int highlight(int figureNr, int playerNr, int distance) {
-
-        Player player = players.get(playerNr);
-        Figure figure = player.getFigure(figureNr);
-
-        Field current = figure.getField();
-
-        int count=0;
-
-        if (current == null)
-            return player.getStartField().getFieldNr();
-
-        if(current.isFinishField()){
-            return 110;
+            result = current.next(player, distance);
         }
 
-        // figure is somewhere on the game board
-        for (int i = 1; i <= distance; i++){
-
-            current = current.next(player);
-            if(current.isFinishField()){
-                count++;
-            }
-
-        }
-
-        if(current.isFinishField()) {
-            return count-101;
-        }
-        return current.getFieldNr();
-    }
-
-
-    /**
-     * Moves a figure to a field after checking the field for availability.
-     *
-     * @param figure the figure to be moved
-     * @param field  the field to move it to
-     * @return true on success, false otherwise
-     */
-    private boolean moveFigure(Figure figure, Field field) {
-        if (figure == null)
-            return false;
-        if (field == null)
-            return moveFigureToOutField(figure);
-        if (field.hasFigure()) {
-            // another figure is blocking the path
-            Figure otherFigure = field.getFigure();
-
-            if (figure.getPlayer() == otherFigure.getPlayer())
-                // cant kick own figures, move is impossible
-                return false;
-            else
-                // kick other figure
-                moveFigureToOutField(otherFigure);
-        }
-
-        // move figure in model (gamelogic)
-        figure.setField(field);
-
-        // move figure in view (playfield)
-        if (field.isFinishField())
-            movingEntity.moveFigureToFinishField(figure.getPlayer().getPlayerNr(), figure.getFigureNr(), field.getFieldNr());
+        // finally, check if result field is already occupied
+        if (result != null && result.hasFigure() && figure.getPlayer() == result.getFigure().getPlayer())
+            // cant kick own figures, move is impossible
+            return null;
         else
-            movingEntity.moveFigure(figure.getPlayer().getPlayerNr(), figure.getFigureNr(), field.getFieldNr());
-
-        return true;
+            // kicking is handled in the draw method
+            return result;
     }
 
     /**
-     * Moves a figure from the game board into the out area aka kicks the figure out of the game.
+     * Moves a figure for a given distance over the board.
+     * Returns a List of Actions if the move is valid and was executed and returns null else.
+     * If null is returned, the board remains unchanged.
      *
-     * @param figure the figure to be kicked
+     * @param playerNr the number of the player who owns the figure
+     * @param figureNr the number of the figure
+     * @param distance the distance to move it
+     * @return a List of Actions on success, null otherwise
      */
-    private boolean moveFigureToOutField(Figure figure) {
-        if (figure != null) {
-            figure.setField(null);
-            movingEntity.moveFigureToOutField(figure.getPlayer().getPlayerNr(), figure.getFigureNr());
-            return true;
-        } else {
-            return false;
+    public List<Action> draw(int playerNr, int figureNr, int distance) {
+        if (distance < 0)
+            return null;
+        List<Action> actions = new ArrayList<>();
+        Figure figure = players.get(playerNr).getFigure(figureNr);
+
+        // find out, where the figure lands
+        Field result = this.getResultField(playerNr, figureNr, distance);
+        if (result == null)
+            return null;
+
+        // check if there are figures to kick
+        if (result.hasFigure()) {
+            Figure otherFigure = result.getFigure();
+            otherFigure.setField(null);
+            actions.add(new KickFigureAction(otherFigure.getPlayer().getPlayerNr(), otherFigure.getFigureNr()));
         }
+
+        // move the figure accordingly
+        figure.setField(result);
+        actions.add(new MoveFigureAction(playerNr, figureNr, result.getFieldNr(), result.isFinishField()));
+
+        return actions;
     }
 
-    /**
-     * Moves a figure from the out area onto the board by placing it onto its player's start field.
-     *
-     * @param figure the figure to be moved
-     * @return true on success, false otherwise
-     */
-    private boolean moveFigureToStartField(Figure figure) {
-        if (figure == null)
-            return false;
-        return moveFigure(figure, figure.getPlayer().getStartField());
-    }
+    public void handleUpdates(List<Action> actions) {
+        if (actions != null) {
+            for (Action action : actions) {
+                if (action instanceof MoveFigureAction) {
+                    MoveFigureAction a = (MoveFigureAction) action;
+                    if (a.moveToFinishField) {
+                        players.get(a.playerNr).getFigure(a.figureNr).setField(players.get(a.playerNr).getFinishField(a.fieldNr));
+                    } else {
+                        players.get(a.playerNr).getFigure(a.figureNr).setField(players.get(0).getStartField().next(null, a.fieldNr));
+                    }
 
-    public MovesFigures getMovingEntity() {
-        return movingEntity;
+                } else if (action instanceof KickFigureAction) {
+                    KickFigureAction a = (KickFigureAction) action;
+                    players.get(a.playerNr).getFigure(a.figureNr).setField(null);
+                }
+            }
+        }
     }
 }

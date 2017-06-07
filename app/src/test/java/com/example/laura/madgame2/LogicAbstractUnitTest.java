@@ -1,7 +1,6 @@
 package com.example.laura.madgame2;
 
 import com.example.laura.madgame2.gamelogic.GameLogic;
-import com.example.laura.madgame2.gamelogic.MovesFigures;
 import com.example.laura.madgame2.gamelogic.Player;
 
 import org.junit.After;
@@ -19,25 +18,13 @@ abstract class LogicAbstractUnitTest {
     GameLogic logic;
     List<Player> players;
 
-    MovesFigures movingEntity;
-
     @Before
     public void init() {
         players = new ArrayList<>();
         for (int i = 0; i < NUM_PLAYERS; i++)
             players.add(new Player(i));
 
-        movingEntity = new MovesFigures() {
-            public void moveFigure(int playerNr, int figureNr, int fieldNr) {
-            }
-            public void moveFigureToOutField(int playerNr, int figureNr) {
-            }
-            public void moveFigureToFinishField(int playerNr, int figureNr, int finishFieldNr) {
-
-            }
-        };
-
-        logic = new GameLogic(players, NUM_FIELDS, movingEntity);
+        logic = new GameLogic(players, NUM_FIELDS);
     }
 
     @After

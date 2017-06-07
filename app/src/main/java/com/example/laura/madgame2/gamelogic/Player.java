@@ -14,6 +14,8 @@ public class Player {
 
     private Field startField;
 
+    private List<Field> finishFields;
+
     private List<Figure> figures;
 
     public Player(int playerNr) {
@@ -44,12 +46,20 @@ public class Player {
         this.figures = figures;
     }
 
-   public boolean getCheater(){
+    public boolean getCheater(){
        return cheater;
-   }
+    }
 
-   public  void setCheater(boolean cheat){
+    public  void setCheater(boolean cheat){
        cheater=cheat;
    }
+
+    Field getFinishField(int fieldNr) {
+        return finishFields.get(fieldNr);
+    }
+
+    void setFinishFields(List<Field> finishFields) {
+        this.finishFields = finishFields;
+    }
 }
 

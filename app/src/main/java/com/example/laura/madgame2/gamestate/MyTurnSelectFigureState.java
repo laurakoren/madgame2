@@ -1,17 +1,9 @@
 package com.example.laura.madgame2.gamestate;
 
-import android.widget.TextView;
-
-import android.content.Context;
-
+import com.example.laura.madgame2.gamelogic.Field;
 import com.example.laura.madgame2.gamestate.action.Action;
 import com.example.laura.madgame2.gamestate.action.HighlightAction;
-import com.example.laura.madgame2.gamestate.action.UpdateDiceRoll;
-import com.example.laura.madgame2.gamestate.action.UpdatePlayerFigure;
-import com.example.laura.madgame2.multiplayer.Client;
-import com.example.laura.madgame2.multiplayer.Server;
 import com.example.laura.madgame2.multiplayer.update.UpdateDraw;
-import com.example.laura.madgame2.multiplayer.update.UpdatePlayersTurn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +14,13 @@ import java.util.List;
 class MyTurnSelectFigureState extends AbstractState {
 
     private int diceRollResult;
+    private boolean previousPlayerHasCheated;
     private boolean playerHasCheatedThisTurn;
     private int selectedFigure;
-    public TextView outPutText;
 
-    MyTurnSelectFigureState(int diceRollResult, boolean playerHasCheatedThisTurn, int selectedFigure) {
+    MyTurnSelectFigureState(int diceRollResult, boolean previousPlayerHasCheated, boolean playerHasCheatedThisTurn, int selectedFigure) {
         this.diceRollResult = diceRollResult;
+        this.previousPlayerHasCheated = previousPlayerHasCheated;
         this.playerHasCheatedThisTurn = playerHasCheatedThisTurn;
         this.selectedFigure = selectedFigure;
     }
@@ -37,54 +30,47 @@ class MyTurnSelectFigureState extends AbstractState {
 
         // TODO Check if the player cant make any move (e.g. because a few of his figures are in the finish, but the rest cant follow up) and inform him
 
-
-        ArrayList<Action> list = new ArrayList<>();
+        List<Action> result = new ArrayList<>();
 
         if (playerNr == context.currPlayerNr()) {
             if (figureNr == selectedFigure) {
                 // player has confirmed his selection
 
-                if (context.logic().draw(playerNr, figureNr, diceRollResult)) {
+                result = context.logic().draw(playerNr, figureNr, diceRollResult);
+
+                if (result != null) {
                     // move executed, continue with next state
 
                     if (diceRollResult == 6) {
                         // player has rolled 6, he may roll another time
                         context.putText("Erneut würfeln ");
 
-                        context.setState(new MyTurnPreDiceRollState(playerHasCheatedThisTurn));
+                        context.setState(new MyTurnPreDiceRollState(previousPlayerHasCheated, playerHasCheatedThisTurn));
                     } else {
                         // the players move is over
-                        context.endTurn();
+                        context.endTurn(playerHasCheatedThisTurn);
                     }
-                    if (Server.isServerRunning()) {
-                        Server.getInstance().sendBroadcastUpdate(new UpdateDraw(playerNr, figureNr, diceRollResult));
-                    } else {
-                        Client.getInstance().sendUpdate(new UpdateDraw(playerNr, figureNr, diceRollResult));
-                    }
+
+                    context.sendUpdate(new UpdateDraw(playerNr, figureNr, diceRollResult));
                 } else {
                     // cannot do that move
-                    // outPutText = (TextView) getViewById("PlayerTurn");
                     context.putText("Sie können diesen Zug nicht ziehen ");
                 }
             } else {
                 // player has changed the figure
                 selectedFigure = figureNr;
 
-                int fieldToHighlight = context.logic().highlight(selectedFigure, playerNr, diceRollResult);
-                list.add(new HighlightAction(fieldToHighlight));
-
-
-                // TODO highlight result field
+                Field field = context.logic().getResultField(playerNr, figureNr, diceRollResult);
+                if (field != null)
+                    result.add(new HighlightAction(playerNr, field.getFieldNr(), field.isFinishField()));
+                // TODO display illegal move message
             }
         } else {
             // player has selected another Player's figure
             context.putText("Nicht Ihre Figur ");
         }
 
-        Action fig = new UpdatePlayerFigure(playerNr, figureNr);
-
-        list.add(fig);
-        return list;
+        return result;
     }
 
     @Override
@@ -94,11 +80,6 @@ class MyTurnSelectFigureState extends AbstractState {
 
     @Override
     List<Action> diceRollResult(Controller context, int result, boolean hasCheated) {
-        Action dice = new UpdateDiceRoll(result);
-        ArrayList<Action> list = new ArrayList<>();
-        list.add(dice);
-        return list;
-
-        // ignore action
+        return null; // ignore action
     }
 }

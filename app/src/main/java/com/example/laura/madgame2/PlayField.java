@@ -3,6 +3,7 @@ package com.example.laura.madgame2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -11,13 +12,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.laura.madgame2.diceroll.RollDiceActivity;
-import com.example.laura.madgame2.gamelogic.MovesFigures;
 import com.example.laura.madgame2.gamelogic.Player;
-import com.example.laura.madgame2.gamestate.action.Action;
 import com.example.laura.madgame2.gamestate.Controller;
+import com.example.laura.madgame2.gamestate.action.Action;
 import com.example.laura.madgame2.gamestate.action.HighlightAction;
+import com.example.laura.madgame2.gamestate.action.KickFigureAction;
+import com.example.laura.madgame2.gamestate.action.MoveFigureAction;
 import com.example.laura.madgame2.gamestate.action.UpdateDiceRoll;
-import com.example.laura.madgame2.gamestate.action.UpdatePlayerFigure;
 import com.example.laura.madgame2.highscore.ScoreEdit;
 import com.example.laura.madgame2.multiplayer.Client;
 import com.example.laura.madgame2.multiplayer.Server;
@@ -28,22 +29,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PlayField extends AppCompatActivity implements MovesFigures {
-
-    /*
-    int s0=0;
-    public void setS0(int S0){S0=s0;}
-    int s1=0;
-    int s2=0;
-    int s3=0;
-    public void setS1(int S1){S1=s1;}
-    public void setS2(int S2){S2=s2;}
-    public void setS3(int S3){S3=s3;}
-    public int getS0(){return s0;}
-    public int getS1(){return s1;}
-    public int getS2(){return s2;}
-    public int getS3(){return s3;}
-    */
+public class PlayField extends AppCompatActivity {
 
     private static final int NUMBER_IDENTIFIER = 1;
 
@@ -55,24 +41,21 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
     private List<List<ViewGroup.LayoutParams>> outFields;
     private TextView outPutText;
 
+    private CountDownTimer highlightCDTimer;
 
     private static final int NUM_FIELDS = 40;
 
-    private int countTurn;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // activity inti
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_field);
 
-
-        countTurn = 0;
-        outPutText = (TextView) getViewById("PlayerTurn");
+        outPutText = (TextView) findViewById(R.id.PlayerTurn);
         outPutText.setText("Spieler 0 starte Spiel!");
 
-
-
+        // create players
+        // TODO create players in multiplayer lobby and pass them to playfield
         List<Player> players = new ArrayList<>();
         for (int i = 0; i < 4; i++)
             players.add(new Player(i));
@@ -111,16 +94,20 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
             outFields.add(tmpLayoutParams);
         }
 
+        // get controller
         controller = Controller.getInstance();
-        if(Server.isServerRunning()|| Client.getInstance() !=null){
+
+        if (Server.isServerRunning() || Client.getInstance() != null) {
+            // TODO outsource this to multiplayer lobby
             controller.setMP(true);
         }
 
-        if(!controller.startGame(players)){   // prüft ob es ein mutliplayer spiel ist
+        // if not in multiplayer mode, init players
+        if (!controller.isMP()) {
             controller.setPlayers(players, 0, 0);
         }
 
-        if (!controller.init(this))
+        if (!controller.init())
             Log.d("Debug", "Failed to initialize state controller");
 
         controller.setOutputtext(outPutText);
@@ -134,21 +121,22 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
         }
     }
 
-    public void hasCheated(View view){
+    public void hasCheated(View view) {
 
-       //hat der vorherige Spieler gecheatet?
+        // TODO in state pattern auslagern
+
+        //hat der vorherige Spieler gecheatet?
         boolean help = controller.getPlayerBefore().getCheater();
 
-        if(help) {
+        if (help) {
             ScoreEdit.updateScore("cheaterCaught");
-            Toast.makeText(getApplication(), "Spieler "+controller.getPlayerBefore().getPlayerNr()+ " hat geschummelt und wird bestraft!",
+            Toast.makeText(getApplication(), "Spieler " + controller.getPlayerBefore().getPlayerNr() + " hat geschummelt und wird bestraft!",
                     Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getApplication(), "Spieler "+controller.getPlayerBefore().getPlayerNr()+ " hat nicht geschummelt! Du wirst bestraft!",
+            Toast.makeText(getApplication(), "Spieler " + controller.getPlayerBefore().getPlayerNr() + " hat nicht geschummelt! Du wirst bestraft!",
                     Toast.LENGTH_SHORT).show();
         }
     }
-
 
     /**
      * Zeigt das Feld an, zu dem man mit dem Würfelergebnis fahren könnte
@@ -163,24 +151,22 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
         if (m.matches()) {
             List<Action> actions = controller.chooseFigure(Integer.valueOf(m.group(1)), Integer.valueOf(m.group(2)));
 
-            for (Action a:actions) {
-                if(a instanceof UpdatePlayerFigure){
-                    int figureNr =((UpdatePlayerFigure) a).getFigureNr();
-                }
-                else if(a instanceof UpdateDiceRoll){
-                    int diceResult=((UpdateDiceRoll) a).getDiceRollResult();
-                }
+            handleUpdates(actions);
 
-                else if(a instanceof HighlightAction){
-                    int field=((HighlightAction) a).getHighlightedField();
-                    int playerNr=Integer.valueOf(m.group(1));
+            /*
+            for (Action a : actions) {
+                if (a instanceof UpdatePlayerFigure) {
+                    int figureNr = ((UpdatePlayerFigure) a).getFigureNr();
+                } else if (a instanceof UpdateDiceRoll) {
+                    int diceResult = ((UpdateDiceRoll) a).getDiceRollResult();
+                } else if (a instanceof HighlightAction) {
+                    int field = ((HighlightAction) a).fieldNr;
+                    int playerNr = Integer.valueOf(m.group(1));
 
+                    if (field < 0) {
+                        field = field + 100;
 
-
-                    if(field<0){
-                        field=field+100;
-
-                        final View img = getViewById("iv_player"+playerNr+"_finish"+(field));       //"@+id/iv_player2_finish2"
+                        final View img = getViewById("iv_player" + playerNr + "_finish" + (field));       //"@+id/iv_player2_finish2"
                         img.setBackgroundResource(R.drawable.fig_empty);
 
                         new CountDownTimer(2000, 1000) {
@@ -192,31 +178,24 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
                                 // unused
                             }
                         }.start();
-                    }else if(field==110) {
-                    }else{
-                    final View img = getViewById("iv_field" + field);
-                    img.setBackgroundResource(R.drawable.fig_empty);
+                    } else if (field == 110) {
+                    } else {
+                        final View img = getViewById("iv_field" + field);
+                        img.setBackgroundResource(R.drawable.fig_empty);
 
-                    new CountDownTimer(2000, 1000) {
-                        public void onFinish() {
-                            img.setBackgroundResource(R.drawable.clear_circle);
-                        }
+                        new CountDownTimer(2000, 1000) {
+                            public void onFinish() {
+                                img.setBackgroundResource(R.drawable.clear_circle);
+                            }
 
-                        public void onTick(long millisUntilFinished) {
-                            // unused
-                        }
-                    }.start();
+                            public void onTick(long millisUntilFinished) {
+                                // unused
+                            }
+                        }.start();
                     }
                 }
-            }
-
-
-
-
-
+            }*/
         }
-
-
     }
 
     /**
@@ -235,82 +214,40 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
 
         if (requestCode == NUMBER_IDENTIFIER && resultCode == RESULT_OK) {
             controller.diceRollResult(data.getIntExtra("result", -1), data.getBooleanExtra("hasCheated", false));
-            if(data.getBooleanExtra("hasCheated",false)){
+            if (data.getBooleanExtra("hasCheated", false)) {
                 ScoreEdit.updateScore("gamesCheated");
             }
             ScoreEdit.updateScore("amountDiceRolls");
         }
+    }
 
-        /*
-        if (requestCode == NUMBER_IDENTIFIER) {
-            if (resultCode == RESULT_OK) {
+    public void highlightField(int playerNr, int fieldNr, boolean isFinishField) {
+        resetHighlightedField();
 
-                outPutText = (TextView) getViewById("PlayerTurn");
-                int player = countTurn;
-                this.numberRolled = data.getIntExtra("result", -1);
+        final View field;
+        if (isFinishField)
+            field = finishFieldViews.get(playerNr).get(fieldNr);
+        else
+            field = fieldViews.get(fieldNr);
 
-                if (this.numberRolled != 6 && player==0 ) {
-                    gameLogic.draw(players.get(player).getFigure(0), this.numberRolled);
-                    countTurn++;
-                    countTurn %= 4;
-                    outPutText.setText("Spieler " + countTurn + ", du bist dran!");
-                } else if(player==0){
-                    gameLogic.draw(players.get(player).getFigure(s0), this.numberRolled);
-                    outPutText.setText("Spieler " + countTurn + ", du darfst erneut würfeln!");
-                    s0=s0+1;
+        field.setBackgroundResource(R.drawable.fig_empty);
 
-                    if(s0==5){
-                        s0=0;
-                    }}
-                if (this.numberRolled != 6 && player==1 ) {
-                    saveAmountDiceRolls();
-                } else {
-                    gameLogic.draw(players.get(player).getFigure(0), this.numberRolled);
-                    countTurn++;
-                    countTurn %= 4;
-                    outPutText.setText("Spieler " + countTurn + ", du bist dran!");
-                } else if (player==1){
-                    gameLogic.draw(players.get(player).getFigure(s1), this.numberRolled);
-                    outPutText.setText("Spieler " + countTurn + ", du darfst erneut würfeln!");
-                    saveAmountDiceRolls();
-                    s1=s1+1;
-                    if(s1==5){
-                        s1=0;
-                    }
-                }
-                if (this.numberRolled != 6 && player==2 ) {
-                    gameLogic.draw(players.get(player).getFigure(0), this.numberRolled);
-                    countTurn++;
-                    countTurn %= 4;
-                    outPutText.setText("Spieler " + countTurn + ", du bist dran!");
-                } else if(player==2) {
-                    gameLogic.draw(players.get(player).getFigure(s2), this.numberRolled);
-                    outPutText.setText("Spieler " + countTurn + ", du darfst erneut würfeln!");
-                    s2=s2+1;
-
-                    if(s2==5){
-                        s2=0;
-                    }}
-                if (this.numberRolled != 6 && player==3 ) {
-                    gameLogic.draw(players.get(player).getFigure(0), this.numberRolled);
-                    countTurn++;
-                    countTurn %= 4;
-                    outPutText.setText("Spieler " + countTurn + ", du bist dran!");
-                } else if(player==3) {
-                    gameLogic.draw(players.get(player).getFigure(s3), this.numberRolled);
-                    outPutText.setText("Spieler " + countTurn + ", du darfst erneut würfeln!");
-                    s3 = s3 + 1;
-
-                    if (s3 == 5) {
-                        s3 = 0;
-                    }
-                }
-
-                //   this.numberRolled=data.getIntExtra("result",-1);
-                //  gameLogic.draw(players.get(0).getFigure(0), this.numberRolled);
+        highlightCDTimer = new CountDownTimer(2000, 1000) {
+            public void onFinish() {
+                field.setBackgroundResource(R.drawable.clear_circle);
             }
+
+            public void onTick(long millisUntilFinished) {
+                // unused
+            }
+        }.start();
+    }
+
+    private void resetHighlightedField() {
+        if (highlightCDTimer != null) {
+            highlightCDTimer.cancel();
+            highlightCDTimer.onFinish();
         }
-        */
     }
 
     /**
@@ -320,18 +257,15 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
      * @param figureNr the number of the figure
      * @param fieldNr  the number of the field to move to
      */
-    @Override
-    public void moveFigure(int playerNr, int figureNr, int fieldNr) {
+    private void moveFigure(int playerNr, int figureNr, int fieldNr) {
         moveTo(figureViews.get(playerNr).get(figureNr), fieldViews.get(fieldNr));
     }
 
-    @Override
-    public void moveFigureToOutField(int playerNr, int figureNr) {
+    private void moveFigureToOutField(int playerNr, int figureNr) {
         figureViews.get(playerNr).get(figureNr).setLayoutParams(outFields.get(playerNr).get(figureNr));
     }
 
-    @Override
-    public void moveFigureToFinishField(int playerNr, int figureNr, int finishFieldNr) {
+    private void moveFigureToFinishField(int playerNr, int figureNr, int finishFieldNr) {
         moveTo(figureViews.get(playerNr).get(figureNr), finishFieldViews.get(playerNr).get(finishFieldNr));
     }
 
@@ -347,23 +281,68 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
     }
 
     /**
-     * Helper function do display a toast message.
+     * Helper function to display a toast message.
      *
-     * @param s the message to display
+     * @param msg the message to display
      */
-    public void toast(String s) {
-        Toast.makeText(getApplication(), s, Toast.LENGTH_SHORT).show();
+    public void toast(String msg) {
+        Toast.makeText(this.getApplication(), msg, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Helper function to display an alert message with an Ok button.
+     *
+     * @param title the title of the message
+     * @param msg   the message
+     */
+    public void alert(String title, String msg) {
+        // method chaining vom feinsten
+        new AlertDialog.Builder(this).setTitle(title).setMessage(msg).setPositiveButton("Ok", null).create().show();
+    }
+
+    /**
+     * Helper function to display status message.
+     *
+     * @param text the status message
+     */
+    public void postStatus(String text) {
+        outPutText.setText(text);
+    }
 
     public void updateField(final UpdateDraw u) {
+        // TODO remove method if not needed
         this.runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
-                controller.getLogic().draw(u.getPlayerNr(),u.getFigureNr(),u.getDiceResult());
+                controller.logic().draw(u.getPlayerNr(), u.getFigureNr(), u.getDiceResult());
             }
         });
     }
 
+    public void handleUpdates(List<Action> actions) {
+        if (actions != null) {
+            for (Action action : actions) {
+                if (action instanceof MoveFigureAction) {
+                    resetHighlightedField();
+                    MoveFigureAction a = (MoveFigureAction) action;
+                    if (a.moveToFinishField)
+                        moveFigureToFinishField(a.playerNr, a.figureNr, a.fieldNr);
+                    else
+                        moveFigure(a.playerNr, a.figureNr, a.fieldNr);
+
+                } else if (action instanceof KickFigureAction) {
+                    KickFigureAction a = (KickFigureAction) action;
+                    moveFigureToOutField(a.playerNr, a.figureNr);
+
+                } else if (action instanceof HighlightAction) {
+                    HighlightAction a = (HighlightAction) action;
+                    highlightField(a.playerNr, a.fieldNr, a.isFinishField);
+
+                } else if (action instanceof UpdateDiceRoll) {
+                    // TODO implement method
+                }
+            }
+        }
+    }
 }

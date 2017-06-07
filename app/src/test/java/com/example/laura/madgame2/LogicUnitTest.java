@@ -21,10 +21,10 @@ public class LogicUnitTest extends LogicAbstractUnitTest {
 
     @Test
     public void rollingSixMovesFigureFromOutToStartField() {
-        for (int i = 0; i < NUM_PLAYERS; i++) {
-            logic.draw(i, 0, 6);
+        for (int playerNr = 0; playerNr < NUM_PLAYERS; playerNr++) {
+            logic.draw(playerNr, 0, 6);
 
-            Assert.assertEquals(players.get(i).getFigure(0).getField(), players.get(i).getStartField());
+            Assert.assertEquals(players.get(playerNr).getFigure(0).getField(), players.get(playerNr).getStartField());
         }
     }
 

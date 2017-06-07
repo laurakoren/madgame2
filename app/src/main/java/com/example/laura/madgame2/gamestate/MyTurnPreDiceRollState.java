@@ -1,11 +1,7 @@
 package com.example.laura.madgame2.gamestate;
 
-import android.widget.TextView;
-
-import com.example.laura.madgame2.gamelogic.Player;
 import com.example.laura.madgame2.gamestate.action.Action;
 import com.example.laura.madgame2.gamestate.action.UpdateDiceRoll;
-import com.example.laura.madgame2.gamestate.action.UpdatePlayerFigure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,25 +11,20 @@ import java.util.List;
  */
 class MyTurnPreDiceRollState extends AbstractState {
 
+    private boolean previousPlayerHasCheated;
     private boolean playerHasCheatedThisTurn;
     private int unluckyThrowsCount;
-    public TextView outPutText;
 
 
-
-    MyTurnPreDiceRollState(boolean playerHasCheatedThisTurn) {
+    MyTurnPreDiceRollState(boolean previousPlayerHasCheated, boolean playerHasCheatedThisTurn) {
+        this.previousPlayerHasCheated = previousPlayerHasCheated;
         this.playerHasCheatedThisTurn = playerHasCheatedThisTurn;
         this.unluckyThrowsCount = 0;
     }
 
     @Override
     List<Action> chooseFigure(Controller context, int playerNr, int figureNr) {
-        Action fig = new UpdatePlayerFigure(playerNr,figureNr);
-        ArrayList<Action> list = new ArrayList<>();
-        list.add(fig);
-        return list;
-
-        // ignore action
+        return null; // ignore action
     }
 
     @Override
@@ -54,11 +45,11 @@ class MyTurnPreDiceRollState extends AbstractState {
             } else {
                 // player has used up his 3 rolls
                 context.putText("Sie können nicht mehr würfeln");
-                context.endTurn();
+                context.endTurn(playerHasCheatedThisTurn);
             }
         } else {
             // normal procedure: continue to next state
-            context.setState(new MyTurnSelectFigureState(result, playerHasCheatedThisTurn, -1));
+            context.setState(new MyTurnSelectFigureState(result, previousPlayerHasCheated, playerHasCheatedThisTurn, -1));
         }
 
         Action dice = new UpdateDiceRoll(result);
@@ -66,6 +57,4 @@ class MyTurnPreDiceRollState extends AbstractState {
         list.add(dice);
         return list;
     }
-
-
 }

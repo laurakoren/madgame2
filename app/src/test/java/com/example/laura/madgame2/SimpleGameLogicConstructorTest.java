@@ -1,7 +1,6 @@
 package com.example.laura.madgame2;
 
 import com.example.laura.madgame2.gamelogic.GameLogic;
-import com.example.laura.madgame2.gamelogic.MovesFigures;
 import com.example.laura.madgame2.gamelogic.Player;
 
 import junit.framework.Assert;
@@ -19,18 +18,7 @@ public class SimpleGameLogicConstructorTest {
     @Test
     public void constructorDoesntThrowExceptions() {
         List<Player> players = new ArrayList<>(Arrays.asList(new Player(0), new Player(1), new Player(2), new Player(3)));
-        GameLogic logic = new GameLogic(players, 40, new MovesFigures() {
-            public void moveFigure(int playerNr, int figureNr, int fieldNr) {
-                // empty method for testing parts of the gamelogic that access parts of the ui that are not present when unit testing.
-                // may be used later on to check results
-            }
-            public void moveFigureToOutField(int playerNr, int figureNr) {
-                // see moveFigure() above for empty method
-            }
-            public void moveFigureToFinishField(int playerNr, int figureNr, int finishFieldNr) {
-                // see moveFigure() above for empty method
-            }
-        });
+        GameLogic logic = new GameLogic(players, 40);
 
         Assert.assertNotNull(logic);
     }

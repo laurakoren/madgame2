@@ -5,15 +5,14 @@ package com.example.laura.madgame2.gamelogic;
  */
 public class Field {
 
-    private Field next;
-
-    private Figure figure;
-
     private int fieldNr;
+
+    private Field next;
+    private Field fork;
 
     private Player finishFieldForPlayer;
 
-    private Field fork;
+    private Figure figure;
 
     Field(int fieldNr, Player finishFieldOwner) {
         this.fieldNr = fieldNr;
@@ -84,7 +83,7 @@ public class Field {
 
     /**
      * Puts a Figure on this Field.
-     * Note: It is recommended to do this by calling {@link com.example.laura.madgame2.gamelogic.Figure#setField(Field) moveTo()} on a given Figure.
+     * Note: It is recommended to do this by calling {@link com.example.laura.madgame2.gamelogic.Figure#setField(Field) setField()} on a given Figure.
      *
      * @param figure the Figure to place on this Field
      */
@@ -92,8 +91,7 @@ public class Field {
         this.figure = figure;
     }
 
-
-    int getFieldNr() {
+    public int getFieldNr() {
         return fieldNr;
     }
 
@@ -101,7 +99,7 @@ public class Field {
         return finishFieldForPlayer;
     }
 
-    boolean isFinishField() {
+    public boolean isFinishField() {
         return finishFieldForPlayer != null;
     }
 
