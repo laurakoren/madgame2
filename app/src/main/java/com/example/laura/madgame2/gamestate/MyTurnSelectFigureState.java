@@ -8,6 +8,10 @@ import com.example.laura.madgame2.gamestate.action.Action;
 import com.example.laura.madgame2.gamestate.action.HighlightAction;
 import com.example.laura.madgame2.gamestate.action.UpdateDiceRoll;
 import com.example.laura.madgame2.gamestate.action.UpdatePlayerFigure;
+import com.example.laura.madgame2.multiplayer.Client;
+import com.example.laura.madgame2.multiplayer.Server;
+import com.example.laura.madgame2.multiplayer.update.UpdateDraw;
+import com.example.laura.madgame2.multiplayer.update.UpdatePlayersTurn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +55,11 @@ class MyTurnSelectFigureState extends AbstractState {
                     } else {
                         // the players move is over
                         context.endTurn();
+                    }
+                    if (Server.isServerRunning()) {
+                        Server.getInstance().sendBroadcastUpdate(new UpdateDraw(playerNr, figureNr, diceRollResult));
+                    } else {
+                        Client.getInstance().sendUpdate(new UpdateDraw(playerNr, figureNr, diceRollResult));
                     }
                 } else {
                     // cannot do that move

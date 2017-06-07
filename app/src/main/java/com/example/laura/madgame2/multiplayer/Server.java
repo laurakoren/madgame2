@@ -8,6 +8,8 @@ import com.example.laura.madgame2.MultiplayerLobbyActivity;
 import com.example.laura.madgame2.PlayField;
 import com.example.laura.madgame2.gamestate.Controller;
 import com.example.laura.madgame2.multiplayer.update.Update;
+import com.example.laura.madgame2.multiplayer.update.UpdateDraw;
+import com.example.laura.madgame2.multiplayer.update.UpdateMyNumber;
 import com.example.laura.madgame2.utils.ActivityUtils;
 
 import java.io.IOException;
@@ -81,7 +83,7 @@ public class Server extends Thread implements Observer {
                 if (clientSocket != null) {
                     EchoClient eClient = new EchoClient(clientSocket);
                     eClient.start();
-                    Thread.sleep(2000);
+                    Thread.sleep(1500);
                     count = 0;
                     while (clients.size() > 0 && clients == null) {
                         count++;
@@ -106,6 +108,13 @@ public class Server extends Thread implements Observer {
             }
 
         }
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            logger.log(Level.WARNING, "Exception at Server Thread run!", e);
+        }
+
+        Controller.getInstance();
         while (!serverSocket.isClosed() && gameStarted) {
             //Do something with the clients
         }
@@ -254,9 +263,14 @@ public class Server extends Thread implements Observer {
 
         Update up =(Update) update;
 
+        if(update instanceof  UpdateDraw){
+            Controller.getInstance().receiveUpdate(up);
+            sendBroadcastUpdate(up);
+        }
+
+        ((Update) update).setPlayerNr(((Update) update).getPlayerNr() % getAmountPlayers());
         if(((Update) update).getPlayerNr()==0){
             Controller.getInstance().receiveUpdate(up);
-
         }else{
             sendBroadcastUpdate(up);
         }
@@ -264,14 +278,28 @@ public class Server extends Thread implements Observer {
     }
 
 
+    public int getAmountPlayers() {
+        return clients.size()+1;
+    }
+
     class StartGame extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
             gameStarted = true;
-            for (EchoClient ec : clients) {
-                ec.startGame();
+            for (int i = 0; i< clients.size(); i++) {
+                clients.get(i).startGame();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                callNumber(i+1,i+1);
             }
             return null;
+        }
+
+        public void callNumber(int playerNr, int hisNumber){
+            new AsyncServerTask().execute(new UpdateMyNumber(playerNr,hisNumber));
         }
     }
 }

@@ -21,6 +21,7 @@ import com.example.laura.madgame2.gamestate.action.UpdatePlayerFigure;
 import com.example.laura.madgame2.highscore.ScoreEdit;
 import com.example.laura.madgame2.multiplayer.Client;
 import com.example.laura.madgame2.multiplayer.Server;
+import com.example.laura.madgame2.multiplayer.update.UpdateDraw;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -354,5 +355,15 @@ public class PlayField extends AppCompatActivity implements MovesFigures {
         Toast.makeText(getApplication(), s, Toast.LENGTH_SHORT).show();
     }
 
+
+    public void updateField(final UpdateDraw u) {
+        this.runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                controller.getLogic().draw(u.getPlayerNr(),u.getFigureNr(),u.getDiceResult());
+            }
+        });
+    }
 
 }

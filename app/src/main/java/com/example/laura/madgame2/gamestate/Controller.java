@@ -1,7 +1,9 @@
 package com.example.laura.madgame2.gamestate;
 
+import android.util.Log;
 import android.widget.TextView;
 
+import com.example.laura.madgame2.PlayField;
 import com.example.laura.madgame2.gamelogic.GameLogic;
 import com.example.laura.madgame2.gamelogic.MovesFigures;
 import com.example.laura.madgame2.gamelogic.Player;
@@ -10,6 +12,7 @@ import com.example.laura.madgame2.multiplayer.Client;
 import com.example.laura.madgame2.multiplayer.Server;
 import com.example.laura.madgame2.multiplayer.update.Update;
 import com.example.laura.madgame2.multiplayer.update.UpdateDraw;
+import com.example.laura.madgame2.multiplayer.update.UpdateMyNumber;
 import com.example.laura.madgame2.multiplayer.update.UpdatePlayersTurn;
 
 
@@ -128,13 +131,21 @@ public class Controller {
     // network accessor methods for states
 
     public void receiveUpdate(Update update) {
+        if(update instanceof UpdateMyNumber){
+         myPlayerNr = ((UpdateMyNumber) update).getMyNumber();
+        }
 
         if(update instanceof UpdatePlayersTurn){
+            currentPlayerNr = myPlayerNr;
             setState(new MyTurnPreDiceRollState(false));
         }
 
+        //TODO vielleich bessere Umsetzung um auf die Figur im View zu bewegen..
         if(update instanceof UpdateDraw){
-            logic.draw(update.getPlayerNr(),((UpdateDraw) update).getFigureNr(),((UpdateDraw) update).getDiceResult());
+            if(update.getPlayerNr() != myPlayerNr) {
+                MovesFigures p = logic.getMovingEntity();
+                ((PlayField) p).updateField((UpdateDraw) update);
+            }
         }
 
 
@@ -167,6 +178,7 @@ public class Controller {
             return false;
         }
             if (Server.isServerRunning()) {
+                myPlayerNr = 0;
                 state = new MyTurnPreDiceRollState(false);
             } else {
                 state = new OtherPlayersTurnState();
@@ -190,4 +202,7 @@ public class Controller {
         return playerBefore;
     }
 
+    public GameLogic getLogic() {
+        return logic;
+    }
 }

@@ -278,4 +278,8 @@ public class GameLogic {
             return false;
         return moveFigure(figure, figure.getPlayer().getStartField());
     }
+
+    public MovesFigures getMovingEntity() {
+        return movingEntity;
+    }
 }

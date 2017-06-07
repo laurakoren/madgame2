@@ -119,8 +119,7 @@ public class Client extends Thread {
         while (gameStarted && !killThread) {
             try {
                 update = (Update) objectIn.readObject();
-
-                Controller.getInstance().receiveUpdate(update);  //
+                Controller.getInstance().receiveUpdate(update);
                 update=null;
 
             } catch (IOException e) {

@@ -21,9 +21,11 @@ public class UpdateDraw extends Update {
         return playerNr;
     }
 
+    @Override
     public void setPlayerNr(int playerNr) {
         this.playerNr = playerNr;
     }
+
 
     public int getFigureNr() {
         return figureNr;
