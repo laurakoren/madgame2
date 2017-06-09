@@ -4,6 +4,7 @@ package com.example.laura.madgame2.multiplayer;
 import android.content.Intent;
 import android.os.AsyncTask;
 
+import com.example.laura.madgame2.MultiplayerActivity;
 import com.example.laura.madgame2.MultiplayerLobbyActivity;
 import com.example.laura.madgame2.PlayField;
 import com.example.laura.madgame2.gamestate.Controller;
@@ -201,6 +202,9 @@ public class Server extends Thread implements Observer {
     }
 
     public String getPlayerName() {
+        if(MultiplayerActivity.chosenPlayerName!=null){
+            return MultiplayerActivity.chosenPlayerName;
+        }
         if (playerName == "") {
             playerName = "Player" + new Random().nextInt(100);
             return playerName;
