@@ -45,33 +45,32 @@ public class MultiplayerActivity extends AppCompatActivity {
         ActivityUtils.setCurrentActivity(this);
     }
 
+    /**
+     * Method called by button to set the Player's name. Opens an Alert Dialog, giving the possibility to enter a name.
+     * The name is stored in a global variable, accessible throughout the game.
+     */
     public void setName(View view){
         final Context context = this;
         button = (Button) findViewById(R.id.btnChooseName);
         result = (EditText) findViewById(R.id.showEnteredName);
 
 
-        // get prompts.xml view
         LayoutInflater li = LayoutInflater.from(context);
         View promptsView = li.inflate(R.layout.custom, null);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 context);
 
-        // set prompts.xml to alertdialog builder
         alertDialogBuilder.setView(promptsView);
 
         final EditText userInput = (EditText) promptsView
                 .findViewById(R.id.editTextDialogUserInput);
 
-        // set dialog message
         alertDialogBuilder
                 .setCancelable(false)
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
-                                // get user input and set it to result
-                                // edit text
                                 result.setText(userInput.getText());
                                 chosenPlayerName=userInput.getText().toString();
                             }
@@ -83,12 +82,8 @@ public class MultiplayerActivity extends AppCompatActivity {
                             }
                         });
 
-        // create alert dialog
         AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
         alertDialog.show();
-
 
     }
 
