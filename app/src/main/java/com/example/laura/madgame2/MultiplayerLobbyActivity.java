@@ -19,7 +19,7 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
     private Server server;
     private TextView hostIp;
     private Role role;
-    public TextView[] playerNames;
+    public static TextView[] playerNames;
     private Button[] kickPlayer;
     Activity m;
 
@@ -33,6 +33,8 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
         playerNames[1] = (TextView) findViewById(R.id.txtPlayerTwo);
         playerNames[2] = (TextView) findViewById(R.id.txtPlayerThree);
         playerNames[3] = (TextView) findViewById(R.id.txtPlayerFour);
+
+
 
         kickPlayer = new Button[4];
         kickPlayer[0] = (Button)findViewById(R.id.btnKickPlayerTwo);

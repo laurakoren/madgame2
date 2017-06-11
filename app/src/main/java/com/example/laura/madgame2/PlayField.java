@@ -24,6 +24,7 @@ import com.example.laura.madgame2.multiplayer.Client;
 import com.example.laura.madgame2.multiplayer.Server;
 import com.example.laura.madgame2.multiplayer.update.UpdateDraw;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -100,6 +101,16 @@ public class PlayField extends AppCompatActivity {
         if (Server.isServerRunning() || Client.getInstance() != null) {
             // TODO outsource this to multiplayer lobby
             controller.setMP(true);
+
+            //Display player names on playfield
+            TextView p1Name = (TextView) findViewById(R.id.playerOneName);
+            TextView p2Name = (TextView) findViewById(R.id.playerTwoName);
+            TextView p3Name = (TextView) findViewById(R.id.playerThreeName);
+            TextView p4Name = (TextView) findViewById(R.id.playerFourName);
+            p1Name.setText(MultiplayerLobbyActivity.playerNames[0].getText().toString());
+            p2Name.setText(MultiplayerLobbyActivity.playerNames[1].getText().toString());
+            p3Name.setText(MultiplayerLobbyActivity.playerNames[2].getText().toString());
+            p4Name.setText(MultiplayerLobbyActivity.playerNames[3].getText().toString());
         }
 
         // if not in multiplayer mode, init players
