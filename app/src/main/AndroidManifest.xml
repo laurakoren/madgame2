@@ -22,14 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".diceroll.RollDiceActivity">
+        <activity android:name=".diceroll.RollDiceActivity" android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".MultiplayerActivity" />
+        <activity android:name=".MultiplayerActivity" android:screenOrientation="portrait"/>
 
-        <activity android:name=".MultiplayerLobbyActivity" />
-        <activity android:name=".PlayField" />
-        <activity android:name=".highscore.HighscoreActivity" />
+        <activity android:name=".MultiplayerLobbyActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".PlayField" android:screenOrientation="portrait"/>
+        <activity android:name=".highscore.HighscoreActivity"  android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
