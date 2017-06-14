@@ -1,5 +1,6 @@
 package com.example.laura.madgame2.gamestate;
 
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.laura.madgame2.gamelogic.GameLogic;
@@ -134,6 +135,7 @@ public class Controller {
     public void receiveUpdate(Update update) {
         if (update instanceof UpdateMyNumber) {
             myPlayerNr = ((UpdateMyNumber) update).getMyNumber();
+            Log.d("MyNumberUpdate", myPlayerNr+"");
         }
 
         if (update instanceof UpdatePlayersTurn) {
@@ -174,19 +176,9 @@ public class Controller {
             state = new OtherPlayersTurnState();
     }
 
-    public boolean startGame(List<Player> players) {
-        // TODO replace by setPlayers
-        this.players = players;
-        if (!isMP()) {
-            return false;
-        }
-        if (Server.isServerRunning()) {
-            myPlayerNr = 0;
-            state = new MyTurnPreDiceRollState(false, false);
-        } else {
-            state = new OtherPlayersTurnState();
-        }
-        return true;
+    public void startGame(List<Player> players) {
+        setPlayers(players, 0, myPlayerNr);
+        Log.d("Debug", myPlayerNr+"");
     }
 
     public boolean init() {
@@ -199,5 +191,9 @@ public class Controller {
 
     public Player getPlayerBefore() {
         return playerBefore;
+    }
+
+    public void setMyPlayerNr(int myPlayerNr) {
+        this.myPlayerNr = myPlayerNr;
     }
 }

@@ -54,7 +54,6 @@ public class MultiplayerActivity extends AppCompatActivity {
         button = (Button) findViewById(R.id.btnChooseName);
         result = (EditText) findViewById(R.id.showEnteredName);
 
-
         LayoutInflater li = LayoutInflater.from(context);
         View promptsView = li.inflate(R.layout.custom, null);
 

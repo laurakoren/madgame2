@@ -9,8 +9,9 @@ public class UpdateDraw extends Update {
     private int playerNr;
     private int figureNr;
     private int diceResult;
+    private boolean playerCheated;
 
-    public UpdateDraw(int playerNr, int figureNr, int diceResult) {
+    public UpdateDraw(int playerNr, int figureNr, int diceResult, boolean playerCheated) {
         super();
         this.diceResult = diceResult;
         this.playerNr = playerNr;
@@ -39,8 +40,8 @@ public class UpdateDraw extends Update {
         return diceResult;
     }
 
-    public void setDiceResult(int diceResult) {
-        this.diceResult = diceResult;
+    public boolean isPlayerCheated() {
+        return playerCheated;
     }
 
     @Override

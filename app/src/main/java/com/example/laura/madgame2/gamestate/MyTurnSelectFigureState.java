@@ -51,7 +51,7 @@ class MyTurnSelectFigureState extends AbstractState {
                         context.endTurn(playerHasCheatedThisTurn);
                     }
 
-                    context.sendUpdate(new UpdateDraw(playerNr, figureNr, diceRollResult));
+                    context.sendUpdate(new UpdateDraw(playerNr, figureNr, diceRollResult, playerHasCheatedThisTurn));
                 } else {
                     // cannot do that move
                     context.putText("Sie können diesen Zug nicht ziehen ");

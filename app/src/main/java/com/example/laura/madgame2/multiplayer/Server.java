@@ -115,7 +115,7 @@ public class Server extends Thread implements Observer {
             logger.log(Level.WARNING, "Exception at Server Thread run!", e);
         }
 
-        Controller.getInstance();
+        Controller.getInstance().setMyPlayerNr(0);
         while (!serverSocket.isClosed() && gameStarted) {
             //Do something with the clients
         }

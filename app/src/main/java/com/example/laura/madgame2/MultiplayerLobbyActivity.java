@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.laura.madgame2.gamestate.Controller;
 import com.example.laura.madgame2.multiplayer.Role;
 import com.example.laura.madgame2.multiplayer.Server;
 import com.example.laura.madgame2.utils.ActivityUtils;
