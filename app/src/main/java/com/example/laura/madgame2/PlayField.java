@@ -1,5 +1,6 @@
 package com.example.laura.madgame2;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -18,13 +19,12 @@ import com.example.laura.madgame2.gamestate.action.Action;
 import com.example.laura.madgame2.gamestate.action.HighlightAction;
 import com.example.laura.madgame2.gamestate.action.KickFigureAction;
 import com.example.laura.madgame2.gamestate.action.MoveFigureAction;
-import com.example.laura.madgame2.gamestate.action.UpdateDiceRoll;
+import com.example.laura.madgame2.gamestate.action.WinningAction;
 import com.example.laura.madgame2.highscore.ScoreEdit;
 import com.example.laura.madgame2.multiplayer.Client;
 import com.example.laura.madgame2.multiplayer.Server;
 import com.example.laura.madgame2.multiplayer.update.UpdateDraw;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -352,8 +352,20 @@ public class PlayField extends AppCompatActivity {
                     HighlightAction a = (HighlightAction) action;
                     highlightField(a.playerNr, a.fieldNr, a.isFinishField);
 
-                } else if (action instanceof UpdateDiceRoll) {
-                    // TODO implement method
+                } else if (action instanceof WinningAction) {
+                    WinningAction a = (WinningAction) action;
+
+                    new AlertDialog.Builder(this)
+                            .setTitle("Spiel beendet!")
+                            .setMessage("Spieler " + a.name + " hat gewonnen!")
+                            .setPositiveButton("Ok", null)
+                            .setCancelable(true)
+                            .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            finish();
+                        }
+                    }).create().show();
                 }
             }
         }

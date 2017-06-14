@@ -47,9 +47,13 @@ class MyTurnPreDiceRollState extends AbstractState {
                 context.putText("Sie können nicht mehr würfeln");
                 context.endTurn(playerHasCheatedThisTurn);
             }
-        } else {
+        } else if (context.logic().hasValidMoves(context.currPlayerNr(), result)) {
             // normal procedure: continue to next state
             context.setState(new MyTurnSelectFigureState(result, previousPlayerHasCheated, playerHasCheatedThisTurn, -1));
+        } else {
+            // player can't move any of his figures with the number he rolled
+            context.putText("Keine Züge möglich, nächster ist dran");
+            context.endTurn(hasCheated || playerHasCheatedThisTurn);
         }
 
         Action dice = new UpdateDiceRoll(result);
