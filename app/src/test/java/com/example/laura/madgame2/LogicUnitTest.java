@@ -73,7 +73,69 @@ public class LogicUnitTest extends LogicAbstractUnitTest {
         Assert.assertEquals(b.getField(), f);
     }
 
-    // TODO test case: cant kick own figures
-    // TODO test case: finish fields (+isFinishField)
-    // TODO test case: game winning criteria
+    @Test
+    public void cantKickOwnFigures() {
+        Figure a = players.get(0).getFigure(0);
+        Figure b = players.get(0).getFigure(1);
+        Figure c = players.get(0).getFigure(2);
+
+        logic.draw(0, 0, 6);
+        logic.draw(0, 0, 4);
+        logic.draw(0, 1, 6);
+        Assert.assertNull(logic.draw(0, 1, 4));
+        Assert.assertNull(logic.draw(0, 2, 6));
+
+        Assert.assertNotNull(a.getField());
+        Assert.assertNotNull(b.getField());
+        Assert.assertNull(c.getField());
+    }
+
+    @Test
+    public void canEnterFinishFieldsButNotGoBeyond() {
+        for (int i = 0; i < 8; i++)
+            Assert.assertNotNull(logic.draw(0, 0, 6));
+
+        Assert.assertNull(logic.draw(0, 0, 6));
+        Assert.assertNotNull(logic.draw(0, 0, 1));
+
+        for (int i = 0; i < 6; i++)
+            Assert.assertNull(logic.draw(0, 0, i));
+    }
+
+    @Test
+    public void gameWinningCriterion() {
+        Assert.assertNull(logic.getWinner());
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 7; j++) {
+                logic.draw(0, i, 6);
+                Assert.assertNull(logic.getWinner());
+            }
+            Assert.assertNotNull(logic.draw(0, i, 3));
+            Assert.assertNotNull(logic.draw(0, i, i + 1));
+        }
+
+        Assert.assertNotNull(logic.getWinner());
+        Assert.assertEquals(logic.getWinner(), players.get(0));
+    }
+
+    @Test
+    public void hasNoValidMoves() {
+        Assert.assertNull(logic.getWinner());
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 7; j++) {
+                logic.draw(0, i, 6);
+                Assert.assertTrue(logic.hasValidMoves(0, 3));
+            }
+            Assert.assertNotNull(logic.draw(0, i, 2));
+            Assert.assertNotNull(logic.draw(0, i, i + 1));
+        }
+
+        for (int i = 1; i <= 4; i++)
+            Assert.assertTrue(logic.hasValidMoves(0, i));
+
+        for (int i = 5; i <= 6; i++)
+            Assert.assertFalse(logic.hasValidMoves(0, i));
+    }
 }

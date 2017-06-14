@@ -9,6 +9,9 @@ import org.junit.Before;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Abstract for Testing that involves GameLogic featuring setUp and tearDown methods.
+ */
 abstract class LogicAbstractUnitTest {
 
     static final int NUM_FIELDS = 40;
@@ -19,7 +22,7 @@ abstract class LogicAbstractUnitTest {
     List<Player> players;
 
     @Before
-    public void init() {
+    public void setUp() {
         players = new ArrayList<>();
         for (int i = 0; i < NUM_PLAYERS; i++)
             players.add(new Player(i));
@@ -28,7 +31,7 @@ abstract class LogicAbstractUnitTest {
     }
 
     @After
-    public void destroy() {
+    public void tearDown() {
         players = null;
         logic = null;
     }
