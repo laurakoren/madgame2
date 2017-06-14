@@ -125,7 +125,7 @@ public class GameLogic {
 
         // if all figures of a player are on finish fields...
         for (int figure = 0; figure < NUM_FIGURES; figure++)
-            if (!player.getFigure(figure).getField().isFinishField())
+            if (player.getFigure(figure).getField() == null || !player.getFigure(figure).getField().isFinishField())
                 return false;
 
         // ...he wins

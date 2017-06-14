@@ -65,7 +65,8 @@ public class Controller {
     }
 
     void putText(String text) {
-        outputtext.setText(text);
+        if (outputtext != null)
+            outputtext.setText(text);
     }
 
     public boolean rollDice() {
