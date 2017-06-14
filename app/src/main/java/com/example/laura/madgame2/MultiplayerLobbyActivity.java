@@ -51,6 +51,7 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
             playerNames[0].setText(server.getPlayerName());
         } else {
             role = Role.Client;
+            findViewById(R.id.btnStart).setVisibility(View.INVISIBLE);
         }
 
     }

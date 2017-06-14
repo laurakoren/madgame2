@@ -116,8 +116,10 @@ public class PlayField extends AppCompatActivity {
         // if not in multiplayer mode, init players
         if (!controller.isMP()) {
             controller.setPlayers(players, 0, 0);
+        } else{
+            controller.startGame(players);
         }
-        controller.startGame(players);
+
         if (!controller.init())
             Log.d("Debug", "Failed to initialize state controller");
 

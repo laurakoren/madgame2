@@ -145,14 +145,11 @@ public class Controller {
             setState(new MyTurnPreDiceRollState(false, false));
         }
 
-        //TODO vielleich bessere Umsetzung um auf die Figur im View zu bewegen..
         if (update instanceof UpdateDraw) {
-            /*if (update.getPlayerNr() != myPlayerNr) {
-                MovesFigures p = logic.getMovingEntity();
-                ((PlayField) p).updateField((UpdateDraw) update);
-            }*/
             UpdateDraw u = (UpdateDraw) update;
-            logic.draw(u.getPlayerNr(), u.getFigureNr(), u.getDiceResult());
+            if (update.getPlayerNr() != myPlayerNr) {
+                logic.draw(u.getPlayerNr(), u.getFigureNr(), u.getDiceResult());
+            }
         }
     }
 
@@ -196,5 +193,6 @@ public class Controller {
 
     public void setMyPlayerNr(int myPlayerNr) {
         this.myPlayerNr = myPlayerNr;
+        Log.d("Debug", myPlayerNr+"");
     }
 }
