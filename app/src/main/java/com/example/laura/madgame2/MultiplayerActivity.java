@@ -1,13 +1,11 @@
 package com.example.laura.madgame2;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -55,7 +53,7 @@ public class MultiplayerActivity extends AppCompatActivity {
         result = (EditText) findViewById(R.id.showEnteredName);
 
         LayoutInflater li = LayoutInflater.from(context);
-        View promptsView = li.inflate(R.layout.custom, null);
+        View promptsView = li.inflate(R.layout.name_input_popup, null);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 context);
