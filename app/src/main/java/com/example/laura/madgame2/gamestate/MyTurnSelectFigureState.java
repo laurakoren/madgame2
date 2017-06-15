@@ -3,8 +3,10 @@ package com.example.laura.madgame2.gamestate;
 import android.util.Log;
 
 import com.example.laura.madgame2.gamelogic.Field;
+import com.example.laura.madgame2.gamelogic.Player;
 import com.example.laura.madgame2.gamestate.action.Action;
 import com.example.laura.madgame2.gamestate.action.HighlightAction;
+import com.example.laura.madgame2.gamestate.action.WinningAction;
 import com.example.laura.madgame2.multiplayer.update.UpdateDraw;
 
 import java.util.ArrayList;
@@ -29,9 +31,6 @@ class MyTurnSelectFigureState extends AbstractState {
 
     @Override
     List<Action> chooseFigure(Controller context, int playerNr, int figureNr) {
-
-        // TODO Check if the player cant make any move (e.g. because a few of his figures are in the finish, but the rest cant follow up) and inform him
-
         List<Action> result = new ArrayList<>();
 
         if (playerNr == context.currPlayerNr()) {
@@ -64,11 +63,16 @@ class MyTurnSelectFigureState extends AbstractState {
                 Field field = context.logic().getResultField(playerNr, figureNr, diceRollResult);
                 if (field != null)
                     result.add(new HighlightAction(playerNr, field.getFieldNr(), field.isFinishField()));
-                // TODO display illegal move message
             }
         } else {
             // player has selected another Player's figure
             context.putText("Nicht Ihre Figur ");
+        }
+
+        Player winner = context.logic().getWinner();
+        if (winner != null) {
+            result.add(new WinningAction(winner, "Spieler "+winner.getPlayerNr()));
+            // TODO update raushauen
         }
 
         return result;

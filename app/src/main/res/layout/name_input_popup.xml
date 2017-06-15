@@ -17,6 +17,7 @@
         android:id="@+id/editTextDialogUserInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxLength="10"
         android:hint="e.g. Horst">
 
         <requestFocus />
