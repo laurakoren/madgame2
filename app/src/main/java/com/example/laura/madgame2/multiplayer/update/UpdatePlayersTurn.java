@@ -7,9 +7,11 @@ package com.example.laura.madgame2.multiplayer.update;
 public class UpdatePlayersTurn extends Update {
 
     private int playerNr;
+    private  boolean playerBeforeCheated;
 
-    public UpdatePlayersTurn(int playerNr){
+    public UpdatePlayersTurn(int playerNr, boolean playerBeforeCheated){
         this.playerNr=playerNr;
+        this.playerBeforeCheated = playerBeforeCheated;
     }
 
     public int getPlayerNr() {
@@ -20,4 +22,7 @@ public class UpdatePlayersTurn extends Update {
         this.playerNr = playerNr;
     }
 
+    public boolean isPlayerBeforeCheated() {
+        return playerBeforeCheated;
+    }
 }

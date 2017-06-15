@@ -1,5 +1,7 @@
 package com.example.laura.madgame2.gamestate;
 
+import android.util.Log;
+
 import com.example.laura.madgame2.gamestate.action.Action;
 import com.example.laura.madgame2.gamestate.action.UpdateDiceRoll;
 
@@ -56,5 +58,15 @@ class MyTurnPreDiceRollState extends AbstractState {
         ArrayList<Action> list = new ArrayList<>();
         list.add(dice);
         return list;
+    }
+
+    @Override
+    void catchCheater(boolean playerBeforeHasCheated) {
+        //TODO punishment for cheating
+        if(playerBeforeHasCheated){
+            Log.d("Cheater", "player before has cheated");
+        }else{
+            Log.d("Cheater", "player before has not cheated");
+        }
     }
 }

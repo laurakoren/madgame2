@@ -242,6 +242,7 @@ public class Server extends Thread implements Observer {
      */
     public void startGame() {
         Controller.getInstance().setMyPlayerNr(0);
+        Controller.getInstance().setMP(true);
         new StartGame().execute();
         ActivityUtils.getCurrentActivity().startActivity(new Intent(ActivityUtils.getCurrentActivity(), PlayField.class));
     }

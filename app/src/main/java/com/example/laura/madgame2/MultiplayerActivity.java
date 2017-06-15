@@ -107,8 +107,9 @@ public class MultiplayerActivity extends AppCompatActivity {
                 Thread.currentThread().interrupt();
             }
             client = client.getInstance();
-            client.start();
-            if (client.isConnected()) {
+
+            if ( client != null && client.isConnected()) {
+                client.start();
                 intent = new Intent(this, MultiplayerLobbyActivity.class);
                 startActivity(intent);
             } else {

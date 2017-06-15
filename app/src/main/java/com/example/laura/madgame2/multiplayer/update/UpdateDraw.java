@@ -11,7 +11,7 @@ public class UpdateDraw extends Update {
     private int diceResult;
     private boolean playerCheated;
 
-    public UpdateDraw(int playerNr, int figureNr, int diceResult, boolean playerCheated) {
+    public UpdateDraw(int playerNr, int figureNr, int diceResult) {
         super();
         this.diceResult = diceResult;
         this.playerNr = playerNr;
@@ -40,9 +40,6 @@ public class UpdateDraw extends Update {
         return diceResult;
     }
 
-    public boolean isPlayerCheated() {
-        return playerCheated;
-    }
 
     @Override
     public String toString() {

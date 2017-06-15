@@ -115,12 +115,12 @@ public class Client extends Thread {
             }
 
         }
-
+        Controller.getInstance().setMP(true);
         while (gameStarted && !killThread) {
             try {
                 update = (Update) objectIn.readObject();
                 Controller.getInstance().receiveUpdate(update);
-                update=null;
+                update = null;
 
             } catch (IOException e) {
                 logger.log(Level.WARNING, "IOException occurred at Client Thread run!", e);
@@ -155,7 +155,10 @@ public class Client extends Thread {
 
 
     public boolean isConnected() {
-        return clientSocket.isConnected();
+        if (clientSocket != null) {
+            return clientSocket.isConnected();
+        }
+        return false;
     }
 
     /**
@@ -173,7 +176,7 @@ public class Client extends Thread {
     }
 
     public static String getPlayerName() {
-        if(MultiplayerActivity.chosenPlayerName!=null){
+        if (MultiplayerActivity.chosenPlayerName != null) {
             return MultiplayerActivity.chosenPlayerName;
         }
         if (playerName == "") {

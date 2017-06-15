@@ -34,6 +34,7 @@ public class Controller {
     private int currentPlayerNr;
     private Player playerBefore;
     private boolean cheated;
+    private boolean playerBeforeCheated;
 
     private Controller() {
         state = null;
@@ -43,6 +44,7 @@ public class Controller {
         isMultiplayerGame = false;
         cheated = false;
         playerBefore = null;
+        playerBeforeCheated = false;
     }
 
     // singleton
@@ -107,19 +109,19 @@ public class Controller {
     }
 
     void endTurn(boolean playerHasCheatedThisTurn) {
-        playerBefore = new Player(currentPlayerNr);
-        playerBefore.setCheater(cheated);
         currentPlayerNr = (currentPlayerNr + 1) % 4;
 
         if (this.isMultiplayerGame) {
-            // assume this only gets called by "MyTurn" states, as receiveUpdate will be responsible else
             state = new OtherPlayersTurnState();
-
-            // TODO send playerHasCheatedThisTurn to other instances
-            sendUpdate(new UpdatePlayersTurn(currentPlayerNr));
-        } else
+            sendUpdate(new UpdatePlayersTurn(currentPlayerNr, cheated));
+            playerBeforeCheated = false;
+            cheated = false;
+        } else {
+            playerBefore = new Player(currentPlayerNr);
+            playerBefore.setCheater(cheated);
             // in local multiplayer mode, just increment
             state = new MyTurnPreDiceRollState(playerHasCheatedThisTurn, false);
+        }
     }
 
     // network accessor methods for states
@@ -136,20 +138,22 @@ public class Controller {
     public void receiveUpdate(Update update) {
         if (update instanceof UpdateMyNumber) {
             myPlayerNr = ((UpdateMyNumber) update).getMyNumber();
-            Log.d("MyNumberUpdate", myPlayerNr+"");
         }
 
         if (update instanceof UpdatePlayersTurn) {
-            // TODO receive playerHasCheatedThisTurn
             currentPlayerNr = myPlayerNr;
-            setState(new MyTurnPreDiceRollState(false, false));
+            UpdatePlayersTurn u = (UpdatePlayersTurn) update;
+            playerBeforeCheated = u.isPlayerBeforeCheated();
+            setState(new MyTurnPreDiceRollState(playerBeforeCheated, false));
         }
 
         if (update instanceof UpdateDraw) {
             UpdateDraw u = (UpdateDraw) update;
-            if (update.getPlayerNr() != myPlayerNr) {
-                logic.draw(u.getPlayerNr(), u.getFigureNr(), u.getDiceResult());
+            if(u.getPlayerNr() != myPlayerNr) {
+               logic.handleUpdates(logic.draw(u.getPlayerNr(), u.getFigureNr(), u.getDiceResult()));
+
             }
+
         }
     }
 
@@ -176,7 +180,6 @@ public class Controller {
 
     public void startGame(List<Player> players) {
         setPlayers(players, 0, myPlayerNr);
-        Log.d("Debug", myPlayerNr+"");
     }
 
     public boolean init() {
@@ -193,6 +196,9 @@ public class Controller {
 
     public void setMyPlayerNr(int myPlayerNr) {
         this.myPlayerNr = myPlayerNr;
-        Log.d("Debug", myPlayerNr+"");
+    }
+
+    public void catchCheater() {
+        state.catchCheater(playerBeforeCheated);
     }
 }

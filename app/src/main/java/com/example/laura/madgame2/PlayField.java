@@ -99,9 +99,6 @@ public class PlayField extends AppCompatActivity {
         controller = Controller.getInstance();
 
         if (Server.isServerRunning() || Client.getInstance() != null) {
-            // TODO outsource this to multiplayer lobby
-            controller.setMP(true);
-
             //Display player names on playfield
             TextView p1Name = (TextView) findViewById(R.id.playerOneName);
             TextView p2Name = (TextView) findViewById(R.id.playerTwoName);
@@ -135,7 +132,7 @@ public class PlayField extends AppCompatActivity {
     }
 
     public void hasCheated(View view) {
-
+        /*
         // TODO in state pattern auslagern
 
         //hat der vorherige Spieler gecheatet?
@@ -149,6 +146,8 @@ public class PlayField extends AppCompatActivity {
             Toast.makeText(getApplication(), "Spieler " + controller.getPlayerBefore().getPlayerNr() + " hat nicht geschummelt! Du wirst bestraft!",
                     Toast.LENGTH_SHORT).show();
         }
+        */
+        controller.catchCheater();
     }
 
     /**
@@ -166,6 +165,8 @@ public class PlayField extends AppCompatActivity {
 
             handleUpdates(actions);
 
+
+            //TODO remove if not needed
             /*
             for (Action a : actions) {
                 if (a instanceof UpdatePlayerFigure) {
@@ -322,16 +323,6 @@ public class PlayField extends AppCompatActivity {
         outPutText.setText(text);
     }
 
-    public void updateField(final UpdateDraw u) {
-        // TODO remove method if not needed
-        this.runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-                controller.logic().draw(u.getPlayerNr(), u.getFigureNr(), u.getDiceResult());
-            }
-        });
-    }
 
     public void handleUpdates(List<Action> actions) {
         if (actions != null) {

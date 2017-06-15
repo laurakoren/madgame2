@@ -21,4 +21,9 @@ class OtherPlayersTurnState extends AbstractState {
     List<Action> diceRollResult(Controller context, int result, boolean hasCheated) {
         return null; // ignore action
     }
+
+    @Override
+    void catchCheater(boolean playerBeforeHasCheated) {
+        //ignore action
+    }
 }

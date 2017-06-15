@@ -30,4 +30,6 @@ abstract class AbstractState {
      * @param result the numbers, that have been rolled
      */
     abstract List<Action> diceRollResult(Controller context, int result, boolean hasCheated);
+
+    abstract void catchCheater(boolean playerBeforeHasCheated);
 }

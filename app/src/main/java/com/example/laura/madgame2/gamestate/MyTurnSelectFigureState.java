@@ -1,5 +1,7 @@
 package com.example.laura.madgame2.gamestate;
 
+import android.util.Log;
+
 import com.example.laura.madgame2.gamelogic.Field;
 import com.example.laura.madgame2.gamestate.action.Action;
 import com.example.laura.madgame2.gamestate.action.HighlightAction;
@@ -35,9 +37,10 @@ class MyTurnSelectFigureState extends AbstractState {
         if (playerNr == context.currPlayerNr()) {
             if (figureNr == selectedFigure) {
                 // player has confirmed his selection
-
                 result = context.logic().draw(playerNr, figureNr, diceRollResult);
-
+                if(context.isMP()) {
+                    context.sendUpdate(new UpdateDraw(playerNr, figureNr, diceRollResult));
+                }
                 if (result != null) {
                     // move executed, continue with next state
 
@@ -50,8 +53,6 @@ class MyTurnSelectFigureState extends AbstractState {
                         // the players move is over
                         context.endTurn(playerHasCheatedThisTurn);
                     }
-
-                    context.sendUpdate(new UpdateDraw(playerNr, figureNr, diceRollResult, playerHasCheatedThisTurn));
                 } else {
                     // cannot do that move
                     context.putText("Sie können diesen Zug nicht ziehen ");
@@ -81,5 +82,15 @@ class MyTurnSelectFigureState extends AbstractState {
     @Override
     List<Action> diceRollResult(Controller context, int result, boolean hasCheated) {
         return null; // ignore action
+    }
+
+    @Override
+    void catchCheater(boolean playerBeforeHasCheated) {
+        //TODO punishment for cheating
+        if(playerBeforeHasCheated){
+            Log.d("Cheater", "player before has cheated");
+        }else{
+            Log.d("Cheater", "player before has not cheated");
+        }
     }
 }
