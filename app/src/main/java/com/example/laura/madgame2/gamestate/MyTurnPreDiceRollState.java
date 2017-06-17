@@ -1,7 +1,9 @@
 package com.example.laura.madgame2.gamestate;
 
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.laura.madgame2.gamelogic.Player;
 import com.example.laura.madgame2.gamestate.action.Action;
 import com.example.laura.madgame2.gamestate.action.UpdateDiceRoll;
 
@@ -72,5 +74,8 @@ class MyTurnPreDiceRollState extends AbstractState {
         }else{
             Log.d("Cheater", "player before has not cheated");
         }
+
     }
+
+
 }

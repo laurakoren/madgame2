@@ -97,4 +97,5 @@ class MyTurnSelectFigureState extends AbstractState {
             Log.d("Cheater", "player before has not cheated");
         }
     }
+
 }

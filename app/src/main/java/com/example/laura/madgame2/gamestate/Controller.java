@@ -3,6 +3,7 @@ package com.example.laura.madgame2.gamestate;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.example.laura.madgame2.diceroll.RollDiceActivity;
 import com.example.laura.madgame2.gamelogic.GameLogic;
 import com.example.laura.madgame2.gamelogic.Player;
 import com.example.laura.madgame2.gamestate.action.Action;
@@ -76,9 +77,10 @@ public class Controller {
     }
 
     public void diceRollResult(int result, boolean hasCheated) {
-        if (hasCheated) {
+        /*if (hasCheated) {
             cheated = hasCheated;
-        }
+        }*/
+        cheated = hasCheated;
         state.diceRollResult(this, result, hasCheated);
     }
 
@@ -110,6 +112,7 @@ public class Controller {
 
     void endTurn(boolean playerHasCheatedThisTurn) {
         currentPlayerNr = (currentPlayerNr + 1) % 4;
+        RollDiceActivity.setCheat(false);
 
         if (this.isMultiplayerGame) {
             state = new OtherPlayersTurnState();
@@ -199,6 +202,13 @@ public class Controller {
     }
 
     public void catchCheater() {
-        state.catchCheater(playerBeforeCheated);
+
+        if(isMultiplayerGame){
+            state.catchCheater(playerBeforeCheated);
+        } else {
+            state.catchCheater(playerBefore.getCheater());
+        }
+
+
     }
 }

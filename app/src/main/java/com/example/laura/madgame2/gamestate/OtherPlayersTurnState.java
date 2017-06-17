@@ -1,5 +1,6 @@
 package com.example.laura.madgame2.gamestate;
 
+import com.example.laura.madgame2.gamelogic.Player;
 import com.example.laura.madgame2.gamestate.action.Action;
 
 import java.util.List;
@@ -26,4 +27,5 @@ class OtherPlayersTurnState extends AbstractState {
     void catchCheater(boolean playerBeforeHasCheated) {
         //ignore action
     }
+
 }

@@ -140,14 +140,16 @@ public class PlayField extends AppCompatActivity {
 
         if (help) {
             ScoreEdit.updateScore("cheaterCaught");
-            Toast.makeText(getApplication(), "Spieler " + controller.getPlayerBefore().getPlayerNr() + " hat geschummelt und wird bestraft!",
+            Toast.makeText(getApplication(), "Spieler " + controller.getPlayerBefore().getPlayerNr() + " hat geschummelt und muss nächste Runde aussetzen!",
                     Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getApplication(), "Spieler " + controller.getPlayerBefore().getPlayerNr() + " hat nicht geschummelt! Du wirst bestraft!",
+            Toast.makeText(getApplication(), "Spieler " + controller.getPlayerBefore().getPlayerNr() + " hat nicht geschummelt! Du musst nächste Runde aussetzen!",
                     Toast.LENGTH_SHORT).show();
         }
         */
         controller.catchCheater();
+
+
     }
 
     /**
@@ -229,6 +231,7 @@ public class PlayField extends AppCompatActivity {
         if (requestCode == NUMBER_IDENTIFIER && resultCode == RESULT_OK) {
             controller.diceRollResult(data.getIntExtra("result", -1), data.getBooleanExtra("hasCheated", false));
             if (data.getBooleanExtra("hasCheated", false)) {
+                    RollDiceActivity.setCheat(true);
                 ScoreEdit.updateScore("gamesCheated");
             }
             ScoreEdit.updateScore("amountDiceRolls");

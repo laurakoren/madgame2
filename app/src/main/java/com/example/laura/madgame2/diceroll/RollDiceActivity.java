@@ -32,9 +32,9 @@ public class RollDiceActivity extends AppCompatActivity {
 
     private int rolledNumber;
 
-    private Button cheat_button;
+    private  Button cheat_button;
 
-    private boolean cheated = false;
+    private static boolean cheated = false;
 
     //Variablen fürs Erkennen ob Gerät geschüttelt wurde
     private ShakeDetector mShakeDetector;
@@ -63,13 +63,9 @@ public class RollDiceActivity extends AppCompatActivity {
             public void onClick(View v) {
                 rolledNumber = randomNumber.nextInt(6) + 1; //nextInt(6) gibt Zahlen von 0 bis 5 -> daher + 1
                 doAnimationAndSound();
-                //wird hier extra nochmal auf false gesetzt, falls im vorherigen Zug gecheated wurde? - Unnötig?
-                cheated = false;
                 Toast.makeText(RollDiceActivity.this, rolledNumber + " Gewürfelt!", Toast.LENGTH_SHORT).show();
                 setButtonsOff();
                 sendData();
-
-
             }
         });
 
@@ -97,6 +93,10 @@ public class RollDiceActivity extends AppCompatActivity {
                 builder.show();
             }
         });
+
+        if(cheated==true){
+            cheat_button.setEnabled(false);
+        }
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -153,7 +153,7 @@ public class RollDiceActivity extends AppCompatActivity {
 
     }
 
-    //Buttons sind nach 1-maligem Würfeln nicht mehr klickbar!
+
     private void setButtonsOff() {
         this.cheat_button.setClickable(false);
         this.roll_button.setClickable(false);
@@ -171,8 +171,6 @@ public class RollDiceActivity extends AppCompatActivity {
                 setResult(RESULT_OK, returnIntent);
                 //Fenster schließen nach dem Würfeln
                 finish();
-
-
             }
         }, 500);
     }
@@ -182,9 +180,14 @@ public class RollDiceActivity extends AppCompatActivity {
         return this.rolledNumber;
     }
 
-    public boolean getCheat() {
-        return this.cheated;
+    public static boolean getCheat() {
+        return cheated;
     }
+
+    public static void setCheat(boolean help){
+        cheated=help;
+    }
+
 
 
     @Override
