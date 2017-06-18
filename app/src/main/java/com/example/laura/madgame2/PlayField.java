@@ -23,7 +23,6 @@ import com.example.laura.madgame2.gamestate.action.WinningAction;
 import com.example.laura.madgame2.highscore.ScoreEdit;
 import com.example.laura.madgame2.multiplayer.Client;
 import com.example.laura.madgame2.multiplayer.Server;
-import com.example.laura.madgame2.multiplayer.update.UpdateDraw;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,16 +103,19 @@ public class PlayField extends AppCompatActivity {
             TextView p2Name = (TextView) findViewById(R.id.playerTwoName);
             TextView p3Name = (TextView) findViewById(R.id.playerThreeName);
             TextView p4Name = (TextView) findViewById(R.id.playerFourName);
-            p1Name.setText(MultiplayerLobbyActivity.playerNames[0].getText().toString());
-            p2Name.setText(MultiplayerLobbyActivity.playerNames[1].getText().toString());
-            p3Name.setText(MultiplayerLobbyActivity.playerNames[2].getText().toString());
-            p4Name.setText(MultiplayerLobbyActivity.playerNames[3].getText().toString());
+
+            String[] playerNames = MultiplayerLobbyActivity.getPlayerNames();
+
+            p1Name.setText(playerNames[0].toString());
+            p2Name.setText(playerNames[1].toString());
+            p3Name.setText(playerNames[2].toString());
+            p4Name.setText(playerNames[3].toString());
         }
 
         // if not in multiplayer mode, init players
         if (!controller.isMP()) {
             controller.setPlayers(players, 0, 0);
-        } else{
+        } else {
             controller.startGame(players);
         }
 
@@ -232,7 +234,7 @@ public class PlayField extends AppCompatActivity {
         if (requestCode == NUMBER_IDENTIFIER && resultCode == RESULT_OK) {
             controller.diceRollResult(data.getIntExtra("result", -1), data.getBooleanExtra("hasCheated", false));
             if (data.getBooleanExtra("hasCheated", false)) {
-                    RollDiceActivity.setCheat(true);
+                RollDiceActivity.setCheat(true);
                 ScoreEdit.updateScore("gamesCheated");
             }
             ScoreEdit.updateScore("amountDiceRolls");
@@ -356,11 +358,11 @@ public class PlayField extends AppCompatActivity {
                             .setPositiveButton("Ok", null)
                             .setCancelable(true)
                             .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            finish();
-                        }
-                    }).create().show();
+                                @Override
+                                public void onDismiss(DialogInterface dialog) {
+                                    finish();
+                                }
+                            }).create().show();
                 }
             }
         }
@@ -371,7 +373,7 @@ public class PlayField extends AppCompatActivity {
 
             @Override
             public void run() {
-               handleUpdates(result);
+                handleUpdates(result);
             }
         });
     }

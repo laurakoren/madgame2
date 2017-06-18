@@ -1,6 +1,5 @@
 package com.example.laura.madgame2;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.laura.madgame2.gamestate.Controller;
 import com.example.laura.madgame2.multiplayer.Role;
 import com.example.laura.madgame2.multiplayer.Server;
 import com.example.laura.madgame2.utils.ActivityUtils;
@@ -20,21 +18,22 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
     private Server server;
     private TextView hostIp;
     private Role role;
-    public static TextView[] playerNames;
+    public TextView[] playerNameTextViews;
     private Button[] kickPlayer;
-    Activity m;
+    private static String[] playerNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiplayer_lobby);
-        m = this;
-        playerNames = new TextView[4];
-        playerNames[0] = (TextView) findViewById(R.id.txtPlayerOne);
-        playerNames[1] = (TextView) findViewById(R.id.txtPlayerTwo);
-        playerNames[2] = (TextView) findViewById(R.id.txtPlayerThree);
-        playerNames[3] = (TextView) findViewById(R.id.txtPlayerFour);
 
+        playerNameTextViews = new TextView[4];
+        playerNameTextViews[0] = (TextView) findViewById(R.id.txtPlayerOne);
+        playerNameTextViews[1] = (TextView) findViewById(R.id.txtPlayerTwo);
+        playerNameTextViews[2] = (TextView) findViewById(R.id.txtPlayerThree);
+        playerNameTextViews[3] = (TextView) findViewById(R.id.txtPlayerFour);
+
+        setPlayerName(playerNameTextViews);
 
         kickPlayer = new Button[4];
         kickPlayer[0] = (Button) findViewById(R.id.btnKickPlayerTwo);
@@ -47,7 +46,7 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
             role = Role.Host;
             hostIp = (TextView) findViewById(R.id.txtIp);
             hostIp.setText(server.getIp() + ":" + server.getPort());
-            playerNames[0].setText(server.getPlayerName());
+            playerNameTextViews[0].setText(server.getPlayerName());
         } else {
             role = Role.Client;
             findViewById(R.id.btnStart).setVisibility(View.INVISIBLE);
@@ -69,8 +68,9 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
             @Override
             public void run() {
                 for (int i = 0; i < names.length; i++) {
-                    playerNames[i].setText(names[i]);
+                    playerNameTextViews[i].setText(names[i]);
                 }
+                setPlayerName(playerNameTextViews);
             }
         });
     }
@@ -80,13 +80,13 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                playerNames[pos].setText(name);
+                playerNameTextViews[pos].setText(name);
                 if (kicked) {
                     kickPlayer[pos].setVisibility(View.INVISIBLE);
                 } else if (pos != 0) {
                     kickPlayer[pos - 1].setVisibility(View.VISIBLE);
                 }
-
+                setPlayerName(playerNameTextViews);
             }
         });
     }
@@ -109,6 +109,17 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
             default:
                 break;
         }
+    }
+
+    public static void setPlayerName(TextView[] names) {
+        playerNames = new String[names.length];
+        for (int i = 0; i < playerNames.length; i++) {
+            playerNames[i] = names[i].getText().toString();
+        }
+    }
+
+    public static String[] getPlayerNames() {
+        return playerNames;
     }
 
 }
