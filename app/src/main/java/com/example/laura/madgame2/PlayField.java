@@ -120,6 +120,7 @@ public class PlayField extends AppCompatActivity {
         if (!controller.init())
             Log.d("Debug", "Failed to initialize state controller");
 
+        controller.setPlayfied(this);
         controller.setOutputtext(outPutText);
     }
 
@@ -364,4 +365,15 @@ public class PlayField extends AppCompatActivity {
             }
         }
     }
+
+    public void updateField(final List<Action> result) {
+        this.runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+               handleUpdates(result);
+            }
+        });
+    }
+
 }

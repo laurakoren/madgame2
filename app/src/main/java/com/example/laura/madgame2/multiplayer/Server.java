@@ -113,6 +113,8 @@ public class Server extends Thread implements Observer {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             logger.log(Level.WARNING, "Exception at Server Thread run!", e);
+            instance = null;
+            Thread.currentThread().interrupt();
         }
 
 
@@ -297,7 +299,8 @@ public class Server extends Thread implements Observer {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    logger.log(Level.WARNING, "Exception at Server Thread run!", e);
+                    Thread.currentThread().interrupt();
                 }
                 callNumber(i+1,i+1);
             }

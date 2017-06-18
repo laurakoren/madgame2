@@ -3,6 +3,7 @@ package com.example.laura.madgame2.gamestate;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.example.laura.madgame2.PlayField;
 import com.example.laura.madgame2.diceroll.RollDiceActivity;
 import com.example.laura.madgame2.gamelogic.GameLogic;
 import com.example.laura.madgame2.gamelogic.Player;
@@ -36,6 +37,7 @@ public class Controller {
     private Player playerBefore;
     private boolean cheated;
     private boolean playerBeforeCheated;
+    private PlayField playfied;
 
     private Controller() {
         state = null;
@@ -46,6 +48,7 @@ public class Controller {
         cheated = false;
         playerBefore = null;
         playerBeforeCheated = false;
+        playfied = null;
     }
 
     // singleton
@@ -152,8 +155,10 @@ public class Controller {
 
         if (update instanceof UpdateDraw) {
             UpdateDraw u = (UpdateDraw) update;
-            if(u.getPlayerNr() != myPlayerNr) {
-               logic.handleUpdates(logic.draw(u.getPlayerNr(), u.getFigureNr(), u.getDiceResult()));
+            if (u.getPlayerNr() != myPlayerNr) {
+                List<Action> actionUpdates = logic.draw(u.getPlayerNr(), u.getFigureNr(), u.getDiceResult());
+                logic.handleUpdates(actionUpdates);
+                playfied.updateField(actionUpdates);
 
             }
 
@@ -203,12 +208,14 @@ public class Controller {
 
     public void catchCheater() {
 
-        if(isMultiplayerGame){
+        if (isMultiplayerGame) {
             state.catchCheater(playerBeforeCheated);
         } else {
             state.catchCheater(playerBefore.getCheater());
         }
+    }
 
-
+    public void setPlayfied(PlayField playfied) {
+        this.playfied = playfied;
     }
 }

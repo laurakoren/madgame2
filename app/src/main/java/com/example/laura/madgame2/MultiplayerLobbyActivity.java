@@ -20,7 +20,7 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
     private Server server;
     private TextView hostIp;
     private Role role;
-    public static TextView[] playerNames;
+    public  TextView[] playerNames;
     private Button[] kickPlayer;
     Activity m;
 

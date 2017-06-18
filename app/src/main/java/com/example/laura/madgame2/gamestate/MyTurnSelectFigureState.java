@@ -70,7 +70,7 @@ class MyTurnSelectFigureState extends AbstractState {
         }
 
         Player winner = context.logic().getWinner();
-        if (winner != null) {
+        if (winner != null && result != null) {
             result.add(new WinningAction(winner, "Spieler "+winner.getPlayerNr()));
             // TODO update raushauen
         }

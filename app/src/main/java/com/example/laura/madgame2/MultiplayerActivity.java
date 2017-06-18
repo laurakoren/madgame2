@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 public class MultiplayerActivity extends AppCompatActivity {
 
-    private static final String TAG ="MultiplayerActivity";
+    private static final String TAG = "MultiplayerActivity";
     private Intent intent;
     private Client client;
     private Logger logger = Logger.getLogger("global");
@@ -47,7 +47,7 @@ public class MultiplayerActivity extends AppCompatActivity {
      * Method called by button to set the Player's name. Opens an Alert Dialog, giving the possibility to enter a name.
      * The name is stored in a global variable, accessible throughout the game.
      */
-    public void setName(View view){
+    public void setName(View view) {
         final Context context = this;
         button = (Button) findViewById(R.id.btnChooseName);
         result = (EditText) findViewById(R.id.showEnteredName);
@@ -67,14 +67,14 @@ public class MultiplayerActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                            public void onClick(DialogInterface dialog, int id) {
                                 result.setText(userInput.getText());
-                                chosenPlayerName=userInput.getText().toString();
+                                chosenPlayerName = userInput.getText().toString();
                             }
                         })
                 .setNegativeButton("Cancel",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                            public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
                         });
@@ -100,13 +100,13 @@ public class MultiplayerActivity extends AppCompatActivity {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 intent = new Intent(this, MainActivity.class);
-                logger.log(Level.WARNING, "Interrupted at MultiplayerActivity sleep!" ,e);
+                logger.log(Level.WARNING, "Interrupted at MultiplayerActivity sleep!", e);
                 startActivity(intent);
                 Thread.currentThread().interrupt();
             }
             client = client.getInstance();
 
-            if ( client != null && client.isConnected()) {
+            if (client != null && client.isConnected()) {
                 client.start();
                 intent = new Intent(this, MultiplayerLobbyActivity.class);
                 startActivity(intent);
