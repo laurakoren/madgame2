@@ -20,7 +20,7 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
     private Server server;
     private TextView hostIp;
     private Role role;
-    public  TextView[] playerNames;
+    public static TextView[] playerNames;
     private Button[] kickPlayer;
     Activity m;
 
@@ -36,11 +36,10 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
         playerNames[3] = (TextView) findViewById(R.id.txtPlayerFour);
 
 
-
         kickPlayer = new Button[4];
-        kickPlayer[0] = (Button)findViewById(R.id.btnKickPlayerTwo);
-        kickPlayer[1] = (Button)findViewById(R.id.btnKickPlayerThree);
-        kickPlayer[2] = (Button)findViewById(R.id.btnKickPlayerFour);
+        kickPlayer[0] = (Button) findViewById(R.id.btnKickPlayerTwo);
+        kickPlayer[1] = (Button) findViewById(R.id.btnKickPlayerThree);
+        kickPlayer[2] = (Button) findViewById(R.id.btnKickPlayerFour);
 
         ActivityUtils.setCurrentActivity(this);
         if (Server.isServerRunning()) {
@@ -82,10 +81,10 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
             @Override
             public void run() {
                 playerNames[pos].setText(name);
-                if(kicked) {
+                if (kicked) {
                     kickPlayer[pos].setVisibility(View.INVISIBLE);
-                } else if(pos != 0){
-                    kickPlayer[pos-1].setVisibility(View.VISIBLE);
+                } else if (pos != 0) {
+                    kickPlayer[pos - 1].setVisibility(View.VISIBLE);
                 }
 
             }
@@ -111,6 +110,5 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
                 break;
         }
     }
-
 
 }
