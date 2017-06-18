@@ -35,6 +35,9 @@ public class ScoreEdit {
 
 
     public static void updateScore(String key){
+        if(sharedPref == null){
+            return;
+        }
         int amount = Integer.parseInt(sharedPref.getString(key, "-1"));
         amount++;
         edit.putString(key, Integer.toString(amount));

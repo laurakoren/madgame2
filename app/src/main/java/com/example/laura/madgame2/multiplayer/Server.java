@@ -75,7 +75,7 @@ public class Server extends Thread implements Observer {
     @Override
     public void run() {
         setServerRunning(true);
-        int count;
+        int count = 0;
         while (!serverSocket.isClosed() && !gameStarted && clients.size() <= 3) {
             try {
                 Socket clientSocket = null;
@@ -85,35 +85,45 @@ public class Server extends Thread implements Observer {
                     EchoClient eClient = new EchoClient(clientSocket);
                     eClient.start();
                     Thread.sleep(1500);
-                    count = 0;
-                    while (clients.size() > 0 && clients == null) {
+                    //count = 0;
+                 /*  while (clients.size() > 0 && clients == null) {
                         count++;
-                    }
+                    }*/
                     clients.add(count, eClient);
-
                     MultiplayerLobbyActivity multiLobby = (MultiplayerLobbyActivity) ActivityUtils.getCurrentActivity();
                     while (eClient.getPlayername() == "") {
                         Thread.sleep(100);
                     }
 
                     multiLobby.updateNames(count + 1, eClient.getPlayername(), false);
-                    for (EchoClient c : clients) {
+
+                   /* for (EchoClient c : clients) {
                         c.sendString(getPlayerName());
                         for (int i = 0; i < clients.size(); i++) {
                             c.sendString(clients.get(i).getPlayername());
                         }
+                    }*/
+
+                    eClient.sendString(getPlayerName());
+                    for (EchoClient e : clients) {
+                        eClient.sendString(e.getPlayername());
+                        if (!e.equals(eClient)) {
+                            e.sendString(eClient.getPlayername());
+                        }
                     }
+
+                    eClient = null;
+                    count++;
                 }
+
             } catch (Exception e) {
                 logger.log(Level.WARNING, "Exception at Server Thread run!", e);
             }
-
         }
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             logger.log(Level.WARNING, "Exception at Server Thread run!", e);
-            instance = null;
             Thread.currentThread().interrupt();
         }
 
@@ -204,7 +214,7 @@ public class Server extends Thread implements Observer {
     }
 
     public String getPlayerName() {
-        if(MultiplayerActivity.chosenPlayerName!=null){
+        if (MultiplayerActivity.chosenPlayerName != null) {
             return MultiplayerActivity.chosenPlayerName;
         }
         if (playerName == "") {
@@ -263,38 +273,38 @@ public class Server extends Thread implements Observer {
     /**
      * Sollte der EchoClient ein Update erhalten, landet es hier.
      * Falls der Spieler 0 (der Server) am Zug ist, schickt er kein BroadcastUpdate raus
+     *
      * @param o
      * @param update Das empfangene Update
      */
     @Override
     public void update(Observable o, Object update) {
 
-        Update up =(Update) update;
+        Update up = (Update) update;
 
-        if(update instanceof  UpdateDraw){
+        if (update instanceof UpdateDraw) {
             Controller.getInstance().receiveUpdate(up);
             sendBroadcastUpdate(up);
+        } else {
+            ((Update) update).setPlayerNr(((Update) update).getPlayerNr() % getAmountPlayers());
+            if (((Update) update).getPlayerNr() == 0) {
+                Controller.getInstance().receiveUpdate(up);
+            } else {
+                sendBroadcastUpdate(up);
+            }
         }
-
-        ((Update) update).setPlayerNr(((Update) update).getPlayerNr() % getAmountPlayers());
-        if(((Update) update).getPlayerNr()==0){
-            Controller.getInstance().receiveUpdate(up);
-        }else{
-            sendBroadcastUpdate(up);
-        }
-
     }
 
 
     public int getAmountPlayers() {
-        return clients.size()+1;
+        return clients.size() + 1;
     }
 
     class StartGame extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
             gameStarted = true;
-            for (int i = 0; i< clients.size(); i++) {
+            for (int i = 0; i < clients.size(); i++) {
                 clients.get(i).startGame();
                 try {
                     Thread.sleep(1000);
@@ -302,13 +312,13 @@ public class Server extends Thread implements Observer {
                     logger.log(Level.WARNING, "Exception at Server Thread run!", e);
                     Thread.currentThread().interrupt();
                 }
-                callNumber(i+1,i+1);
+                callNumber(i + 1, i + 1);
             }
             return null;
         }
 
-        public void callNumber(int playerNr, int hisNumber){
-            new AsyncServerTask().execute(new UpdateMyNumber(playerNr,hisNumber));
+        public void callNumber(int playerNr, int hisNumber) {
+            new AsyncServerTask().execute(new UpdateMyNumber(playerNr, hisNumber));
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.laura.madgame2.gamestate;
 
+import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -8,6 +9,7 @@ import com.example.laura.madgame2.diceroll.RollDiceActivity;
 import com.example.laura.madgame2.gamelogic.GameLogic;
 import com.example.laura.madgame2.gamelogic.Player;
 import com.example.laura.madgame2.gamestate.action.Action;
+import com.example.laura.madgame2.multiplayer.AsyncServerTask;
 import com.example.laura.madgame2.multiplayer.Client;
 import com.example.laura.madgame2.multiplayer.Server;
 import com.example.laura.madgame2.multiplayer.update.Update;
@@ -133,12 +135,7 @@ public class Controller {
     // network accessor methods for states
 
     public void sendUpdate(Update update) {
-        if (this.isMultiplayerGame) {
-            if (Server.isServerRunning())
-                Server.getInstance().sendBroadcastUpdate(update);
-            else
-                Client.getInstance().sendUpdate(update);
-        }
+        new Updater().execute(update);
     }
 
     public void receiveUpdate(Update update) {
@@ -161,7 +158,7 @@ public class Controller {
                 playfied.updateField(actionUpdates);
 
             }
-
+            Log.d("CONTROLLER", myPlayerNr + ", " + u.getDiceResult() + "; " + u.getPlayerNr());
         }
     }
 
@@ -217,5 +214,21 @@ public class Controller {
 
     public void setPlayfied(PlayField playfied) {
         this.playfied = playfied;
+    }
+
+    private class Updater extends AsyncTask<Update, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Update... params) {
+            if (isMultiplayerGame) {
+                if (Server.isServerRunning()) {
+                    Server.getInstance().sendBroadcastUpdate(params[0]);
+                } else {
+                    Client.getInstance().sendUpdate(params[0]);
+                }
+
+            }
+            return null;
+        }
     }
 }

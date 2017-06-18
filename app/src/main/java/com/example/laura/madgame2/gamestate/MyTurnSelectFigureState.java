@@ -1,5 +1,6 @@
 package com.example.laura.madgame2.gamestate;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.laura.madgame2.gamelogic.Field;
@@ -38,7 +39,7 @@ class MyTurnSelectFigureState extends AbstractState {
                 // player has confirmed his selection
                 result = context.logic().draw(playerNr, figureNr, diceRollResult);
                 if(context.isMP()) {
-                    context.sendUpdate(new UpdateDraw(playerNr, figureNr, diceRollResult));
+                    new DrawUpdate(context).execute(playerNr,figureNr,diceRollResult);
                 }
                 if (result != null) {
                     // move executed, continue with next state
@@ -95,6 +96,23 @@ class MyTurnSelectFigureState extends AbstractState {
             Log.d("Cheater", "player before has cheated");
         }else{
             Log.d("Cheater", "player before has not cheated");
+        }
+    }
+
+    private class DrawUpdate extends AsyncTask<Integer, Void, Void>{
+
+        private Controller controller;
+
+        protected DrawUpdate(){}
+
+        public DrawUpdate(Controller controller){
+            this.controller = controller;
+        }
+
+        @Override
+        protected Void doInBackground(Integer... params) {
+            controller.sendUpdate(new UpdateDraw(params[0], params[1], params[2]));
+            return null;
         }
     }
 
