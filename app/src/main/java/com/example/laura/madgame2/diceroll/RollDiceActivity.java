@@ -24,15 +24,15 @@ import java.util.Random;
 
 public class RollDiceActivity extends AppCompatActivity {
 
-    private Button roll_button;
+    private Button rollButton;
 
-    private ImageView dice_view;
+    private ImageView diceView;
 
     private Random randomNumber = new Random();
 
     private int rolledNumber;
 
-    private  Button cheat_button;
+    private Button cheatButton;
 
     private static boolean cheated = false;
 
@@ -50,15 +50,15 @@ public class RollDiceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dice_roll);
 
-        roll_button = (Button) findViewById(R.id.roll_button);
-        dice_view = (ImageView) findViewById(R.id.dice_view);
-        cheat_button = (Button) findViewById(R.id.cheat_button);
+        rollButton = (Button) findViewById(R.id.roll_button);
+        diceView = (ImageView) findViewById(R.id.dice_view);
+        cheatButton = (Button) findViewById(R.id.cheat_button);
 
         this.mp = MediaPlayer.create(this, R.raw.dicesound);
 
 
         //normaler Würfelbutton
-        roll_button.setOnClickListener(new View.OnClickListener() {
+        rollButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 rolledNumber = randomNumber.nextInt(6) + 1; //nextInt(6) gibt Zahlen von 0 bis 5 -> daher + 1
@@ -70,32 +70,30 @@ public class RollDiceActivity extends AppCompatActivity {
         });
 
         //Button zum Schummeln
-        cheat_button.setOnClickListener(new View.OnClickListener() {
+        cheatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View w) {
                 final CharSequence[] numbers = new CharSequence[]{"1", "2", "3", "4", "5", "6"};
 
                 //DialogBox wo man eintragen kann welche Zahl man gerne würfeln würde.
-                AlertDialog.Builder builder = new AlertDialog.Builder(RollDiceActivity.this);
-                builder.setTitle("Wähle die Zahl aus die du würfeln möchtest!");
-                builder.setItems(numbers, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //da ein CharSequenze als Parameter erwartet wurde muss diese noch zu einem Integer gemacht werden
-                        rolledNumber = Integer.parseInt(numbers[which].toString());
-                        doAnimationAndSound();
-                        cheated = true;
-                        setButtonsOff();
-                        sendData();
-
-                    }
-                });
-                builder.show();
+                new AlertDialog.Builder(RollDiceActivity.this).
+                        setTitle("Wähle die Zahl aus die du würfeln möchtest!")
+                        .setItems(numbers, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //da ein CharSequenze als Parameter erwartet wurde muss diese noch zu einem Integer gemacht werden
+                                rolledNumber = Integer.parseInt(numbers[which].toString());
+                                doAnimationAndSound();
+                                setCheat(true);
+                                setButtonsOff();
+                                sendData();
+                            }
+                        }).show();
             }
         });
 
-        if(cheated==true){
-            cheat_button.setEnabled(false);
+        if (cheated) {
+            cheatButton.setEnabled(false);
         }
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -107,7 +105,7 @@ public class RollDiceActivity extends AppCompatActivity {
             public void onShake(int count) {
                 rolledNumber = randomNumber.nextInt(6) + 1; //nextInt(6) gibt Zahlen von 0 bis 5 -> daher + 1
                 doAnimationAndSound();
-                cheated = false; //redundant?
+                setCheat(false); //redundant?
                 setButtonsOff();
                 sendData();
 
@@ -122,7 +120,7 @@ public class RollDiceActivity extends AppCompatActivity {
         changePicture(rolledNumber);
         Animation animateDice = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animatedice);
         mp.start();
-        dice_view.startAnimation(animateDice);
+        diceView.startAnimation(animateDice);
 
     }
 
@@ -130,33 +128,33 @@ public class RollDiceActivity extends AppCompatActivity {
     private void changePicture(int wurf) {
         switch (wurf) {
             case 1:
-                dice_view.setImageResource(R.drawable.one);
+                diceView.setImageResource(R.drawable.one);
                 break;
             case 2:
-                dice_view.setImageResource(R.drawable.two);
+                diceView.setImageResource(R.drawable.two);
                 break;
             case 3:
-                dice_view.setImageResource(R.drawable.three);
+                diceView.setImageResource(R.drawable.three);
                 break;
             case 4:
-                dice_view.setImageResource(R.drawable.four);
+                diceView.setImageResource(R.drawable.four);
                 break;
             case 5:
-                dice_view.setImageResource(R.drawable.five);
+                diceView.setImageResource(R.drawable.five);
                 break;
             case 6:
-                dice_view.setImageResource(R.drawable.six);
+                diceView.setImageResource(R.drawable.six);
                 break;
             default:
-                dice_view.setImageResource(R.drawable.dice_standard);
+                diceView.setImageResource(R.drawable.dice_standard);
         }
 
     }
 
 
     private void setButtonsOff() {
-        this.cheat_button.setClickable(false);
-        this.roll_button.setClickable(false);
+        this.cheatButton.setClickable(false);
+        this.rollButton.setClickable(false);
     }
 
     //Methode um einen Rückgabewert der Acitivity zu setzen
@@ -184,10 +182,9 @@ public class RollDiceActivity extends AppCompatActivity {
         return cheated;
     }
 
-    public static void setCheat(boolean help){
-        cheated=help;
+    public static void setCheat(boolean help) {
+        cheated = help;
     }
-
 
 
     @Override

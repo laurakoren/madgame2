@@ -4,7 +4,15 @@ package com.example.laura.madgame2.gamestate.action;
  * Created by Alex on 30.05.2017.
  */
 
-public class UpdatePlayerFigure implements Action{
+public class UpdatePlayerFigure implements Action {
+
+    int playerNr;
+    int figureNr;
+
+    public UpdatePlayerFigure(int playerNr, int figureNr) {
+        this.figureNr = figureNr;
+        this.playerNr = playerNr;
+    }
 
     public int getPlayerNr() {
         return playerNr;
@@ -20,13 +28,6 @@ public class UpdatePlayerFigure implements Action{
 
     public void setFigureNr(int figureNr) {
         this.figureNr = figureNr;
-    }
-
-    int playerNr,figureNr;
-
-    public UpdatePlayerFigure(int playerNr, int figureNr){
-        this.figureNr=figureNr;
-        this.playerNr=playerNr;
     }
 
 }

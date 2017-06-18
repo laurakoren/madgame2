@@ -2,14 +2,12 @@ package com.example.laura.madgame2.gamestate;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.example.laura.madgame2.PlayField;
 import com.example.laura.madgame2.diceroll.RollDiceActivity;
 import com.example.laura.madgame2.gamelogic.GameLogic;
 import com.example.laura.madgame2.gamelogic.Player;
 import com.example.laura.madgame2.gamestate.action.Action;
-import com.example.laura.madgame2.multiplayer.AsyncServerTask;
 import com.example.laura.madgame2.multiplayer.Client;
 import com.example.laura.madgame2.multiplayer.Server;
 import com.example.laura.madgame2.multiplayer.update.Update;
@@ -24,11 +22,9 @@ import java.util.List;
  * aka Context from StatePattern
  */
 public class Controller {
-
-    private TextView outputtext;
     private static Controller instance;
 
-    private AbstractState state;
+    private State state;
 
     private boolean isMultiplayerGame;
 
@@ -39,7 +35,7 @@ public class Controller {
     private Player playerBefore;
     private boolean cheated;
     private boolean playerBeforeCheated;
-    private PlayField playfied;
+    private PlayField playField;
 
     private Controller() {
         state = null;
@@ -50,7 +46,7 @@ public class Controller {
         cheated = false;
         playerBefore = null;
         playerBeforeCheated = false;
-        playfied = null;
+        playField = null;
     }
 
     // singleton
@@ -68,25 +64,13 @@ public class Controller {
 
     }
 
-    public void setOutputtext(TextView view) {
-        outputtext = view;
-    }
-
-    void putText(String text) {
-        if (outputtext != null)
-            outputtext.setText(text);
-    }
-
     public boolean rollDice() {
         return state.rollDice(this);
     }
 
-    public void diceRollResult(int result, boolean hasCheated) {
-        /*if (hasCheated) {
-            cheated = hasCheated;
-        }*/
+    public List<Action> diceRollResult(int result, boolean hasCheated) {
         cheated = hasCheated;
-        state.diceRollResult(this, result, hasCheated);
+        return state.diceRollResult(this, result, hasCheated);
     }
 
     // accessor methods for states
@@ -111,7 +95,7 @@ public class Controller {
         return currentPlayerNr;
     }
 
-    void setState(AbstractState state) {
+    void setState(State state) {
         this.state = state;
     }
 
@@ -155,7 +139,7 @@ public class Controller {
             if (u.getPlayerNr() != myPlayerNr) {
                 List<Action> actionUpdates = logic.draw(u.getPlayerNr(), u.getFigureNr(), u.getDiceResult());
                 logic.handleUpdates(actionUpdates);
-                playfied.updateField(actionUpdates);
+                playField.updateField(actionUpdates);
 
             }
             Log.d("CONTROLLER", myPlayerNr + ", " + u.getDiceResult() + "; " + u.getPlayerNr());
@@ -212,8 +196,8 @@ public class Controller {
         }
     }
 
-    public void setPlayfied(PlayField playfied) {
-        this.playfied = playfied;
+    public void setPlayField(PlayField playField) {
+        this.playField = playField;
     }
 
     private class Updater extends AsyncTask<Update, Void, Void> {

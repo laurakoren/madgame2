@@ -9,6 +9,9 @@ import android.app.Activity;
 public class ActivityUtils {
     private static Activity currentActivity;
 
+    private ActivityUtils() {
+    }
+
     public static Activity getCurrentActivity() {
         return currentActivity;
     }

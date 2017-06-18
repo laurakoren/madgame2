@@ -219,14 +219,14 @@ public class GameLogic {
      */
     public List<Action> draw(int playerNr, int figureNr, int distance) {
         if (distance < 0)
-            return null;
+            return new ArrayList<>();
         List<Action> actions = new ArrayList<>();
         Figure figure = players.get(playerNr).getFigure(figureNr);
 
         // find out, where the figure lands
         Field result = this.getResultField(playerNr, figureNr, distance);
         if (result == null)
-            return null;
+            return new ArrayList<>();
 
         // check if there are figures to kick
         if (result.hasFigure()) {

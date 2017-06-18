@@ -8,6 +8,9 @@ import java.util.regex.Pattern;
 
 public class NetworkUtils {
 
+    private NetworkUtils() {
+    }
+
     public static boolean checkIp(String ip){
        Pattern ipPattern = Pattern.compile("(([0-9]{1,3}\\.){3})[0-9]{1,3}:[0-9]{1,5}$");
         return ipPattern.matcher(ip).matches();

@@ -16,9 +16,11 @@ import com.example.laura.madgame2.diceroll.RollDiceActivity;
 import com.example.laura.madgame2.gamelogic.Player;
 import com.example.laura.madgame2.gamestate.Controller;
 import com.example.laura.madgame2.gamestate.action.Action;
+import com.example.laura.madgame2.gamestate.action.EndGameAction;
 import com.example.laura.madgame2.gamestate.action.HighlightAction;
 import com.example.laura.madgame2.gamestate.action.KickFigureAction;
 import com.example.laura.madgame2.gamestate.action.MoveFigureAction;
+import com.example.laura.madgame2.gamestate.action.NotificationAction;
 import com.example.laura.madgame2.gamestate.action.WinningAction;
 import com.example.laura.madgame2.highscore.ScoreEdit;
 import com.example.laura.madgame2.multiplayer.Client;
@@ -26,6 +28,8 @@ import com.example.laura.madgame2.multiplayer.Server;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,15 +45,21 @@ public class PlayField extends AppCompatActivity {
     private List<List<ViewGroup.LayoutParams>> outFields;
     private TextView outPutText;
 
+    private Queue<Action> actionQueue;
+    private boolean asyncTaskRunning;
+
     private CountDownTimer highlightCDTimer;
 
     private static final int NUM_FIELDS = 40;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // activity inti
+        // activity init
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_field);
+
+        actionQueue = new LinkedBlockingQueue<>();
+        asyncTaskRunning = false;
 
         outPutText = (TextView) findViewById(R.id.PlayerTurn);
         outPutText.setText("Spieler 0 starte Spiel!");
@@ -106,10 +116,10 @@ public class PlayField extends AppCompatActivity {
 
             String[] playerNames = MultiplayerLobbyActivity.getPlayerNames();
 
-            p1Name.setText(playerNames[0].toString());
-            p2Name.setText(playerNames[1].toString());
-            p3Name.setText(playerNames[2].toString());
-            p4Name.setText(playerNames[3].toString());
+            p1Name.setText(playerNames[0]);
+            p2Name.setText(playerNames[1]);
+            p3Name.setText(playerNames[2]);
+            p4Name.setText(playerNames[3]);
         }
 
         // if not in multiplayer mode, init players
@@ -122,8 +132,7 @@ public class PlayField extends AppCompatActivity {
         if (!controller.init())
             Log.d("Debug", "Failed to initialize state controller");
 
-        controller.setPlayfied(this);
-        controller.setOutputtext(outPutText);
+        controller.setPlayField(this);
     }
 
     public void diceRoll(View view) {
@@ -151,76 +160,27 @@ public class PlayField extends AppCompatActivity {
         }
         */
         controller.catchCheater();
-
-
     }
 
     /**
      * Zeigt das Feld an, zu dem man mit dem Würfelergebnis fahren könnte
      */
     public void click(View viewIn) {
-
         String idOut = viewIn.getResources().getResourceEntryName(viewIn.getId());
 
+        // check if the selected view represents a figure and find out which
         Pattern p = Pattern.compile("iv_player(\\d)_figure(\\d)");
         Matcher m = p.matcher(idOut);
 
-        if (m.matches()) {
-            List<Action> actions = controller.chooseFigure(Integer.valueOf(m.group(1)), Integer.valueOf(m.group(2)));
-
-            handleUpdates(actions);
-
-
-            //TODO remove if not needed
-            /*
-            for (Action a : actions) {
-                if (a instanceof UpdatePlayerFigure) {
-                    int figureNr = ((UpdatePlayerFigure) a).getFigureNr();
-                } else if (a instanceof UpdateDiceRoll) {
-                    int diceResult = ((UpdateDiceRoll) a).getDiceRollResult();
-                } else if (a instanceof HighlightAction) {
-                    int field = ((HighlightAction) a).fieldNr;
-                    int playerNr = Integer.valueOf(m.group(1));
-
-                    if (field < 0) {
-                        field = field + 100;
-
-                        final View img = getViewById("iv_player" + playerNr + "_finish" + (field));       //"@+id/iv_player2_finish2"
-                        img.setBackgroundResource(R.drawable.fig_empty);
-
-                        new CountDownTimer(2000, 1000) {
-                            public void onFinish() {
-                                img.setBackgroundResource(R.drawable.clear_circle);
-                            }
-
-                            public void onTick(long millisUntilFinished) {
-                                // unused
-                            }
-                        }.start();
-                    } else if (field == 110) {
-                    } else {
-                        final View img = getViewById("iv_field" + field);
-                        img.setBackgroundResource(R.drawable.fig_empty);
-
-                        new CountDownTimer(2000, 1000) {
-                            public void onFinish() {
-                                img.setBackgroundResource(R.drawable.clear_circle);
-                            }
-
-                            public void onTick(long millisUntilFinished) {
-                                // unused
-                            }
-                        }.start();
-                    }
-                }
-            }*/
-        }
+        if (m.matches())
+            handleUpdates(controller.chooseFigure(Integer.valueOf(m.group(1)), Integer.valueOf(m.group(2))));
     }
 
     /**
      * Returns the associated UI element (view) for the given id.
+     * Note that this way of retrieving View items is slow compared to resource identifiers.
      *
-     * @param id the id name declared in the activities xml layout
+     * @param id the resource identifier, as declared in the activities xml layout
      * @return the View object
      */
     private View getViewById(String id) {
@@ -232,7 +192,7 @@ public class PlayField extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NUMBER_IDENTIFIER && resultCode == RESULT_OK) {
-            controller.diceRollResult(data.getIntExtra("result", -1), data.getBooleanExtra("hasCheated", false));
+            handleUpdates(controller.diceRollResult(data.getIntExtra("result", -1), data.getBooleanExtra("hasCheated", false)));
             if (data.getBooleanExtra("hasCheated", false)) {
                 RollDiceActivity.setCheat(true);
                 ScoreEdit.updateScore("gamesCheated");
@@ -311,13 +271,31 @@ public class PlayField extends AppCompatActivity {
 
     /**
      * Helper function to display an alert message with an Ok button.
+     * Sets the message to call {@link #handleUpdates(List)} on dismiss to establish a queue of actions.
      *
-     * @param title the title of the message
-     * @param msg   the message
+     * @param title  the title of the message
+     * @param msg    the message
+     * @param button the text on the alert message button
      */
-    public void alert(String title, String msg) {
+    public void alert(String title, String msg, String button) {
+        final PlayField ref = this;
+
         // method chaining vom feinsten
-        new AlertDialog.Builder(this).setTitle(title).setMessage(msg).setPositiveButton("Ok", null).create().show();
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton(button, null)
+                .setCancelable(true)
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        // make sure queued tasks are executed after this one finishes
+                        synchronized (ref) {
+                            asyncTaskRunning = false;
+                        }
+                        handleUpdates(null);
+                    }
+                }).create().show();
     }
 
     /**
@@ -325,46 +303,83 @@ public class PlayField extends AppCompatActivity {
      *
      * @param text the status message
      */
-    public void postStatus(String text) {
+    public void putStatusText(String text) {
         outPutText.setText(text);
     }
 
+    /**
+     * Handles execution of batches of actions, as returned by Controller's event handlers.
+     *
+     * @see #handleUpdate(Action)
+     */
+    public synchronized void handleUpdates(List<Action> actions) {
+        // handle new actions
+        if (actions != null)
+            for (Action action : actions)
+                handleUpdate(action);
 
-    public void handleUpdates(List<Action> actions) {
-        if (actions != null) {
-            for (Action action : actions) {
-                if (action instanceof MoveFigureAction) {
-                    resetHighlightedField();
-                    MoveFigureAction a = (MoveFigureAction) action;
-                    if (a.moveToFinishField)
-                        moveFigureToFinishField(a.playerNr, a.figureNr, a.fieldNr);
-                    else
-                        moveFigure(a.playerNr, a.figureNr, a.fieldNr);
+        // handle queued actions
+        Action action;
+        while (!asyncTaskRunning && (action = actionQueue.poll()) != null)
+            handleUpdate(action);
+    }
 
-                } else if (action instanceof KickFigureAction) {
-                    KickFigureAction a = (KickFigureAction) action;
-                    moveFigureToOutField(a.playerNr, a.figureNr);
+    /**
+     * Handles execution of actions. Synchronous actions are executed immediately
+     * while asynchronous are dispatched if there are no other active tasks, else queued for later execution.
+     *
+     * @see #handleUpdates(List)
+     */
+    private void handleUpdate(Action action) {
+        if (action instanceof MoveFigureAction) {
+            resetHighlightedField();
+            MoveFigureAction a = (MoveFigureAction) action;
+            if (a.moveToFinishField)
+                moveFigureToFinishField(a.playerNr, a.figureNr, a.fieldNr);
+            else
+                moveFigure(a.playerNr, a.figureNr, a.fieldNr);
 
-                } else if (action instanceof HighlightAction) {
-                    HighlightAction a = (HighlightAction) action;
-                    highlightField(a.playerNr, a.fieldNr, a.isFinishField);
+        } else if (action instanceof KickFigureAction) {
+            KickFigureAction a = (KickFigureAction) action;
+            moveFigureToOutField(a.playerNr, a.figureNr);
 
-                } else if (action instanceof WinningAction) {
-                    WinningAction a = (WinningAction) action;
+        } else if (action instanceof HighlightAction) {
+            HighlightAction a = (HighlightAction) action;
+            highlightField(a.playerNr, a.fieldNr, a.isFinishField);
 
-                    new AlertDialog.Builder(this)
-                            .setTitle("Spiel beendet!")
-                            .setMessage("Spieler " + a.name + " hat gewonnen!")
-                            .setPositiveButton("Ok", null)
-                            .setCancelable(true)
-                            .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                @Override
-                                public void onDismiss(DialogInterface dialog) {
-                                    finish();
-                                }
-                            }).create().show();
-                }
+        } else if (action instanceof NotificationAction) {
+            NotificationAction a = (NotificationAction) action;
+            switch (a.type) {
+                case TEXTFIELD:
+                    putStatusText(a.msg);
+                    break;
+                case TOAST:
+                    toast(a.msg);
+                    break;
+                case ALERT:
+                    if (asyncTaskRunning) {
+                        actionQueue.add(action);
+                    } else {
+                        asyncTaskRunning = true;
+                        alert(a.title, a.msg, "Ok");
+                    }
+                    break;
+                default:
+                    break;
             }
+
+        } else if (action instanceof WinningAction) {
+            WinningAction a = (WinningAction) action;
+            if (asyncTaskRunning) {
+                actionQueue.add(action);
+            } else {
+                actionQueue.add(new EndGameAction());
+                asyncTaskRunning = true;
+                alert("Spiel beendet!", "Spieler " + a.name + " hat gewonnen!", "Ok");
+            }
+
+        } else if (action instanceof EndGameAction) {
+            finish();
         }
     }
 

@@ -7,16 +7,19 @@ import com.example.laura.madgame2.gamelogic.Field;
 import com.example.laura.madgame2.gamelogic.Player;
 import com.example.laura.madgame2.gamestate.action.Action;
 import com.example.laura.madgame2.gamestate.action.HighlightAction;
+import com.example.laura.madgame2.gamestate.action.NotificationAction;
 import com.example.laura.madgame2.gamestate.action.WinningAction;
 import com.example.laura.madgame2.multiplayer.update.UpdateDraw;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.laura.madgame2.gamestate.action.NotificationAction.Type.TEXTFIELD;
+
 /**
  * State that is active during this Player's turn. In this state the Player may select one of his figures to move.
  */
-class MyTurnSelectFigureState extends AbstractState {
+class MyTurnSelectFigureState implements State {
 
     private int diceRollResult;
     private boolean previousPlayerHasCheated;
@@ -31,22 +34,23 @@ class MyTurnSelectFigureState extends AbstractState {
     }
 
     @Override
-    List<Action> chooseFigure(Controller context, int playerNr, int figureNr) {
+    public List<Action> chooseFigure(Controller context, int playerNr, int figureNr) {
         List<Action> result = new ArrayList<>();
 
         if (playerNr == context.currPlayerNr()) {
             if (figureNr == selectedFigure) {
                 // player has confirmed his selection
                 result = context.logic().draw(playerNr, figureNr, diceRollResult);
-                if(context.isMP()) {
-                    new DrawUpdate(context).execute(playerNr,figureNr,diceRollResult);
+                if (context.isMP()) {
+                    new DrawUpdate(context).execute(playerNr, figureNr, diceRollResult);
                 }
-                if (result != null) {
+
+                if (!result.isEmpty()) {
                     // move executed, continue with next state
 
                     if (diceRollResult == 6) {
                         // player has rolled 6, he may roll another time
-                        context.putText("Erneut würfeln ");
+                        result.add(new NotificationAction(TEXTFIELD, "", "Erneut würfeln"));
 
                         context.setState(new MyTurnPreDiceRollState(previousPlayerHasCheated, playerHasCheatedThisTurn));
                     } else {
@@ -55,7 +59,7 @@ class MyTurnSelectFigureState extends AbstractState {
                     }
                 } else {
                     // cannot do that move
-                    context.putText("Sie können diesen Zug nicht ziehen ");
+                    result.add(new NotificationAction(TEXTFIELD, "", "Dieser Zug ist ungültig"));
                 }
             } else {
                 // player has changed the figure
@@ -67,12 +71,12 @@ class MyTurnSelectFigureState extends AbstractState {
             }
         } else {
             // player has selected another Player's figure
-            context.putText("Nicht Ihre Figur ");
+            result.add(new NotificationAction(TEXTFIELD, "", "Nicht Ihre Figur"));
         }
 
         Player winner = context.logic().getWinner();
-        if (winner != null && result != null) {
-            result.add(new WinningAction(winner, "Spieler "+winner.getPlayerNr()));
+        if (winner != null) {
+            result.add(new WinningAction(winner, "Spieler " + winner.getPlayerNr()));
             // TODO update raushauen
         }
 
@@ -80,32 +84,33 @@ class MyTurnSelectFigureState extends AbstractState {
     }
 
     @Override
-    boolean rollDice(Controller context) {
+    public boolean rollDice(Controller context) {
         return false; // ignore action
     }
 
     @Override
-    List<Action> diceRollResult(Controller context, int result, boolean hasCheated) {
-        return null; // ignore action
+    public List<Action> diceRollResult(Controller context, int result, boolean hasCheated) {
+        return new ArrayList<>(); // ignore action
     }
 
     @Override
-    void catchCheater(boolean playerBeforeHasCheated) {
+    public void catchCheater(boolean playerBeforeHasCheated) {
         //TODO punishment for cheating
-        if(playerBeforeHasCheated){
+        if (playerBeforeHasCheated) {
             Log.d("Cheater", "player before has cheated");
-        }else{
+        } else {
             Log.d("Cheater", "player before has not cheated");
         }
     }
 
-    private class DrawUpdate extends AsyncTask<Integer, Void, Void>{
+    private class DrawUpdate extends AsyncTask<Integer, Void, Void> {
 
         private Controller controller;
 
-        protected DrawUpdate(){}
+        protected DrawUpdate() {
+        }
 
-        public DrawUpdate(Controller controller){
+        public DrawUpdate(Controller controller) {
             this.controller = controller;
         }
 

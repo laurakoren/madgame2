@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 
 public class EchoClient extends Thread {
 
-    private final String TAG = "EchoClient";
+    private static final String TAG = "EchoClient";
 
     private String playername;
     private Socket socket;
@@ -51,7 +51,7 @@ public class EchoClient extends Thread {
         while (!gameStarted && !killThread) {
             try {
                 playername = in.readUTF();
-                if (playername.equals("acceptStart")) {
+                if ("acceptStart".equals(playername)) {
                     gameStarted = true;
                     break;
                 }
@@ -133,7 +133,7 @@ public class EchoClient extends Thread {
             objectOut.close();
             socket.close();
         } catch (IOException e) {
-            logger.log(Level.INFO, "Killed Thread while running");
+            logger.log(Level.WARNING, "Killed Thread while running", e);
         }
     }
 

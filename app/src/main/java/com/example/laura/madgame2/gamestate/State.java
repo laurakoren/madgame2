@@ -1,38 +1,34 @@
 package com.example.laura.madgame2.gamestate;
 
-import com.example.laura.madgame2.gamelogic.Player;
 import com.example.laura.madgame2.gamestate.action.Action;
 
 import java.util.List;
 
 /**
- * Interface for states in AbstractState-Pattern
+ * Interface for states from State-Pattern
  */
-abstract class AbstractState {
-
-    // TODO implement network receive update functionality
-
+interface State {
     /**
      * The player chooses a Figure
      *
      * @param playerNr the number of the Player whose Figure was chosen
      * @param figureNr the Figure's number
      */
-    abstract List<Action> chooseFigure(Controller context, int playerNr, int figureNr);
+    List<Action> chooseFigure(Controller context, int playerNr, int figureNr);
 
     /**
      * The player wants to roll the dice
      */
-    abstract boolean rollDice(Controller context);
+    boolean rollDice(Controller context);
 
     /**
      * The die has been cast. The results must be honored.
      *
      * @param result the numbers, that have been rolled
      */
-    abstract List<Action> diceRollResult(Controller context, int result, boolean hasCheated);
+    List<Action> diceRollResult(Controller context, int result, boolean hasCheated);
 
-    abstract void catchCheater(boolean playerBeforeHasCheated);
+    void catchCheater(boolean playerBeforeHasCheated);
 
 
 }
