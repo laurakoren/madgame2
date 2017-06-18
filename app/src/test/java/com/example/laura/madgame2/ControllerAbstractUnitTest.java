@@ -3,11 +3,8 @@ package com.example.laura.madgame2;
 import com.example.laura.madgame2.gamestate.Controller;
 import com.example.laura.madgame2.gamestate.action.Action;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -54,13 +51,5 @@ abstract class ControllerAbstractUnitTest extends LogicAbstractUnitTest {
                 draw((playerNr + i) % 4, 0, 1);
             }
         }
-    }
-
-    void assertEmpty(Collection<?> c) {
-        Assert.assertTrue(c.isEmpty());
-    }
-
-    void assertNotEmpty(Collection<?> c) {
-        Assert.assertFalse(c.isEmpty());
     }
 }

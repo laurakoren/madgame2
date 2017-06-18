@@ -82,8 +82,8 @@ public class LogicUnitTest extends LogicAbstractUnitTest {
         logic.draw(0, 0, 6);
         logic.draw(0, 0, 4);
         logic.draw(0, 1, 6);
-        Assert.assertNull(logic.draw(0, 1, 4));
-        Assert.assertNull(logic.draw(0, 2, 6));
+        assertEmpty(logic.draw(0, 1, 4));
+        assertEmpty(logic.draw(0, 2, 6));
 
         Assert.assertNotNull(a.getField());
         Assert.assertNotNull(b.getField());
@@ -93,13 +93,13 @@ public class LogicUnitTest extends LogicAbstractUnitTest {
     @Test
     public void canEnterFinishFieldsButNotGoBeyond() {
         for (int i = 0; i < 8; i++)
-            Assert.assertNotNull(logic.draw(0, 0, 6));
+            assertNotEmpty(logic.draw(0, 0, 6));
 
-        Assert.assertNull(logic.draw(0, 0, 6));
-        Assert.assertNotNull(logic.draw(0, 0, 1));
+        assertEmpty(logic.draw(0, 0, 6));
+        assertNotEmpty(logic.draw(0, 0, 1));
 
         for (int i = 0; i < 6; i++)
-            Assert.assertNull(logic.draw(0, 0, i));
+            assertEmpty(logic.draw(0, 0, i));
     }
 
     @Test

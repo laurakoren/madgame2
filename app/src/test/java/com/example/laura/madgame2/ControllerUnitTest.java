@@ -15,18 +15,18 @@ public class ControllerUnitTest extends ControllerAbstractUnitTest {
         // try rolling a 2
         controller.rollDice();
         controller.diceRollResult(2, false);
-        Assert.assertNull(controller.chooseFigure(0, 0));
+        assertEmpty(controller.chooseFigure(0, 0));
 
         // and a 4
         controller.rollDice();
         controller.diceRollResult(4, false);
-        Assert.assertNull(controller.chooseFigure(0, 0));
+        assertEmpty(controller.chooseFigure(0, 0));
 
         // and finally a 6
         controller.rollDice();
         controller.diceRollResult(6, false);
-        Assert.assertNotNull(controller.chooseFigure(0, 0));
-        Assert.assertNotNull(controller.chooseFigure(0, 0));
+        assertNotEmpty(controller.chooseFigure(0, 0));
+        assertNotEmpty(controller.chooseFigure(0, 0));
     }
 
     @Test
@@ -64,7 +64,7 @@ public class ControllerUnitTest extends ControllerAbstractUnitTest {
         List<Action> actions = controller.chooseFigure(0, 0);
 
         // check list for size and content
-        Assert.assertEquals(actions.size(), 1);
+        assertSize(actions, 1);
         Assert.assertTrue(actions.get(0) instanceof MoveFigureAction);
     }
 
