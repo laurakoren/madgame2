@@ -30,11 +30,15 @@ public class MultiplayerActivity extends AppCompatActivity {
     private Button button;
     private EditText result;
 
-    public String getChosenPlayerName() {
+    public static String getChosenPlayerName() {
         return chosenPlayerName;
     }
 
-    public static String chosenPlayerName;
+    public static void setChosenPlayerName(String chosenPlayerName) {
+        MultiplayerActivity.chosenPlayerName = chosenPlayerName;
+    }
+
+    private static String chosenPlayerName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +73,7 @@ public class MultiplayerActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 result.setText(userInput.getText());
-                                chosenPlayerName = userInput.getText().toString();
+                                setChosenPlayerName(userInput.getText().toString());
                             }
                         })
                 .setNegativeButton("Cancel",

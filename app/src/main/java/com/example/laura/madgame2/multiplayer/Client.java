@@ -176,8 +176,8 @@ public class Client extends Thread {
     }
 
     public static String getPlayerName() {
-        if (MultiplayerActivity.chosenPlayerName != null) {
-            return MultiplayerActivity.chosenPlayerName;
+        if (MultiplayerActivity.getChosenPlayerName() != null) {
+            return MultiplayerActivity.getChosenPlayerName();
         }
         if (playerName == "") {
             playerName = "Player" + new Random().nextInt(100);
