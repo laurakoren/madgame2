@@ -119,7 +119,7 @@ public class GameLogic {
      * @param player the Player to check
      * @return true if the player has won
      */
-    private boolean hasWon(Player player) {
+    public boolean hasWon(Player player) {
         if (player == null)
             return false;
 
