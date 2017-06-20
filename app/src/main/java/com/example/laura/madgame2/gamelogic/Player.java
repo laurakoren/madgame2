@@ -10,6 +10,8 @@ import java.util.List;
 public class Player {
     private boolean cheater;
 
+    private boolean pauseNextTurn;
+
     private int playerNr;
 
     private Field startField;
@@ -18,9 +20,11 @@ public class Player {
 
     private List<Figure> figures;
 
+
     public Player(int playerNr) {
         this.playerNr = playerNr;
         cheater=false;
+        pauseNextTurn=false;
     }
 
     public int getPlayerNr() {
@@ -60,6 +64,14 @@ public class Player {
 
     void setFinishFields(List<Field> finishFields) {
         this.finishFields = finishFields;
+    }
+
+    public boolean getPauseNextTurn(){
+        return this.pauseNextTurn;
+    }
+
+    public void setPauseNextTurn(boolean pauseNextTurn){
+        this.pauseNextTurn=pauseNextTurn;
     }
 }
 
