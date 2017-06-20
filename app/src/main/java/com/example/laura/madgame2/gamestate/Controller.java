@@ -1,20 +1,22 @@
 package com.example.laura.madgame2.gamestate;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.example.laura.madgame2.PlayField;
 import com.example.laura.madgame2.diceroll.RollDiceActivity;
 import com.example.laura.madgame2.gamelogic.GameLogic;
 import com.example.laura.madgame2.gamelogic.Player;
 import com.example.laura.madgame2.gamestate.action.Action;
+import com.example.laura.madgame2.gamestate.action.WinningAction;
 import com.example.laura.madgame2.multiplayer.Client;
 import com.example.laura.madgame2.multiplayer.Server;
 import com.example.laura.madgame2.multiplayer.update.Update;
 import com.example.laura.madgame2.multiplayer.update.UpdateDraw;
 import com.example.laura.madgame2.multiplayer.update.UpdateMyNumber;
 import com.example.laura.madgame2.multiplayer.update.UpdatePlayersTurn;
+import com.example.laura.madgame2.multiplayer.update.WinningUpdate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -79,6 +81,10 @@ public class Controller {
         return isMultiplayerGame;
     }
 
+    public void setMP(boolean isMP) {
+        this.isMultiplayerGame = isMP;
+    }
+
     List<Player> players() {
         return players;
     }
@@ -99,6 +105,8 @@ public class Controller {
         this.state = state;
     }
 
+    // network accessor methods for states
+
     void endTurn(boolean playerHasCheatedThisTurn) {
         currentPlayerNr = (currentPlayerNr + 1) % 4;
         RollDiceActivity.setCheat(false);
@@ -116,40 +124,33 @@ public class Controller {
         }
     }
 
-    // network accessor methods for states
-
     public void sendUpdate(Update update) {
         new Updater().execute(update);
     }
 
+    // setter and init
+
     public void receiveUpdate(Update update) {
         if (update instanceof UpdateMyNumber) {
             myPlayerNr = ((UpdateMyNumber) update).getMyNumber();
-        }
-
-        if (update instanceof UpdatePlayersTurn) {
+        } else if (update instanceof UpdatePlayersTurn) {
             currentPlayerNr = myPlayerNr;
             UpdatePlayersTurn u = (UpdatePlayersTurn) update;
             playerBeforeCheated = u.isPlayerBeforeCheated();
             setState(new MyTurnPreDiceRollState(playerBeforeCheated, false));
-        }
-
-        if (update instanceof UpdateDraw) {
+        } else if (update instanceof UpdateDraw) {
             UpdateDraw u = (UpdateDraw) update;
             if (u.getPlayerNr() != myPlayerNr) {
                 List<Action> actionUpdates = logic.draw(u.getPlayerNr(), u.getFigureNr(), u.getDiceResult());
                 logic.handleUpdates(actionUpdates);
                 playField.updateField(actionUpdates);
-
             }
-            Log.d("CONTROLLER", myPlayerNr + ", " + u.getDiceResult() + "; " + u.getPlayerNr());
+        } else if (update instanceof WinningUpdate) {
+            WinningUpdate u = (WinningUpdate) update;
+            List<Action> list = new ArrayList<>();
+            list.add(new WinningAction(players.get(u.winnerNr), u.name));
+            playField.handleUpdates(list);
         }
-    }
-
-    // setter and init
-
-    public void setMP(boolean isMP) {
-        this.isMultiplayerGame = isMP;
     }
 
     public void setPlayers(List<Player> players, int startingPlayerNr, int myPlayerNr) {
@@ -198,6 +199,18 @@ public class Controller {
 
     public void setPlayField(PlayField playField) {
         this.playField = playField;
+    }
+
+    String getPlayerName() {
+        if (this.isMultiplayerGame) {
+            if (Server.isServerRunning()) {
+                return Server.getInstance().getPlayerName();
+            } else {
+                return Client.getPlayerName();
+            }
+        } else {
+            return "Spieler " + currentPlayerNr + 1;
+        }
     }
 
     private class Updater extends AsyncTask<Update, Void, Void> {

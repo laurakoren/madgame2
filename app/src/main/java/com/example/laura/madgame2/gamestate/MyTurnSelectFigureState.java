@@ -4,12 +4,12 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.laura.madgame2.gamelogic.Field;
-import com.example.laura.madgame2.gamelogic.Player;
 import com.example.laura.madgame2.gamestate.action.Action;
 import com.example.laura.madgame2.gamestate.action.HighlightAction;
 import com.example.laura.madgame2.gamestate.action.NotificationAction;
 import com.example.laura.madgame2.gamestate.action.WinningAction;
 import com.example.laura.madgame2.multiplayer.update.UpdateDraw;
+import com.example.laura.madgame2.multiplayer.update.WinningUpdate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,10 +74,10 @@ class MyTurnSelectFigureState implements State {
             result.add(new NotificationAction(TEXTFIELD, "", "Nicht Ihre Figur"));
         }
 
-        Player winner = context.logic().getWinner();
-        if (winner != null) {
-            result.add(new WinningAction(winner, "Spieler " + winner.getPlayerNr()));
-            // TODO update raushauen
+        if (context.logic().hasWon(context.players().get(playerNr))) {
+            String name = context.getPlayerName();
+            result.add(new WinningAction(context.players().get(playerNr), name));
+            context.sendUpdate(new WinningUpdate(playerNr, name));
         }
 
         return result;

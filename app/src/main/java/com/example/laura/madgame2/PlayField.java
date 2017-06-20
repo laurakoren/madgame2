@@ -36,21 +36,16 @@ import java.util.regex.Pattern;
 public class PlayField extends AppCompatActivity {
 
     private static final int NUMBER_IDENTIFIER = 1;
-
+    private static final int NUM_FIELDS = 40;
     private Controller controller;
-
     private List<View> fieldViews;
     private List<List<View>> finishFieldViews;
     private List<List<View>> figureViews;
     private List<List<ViewGroup.LayoutParams>> outFields;
     private TextView outPutText;
-
     private Queue<Action> actionQueue;
     private boolean asyncTaskRunning;
-
     private CountDownTimer highlightCDTimer;
-
-    private static final int NUM_FIELDS = 40;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
