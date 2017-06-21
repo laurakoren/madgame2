@@ -57,7 +57,7 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
     public void doCancel(View view) {
         intent = new Intent(this, MultiplayerActivity.class);
         if (role == Role.Host) {
-            server.shutdown();
+            Server.shutdown();
         }
         startActivity(intent);
     }

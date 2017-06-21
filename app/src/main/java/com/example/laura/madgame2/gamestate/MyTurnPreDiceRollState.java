@@ -66,14 +66,13 @@ class MyTurnPreDiceRollState implements State {
     }
 
     @Override
-    public void catchCheater(boolean playerBeforeHasCheated) {
-        //TODO punishment for cheating
+    public void catchCheater(boolean playerBeforeHasCheated, Controller context) {
         if (playerBeforeHasCheated) {
-            Log.d("Cheater", "player before has cheated");
+            int cheaterNr = (Math.abs(context.getMyPlayerNr().intValue() - 1)) % 4;
+            context.addCheater(cheaterNr);
         } else {
-            Log.d("Cheater", "player before has not cheated");
+            context.endTurn(false);
         }
-
     }
 
 

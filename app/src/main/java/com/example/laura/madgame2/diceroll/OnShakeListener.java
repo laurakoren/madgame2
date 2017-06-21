@@ -6,5 +6,5 @@ package com.example.laura.madgame2.diceroll;
 
 public interface OnShakeListener {
 
-    public void onShake(int count);
+    void onShake(int count);
 }

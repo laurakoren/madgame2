@@ -11,7 +11,7 @@ public class AsyncClientTask extends AsyncTask<String, Void, Void> {
     @Override
     protected Void doInBackground(String... params) {
         Client client = new Client(params[0], Integer.parseInt(params[1]));
-        client.setInstance(client);
+        Client.setInstance(client);
         return null;
     }
 }

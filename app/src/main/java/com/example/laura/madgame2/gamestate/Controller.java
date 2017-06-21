@@ -1,6 +1,7 @@
 package com.example.laura.madgame2.gamestate;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.laura.madgame2.PlayField;
 import com.example.laura.madgame2.diceroll.RollDiceActivity;
@@ -15,7 +16,7 @@ import com.example.laura.madgame2.multiplayer.update.Update;
 import com.example.laura.madgame2.multiplayer.update.UpdateDraw;
 import com.example.laura.madgame2.multiplayer.update.UpdateMyNumber;
 import com.example.laura.madgame2.multiplayer.update.UpdatePlayersTurn;
-import com.example.laura.madgame2.multiplayer.update.WinningUpdate;
+import com.example.laura.madgame2.multiplayer.update.UpdatePlayerWon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +34,13 @@ public class Controller {
 
     private List<Player> players;
     private GameLogic logic;
-    private int myPlayerNr;
+    private Integer myPlayerNr;
     private int currentPlayerNr;
     private Player playerBefore;
     private boolean cheated;
     private boolean playerBeforeCheated;
     private PlayField playField;
+    private List<Integer> playerWhoCheated;
 
     private Controller() {
         state = null;
@@ -50,6 +52,7 @@ public class Controller {
         playerBefore = null;
         playerBeforeCheated = false;
         playField = null;
+        playerWhoCheated = new ArrayList<>();
     }
 
     // singleton
@@ -98,6 +101,10 @@ public class Controller {
         return myPlayerNr;
     }
 
+    public Integer getMyPlayerNr() {
+        return myPlayerNr;
+    }
+
     int currPlayerNr() {
         return currentPlayerNr;
     }
@@ -109,16 +116,15 @@ public class Controller {
     // network accessor methods for states
 
     void endTurn(boolean playerHasCheatedThisTurn) {
-        //currentPlayerNr = (currentPlayerNr + 1) % 4;
-        skipPlayerThisTurn();
         RollDiceActivity.setCheat(false);
-
         if (this.isMultiplayerGame) {
+            currentPlayerNr = (currentPlayerNr + 1) % 4;
             state = new OtherPlayersTurnState();
-            sendUpdate(new UpdatePlayersTurn(currentPlayerNr, cheated));
+            sendUpdate(new UpdatePlayersTurn(currentPlayerNr, cheated, playerWhoCheated));
             playerBeforeCheated = false;
             cheated = false;
         } else {
+            skipPlayerThisTurn();
             playerBefore = new Player(currentPlayerNr);
             playerBefore.setCheater(cheated);
             int number = (currentPlayerNr - 1) % 4;
@@ -126,7 +132,6 @@ public class Controller {
                 number *= -1;
             }
             players.get(number).setCheater(cheated);
-
             // in local multiplayer mode, just increment
             state = new MyTurnPreDiceRollState(playerHasCheatedThisTurn, false);
         }
@@ -144,17 +149,26 @@ public class Controller {
         } else if (update instanceof UpdatePlayersTurn) {
             currentPlayerNr = myPlayerNr;
             UpdatePlayersTurn u = (UpdatePlayersTurn) update;
-            playerBeforeCheated = u.isPlayerBeforeCheated();
-            setState(new MyTurnPreDiceRollState(playerBeforeCheated, false));
+            playerWhoCheated = u.getPlayerCaughtCheating();
+            if (playerWhoCheated.contains(myPlayerNr)) {
+                playerWhoCheated.remove(myPlayerNr);
+                endTurn(false);
+            } else {
+                playerBeforeCheated = u.isPlayerBeforeCheated();
+                setState(new MyTurnPreDiceRollState(playerBeforeCheated, false));
+            }
+
         } else if (update instanceof UpdateDraw) {
+
             UpdateDraw u = (UpdateDraw) update;
             if (u.getPlayerNr() != myPlayerNr) {
                 List<Action> actionUpdates = logic.draw(u.getPlayerNr(), u.getFigureNr(), u.getDiceResult());
                 logic.handleUpdates(actionUpdates);
                 playField.updateField(actionUpdates);
             }
-        } else if (update instanceof WinningUpdate) {
-            WinningUpdate u = (WinningUpdate) update;
+        } else if (update instanceof UpdatePlayerWon) {
+
+            UpdatePlayerWon u = (UpdatePlayerWon) update;
             List<Action> list = new ArrayList<>();
             list.add(new WinningAction(players.get(u.winnerNr), u.name));
             playField.handleUpdates(list);
@@ -200,7 +214,7 @@ public class Controller {
 
 
         if (isMultiplayerGame) {
-            state.catchCheater(playerBeforeCheated);
+            state.catchCheater(playerBeforeCheated, this);
 
         } else {
             int number = (currentPlayerNr - 1) % 4;
@@ -210,7 +224,7 @@ public class Controller {
             }
 
             boolean help = players.get(number).getCheater();
-            state.catchCheater(help);
+            state.catchCheater(help, this);
 
             if (help) {
                 players.get(number).setPauseNextTurn(true);
@@ -263,6 +277,14 @@ public class Controller {
         if (players.get(help).getPauseNextTurn() == false) {
             currentPlayerNr = help;
         }
+    }
+
+    public boolean addCheater(Integer playerNr) {
+        if (!playerWhoCheated.contains(playerNr)) {
+            playerWhoCheated.add(playerNr);
+            return true;
+        }
+        return false;
     }
 
 }

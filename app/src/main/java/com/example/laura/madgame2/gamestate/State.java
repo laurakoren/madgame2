@@ -28,7 +28,7 @@ interface State {
      */
     List<Action> diceRollResult(Controller context, int result, boolean hasCheated);
 
-    void catchCheater(boolean playerBeforeHasCheated);
+    void catchCheater(boolean playerBeforeHasCheated, Controller context);
 
 
 }

@@ -1,6 +1,8 @@
 package com.example.laura.madgame2.gamestate;
 
 
+import android.util.Log;
+
 import com.example.laura.madgame2.gamestate.action.Action;
 
 import java.util.ArrayList;
@@ -25,7 +27,7 @@ class OtherPlayersTurnState implements State {
     }
 
     @Override
-    public void catchCheater(boolean playerBeforeHasCheated) {
+    public void catchCheater(boolean playerBeforeHasCheated, Controller context) {
         //ignore action
     }
 

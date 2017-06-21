@@ -1,5 +1,7 @@
 package com.example.laura.madgame2.multiplayer.update;
 
+import java.util.List;
+
 /**
  * Created by Philipp on 23.05.17.
  */
@@ -9,7 +11,6 @@ public class UpdateDraw extends Update {
     private int playerNr;
     private int figureNr;
     private int diceResult;
-    private boolean playerCheated;
 
     public UpdateDraw(int playerNr, int figureNr, int diceResult) {
         super();
@@ -39,6 +40,7 @@ public class UpdateDraw extends Update {
     public int getDiceResult() {
         return diceResult;
     }
+
 
 
     @Override

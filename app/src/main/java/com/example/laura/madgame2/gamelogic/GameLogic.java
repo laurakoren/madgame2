@@ -7,6 +7,7 @@ import com.example.laura.madgame2.gamestate.action.MoveFigureAction;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * The internal representation for the game board.
  */

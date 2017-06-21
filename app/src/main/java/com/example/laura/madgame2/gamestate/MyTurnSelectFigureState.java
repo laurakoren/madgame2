@@ -8,8 +8,9 @@ import com.example.laura.madgame2.gamestate.action.Action;
 import com.example.laura.madgame2.gamestate.action.HighlightAction;
 import com.example.laura.madgame2.gamestate.action.NotificationAction;
 import com.example.laura.madgame2.gamestate.action.WinningAction;
+import com.example.laura.madgame2.multiplayer.update.Update;
 import com.example.laura.madgame2.multiplayer.update.UpdateDraw;
-import com.example.laura.madgame2.multiplayer.update.WinningUpdate;
+import com.example.laura.madgame2.multiplayer.update.UpdatePlayerWon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ class MyTurnSelectFigureState implements State {
                 // player has confirmed his selection
                 result = context.logic().draw(playerNr, figureNr, diceRollResult);
                 if (context.isMP()) {
-                    new DrawUpdate(context).execute(playerNr, figureNr, diceRollResult);
+                    new DrawUpdate(context).execute(new UpdateDraw(playerNr, figureNr, diceRollResult));
                 }
 
                 if (!result.isEmpty()) {
@@ -77,7 +78,7 @@ class MyTurnSelectFigureState implements State {
         if (context.logic().hasWon(context.players().get(playerNr))) {
             String name = context.getPlayerName();
             result.add(new WinningAction(context.players().get(playerNr), name));
-            context.sendUpdate(new WinningUpdate(playerNr, name));
+            context.sendUpdate(new UpdatePlayerWon(playerNr, name));
         }
 
         return result;
@@ -94,16 +95,17 @@ class MyTurnSelectFigureState implements State {
     }
 
     @Override
-    public void catchCheater(boolean playerBeforeHasCheated) {
-        //TODO punishment for cheating
+    public void catchCheater(boolean playerBeforeHasCheated, Controller context) {
         if (playerBeforeHasCheated) {
-            Log.d("Cheater", "player before has cheated");
+            int cheaterNr = (Math.abs(context.getMyPlayerNr().intValue() - 1)) % 4;
+
+            context.addCheater(cheaterNr);
         } else {
-            Log.d("Cheater", "player before has not cheated");
+            context.endTurn(false);
         }
     }
 
-    private class DrawUpdate extends AsyncTask<Integer, Void, Void> {
+    private class DrawUpdate extends AsyncTask<Update, Void, Void> {
 
         private Controller controller;
 
@@ -115,8 +117,8 @@ class MyTurnSelectFigureState implements State {
         }
 
         @Override
-        protected Void doInBackground(Integer... params) {
-            controller.sendUpdate(new UpdateDraw(params[0], params[1], params[2]));
+        protected Void doInBackground(Update... params) {
+            controller.sendUpdate(params[0]);
             return null;
         }
     }
