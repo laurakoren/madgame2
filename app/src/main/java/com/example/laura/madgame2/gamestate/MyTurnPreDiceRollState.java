@@ -77,7 +77,7 @@ class MyTurnPreDiceRollState implements State {
         if (playerBeforeHasCheated) {
             int cheaterNr = (((context.getMyPlayerNr() - 1) % 4) + 4) % 4;
             context.addCheater(cheaterNr);
-            result.add(new NotificationAction(TOAST, "", "erwischt, " + context.getPlayerName() + " wird bestraft"));
+            result.add(new NotificationAction(TOAST, "", "erwischt, Spieler " + (cheaterNr + 1) + " wird bestraft"));
         } else {
             context.endTurn(false);
             result.add(new NotificationAction(TOAST, "", "fälschlich beschuldigt, du wirst bestraft"));

@@ -93,7 +93,7 @@ class MyTurnSelectFigureState implements State {
     public List<Action> diceRollResult(Controller context, int result, boolean hasCheated) {
         return new ArrayList<>(); // ignore action
     }
-
+    
     @Override
     public List<Action> catchCheater(boolean playerBeforeHasCheated, Controller context) {
         List<Action> result = new ArrayList<>();
@@ -101,7 +101,7 @@ class MyTurnSelectFigureState implements State {
         if (playerBeforeHasCheated) {
             int cheaterNr = (((context.getMyPlayerNr() - 1) % 4) + 4) % 4;
             context.addCheater(cheaterNr);
-            result.add(new NotificationAction(TOAST, "", "erwischt, " + context.getPlayerName() + " wird bestraft"));
+            result.add(new NotificationAction(TOAST, "", "erwischt, Spieler " + (cheaterNr + 1) + " wird bestraft"));
         } else {
             context.endTurn(false);
             result.add(new NotificationAction(TOAST, "", "fälschlich beschuldigt, du wirst bestraft"));

@@ -276,7 +276,7 @@ public class Controller {
             nextPlayerNr = (nextPlayerNr + 1) % 4;
         }
 
-        currentPlayerNr = nextPlayerNr;
+        myPlayerNr = currentPlayerNr = nextPlayerNr;
     }
 
     boolean addCheater(Integer playerNr) {
