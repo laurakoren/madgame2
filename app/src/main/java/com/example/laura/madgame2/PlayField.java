@@ -57,7 +57,7 @@ public class PlayField extends AppCompatActivity {
         asyncTaskRunning = false;
 
         outPutText = (TextView) findViewById(R.id.PlayerTurn);
-        outPutText.setText("Spieler 1 starte Spiel!");
+        outPutText.setText("Spieler 0 starte Spiel!");
 
         // create players
         // TODO create players in multiplayer lobby and pass them to playfield
@@ -370,6 +370,7 @@ public class PlayField extends AppCompatActivity {
             } else {
                 actionQueue.add(new EndGameAction());
                 asyncTaskRunning = true;
+                ScoreEdit.updateScore("gamesWon");
                 alert("Spiel beendet!", "Spieler " + a.name + " hat gewonnen!", "Ok");
             }
 

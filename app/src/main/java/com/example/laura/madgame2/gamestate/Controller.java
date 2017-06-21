@@ -1,24 +1,24 @@
 package com.example.laura.madgame2.gamestate;
 
 import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.example.laura.madgame2.PlayField;
 import com.example.laura.madgame2.diceroll.RollDiceActivity;
 import com.example.laura.madgame2.gamelogic.GameLogic;
 import com.example.laura.madgame2.gamelogic.Player;
 import com.example.laura.madgame2.gamestate.action.Action;
+import com.example.laura.madgame2.gamestate.action.WinningAction;
+import com.example.laura.madgame2.highscore.ScoreEdit;
 import com.example.laura.madgame2.multiplayer.Client;
 import com.example.laura.madgame2.multiplayer.Server;
 import com.example.laura.madgame2.multiplayer.update.Update;
 import com.example.laura.madgame2.multiplayer.update.UpdateDraw;
 import com.example.laura.madgame2.multiplayer.update.UpdateMyNumber;
 import com.example.laura.madgame2.multiplayer.update.UpdatePlayersTurn;
+import com.example.laura.madgame2.multiplayer.update.WinningUpdate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * Controller for PlayField
@@ -82,6 +82,10 @@ public class Controller {
         return isMultiplayerGame;
     }
 
+    public void setMP(boolean isMP) {
+        this.isMultiplayerGame = isMP;
+    }
+
     List<Player> players() {
         return players;
     }
@@ -102,10 +106,11 @@ public class Controller {
         this.state = state;
     }
 
-    void endTurn(boolean playerHasCheatedThisTurn) {
-        skipPlayerThisTurn();
+    // network accessor methods for states
 
+    void endTurn(boolean playerHasCheatedThisTurn) {
         //currentPlayerNr = (currentPlayerNr + 1) % 4;
+        skipPlayerThisTurn();
         RollDiceActivity.setCheat(false);
 
         if (this.isMultiplayerGame) {
@@ -116,54 +121,44 @@ public class Controller {
         } else {
             playerBefore = new Player(currentPlayerNr);
             playerBefore.setCheater(cheated);
-            int number =  (currentPlayerNr-1)%4;
-            if(number<0){
-                number*=-1;
+            int number = (currentPlayerNr - 1) % 4;
+            if (number < 0) {
+                number *= -1;
             }
             players.get(number).setCheater(cheated);
 
             // in local multiplayer mode, just increment
             state = new MyTurnPreDiceRollState(playerHasCheatedThisTurn, false);
         }
-
-
-
     }
-
-    // network accessor methods for states
 
     public void sendUpdate(Update update) {
         new Updater().execute(update);
     }
 
+    // setter and init
+
     public void receiveUpdate(Update update) {
         if (update instanceof UpdateMyNumber) {
             myPlayerNr = ((UpdateMyNumber) update).getMyNumber();
-        }
-
-        if (update instanceof UpdatePlayersTurn) {
+        } else if (update instanceof UpdatePlayersTurn) {
             currentPlayerNr = myPlayerNr;
             UpdatePlayersTurn u = (UpdatePlayersTurn) update;
             playerBeforeCheated = u.isPlayerBeforeCheated();
             setState(new MyTurnPreDiceRollState(playerBeforeCheated, false));
-        }
-
-        if (update instanceof UpdateDraw) {
+        } else if (update instanceof UpdateDraw) {
             UpdateDraw u = (UpdateDraw) update;
             if (u.getPlayerNr() != myPlayerNr) {
                 List<Action> actionUpdates = logic.draw(u.getPlayerNr(), u.getFigureNr(), u.getDiceResult());
                 logic.handleUpdates(actionUpdates);
                 playField.updateField(actionUpdates);
-
             }
-            Log.d("CONTROLLER", myPlayerNr + ", " + u.getDiceResult() + "; " + u.getPlayerNr());
+        } else if (update instanceof WinningUpdate) {
+            WinningUpdate u = (WinningUpdate) update;
+            List<Action> list = new ArrayList<>();
+            list.add(new WinningAction(players.get(u.winnerNr), u.name));
+            playField.handleUpdates(list);
         }
-    }
-
-    // setter and init
-
-    public void setMP(boolean isMP) {
-        this.isMultiplayerGame = isMP;
     }
 
     public void setPlayers(List<Player> players, int startingPlayerNr, int myPlayerNr) {
@@ -203,21 +198,23 @@ public class Controller {
 
     public void catchCheater() {
 
+
         if (isMultiplayerGame) {
             state.catchCheater(playerBeforeCheated);
 
         } else {
-            int number  = (currentPlayerNr-1)%4;
+            int number = (currentPlayerNr - 1) % 4;
 
-            if(number<0){
-                    number*=-1;
-                }
+            if (number < 0) {
+                number *= -1;
+            }
 
-                boolean help = players.get(number).getCheater();
-                state.catchCheater(help);
+            boolean help = players.get(number).getCheater();
+            state.catchCheater(help);
 
-            if(help){
+            if (help) {
                 players.get(number).setPauseNextTurn(true);
+                ScoreEdit.updateScore("cheaterCaught");
             } else {
                 players.get(currentPlayerNr).setPauseNextTurn(true);
             }
@@ -226,6 +223,18 @@ public class Controller {
 
     public void setPlayField(PlayField playField) {
         this.playField = playField;
+    }
+
+    String getPlayerName() {
+        if (this.isMultiplayerGame) {
+            if (Server.isServerRunning()) {
+                return Server.getInstance().getPlayerName();
+            } else {
+                return Client.getPlayerName();
+            }
+        } else {
+            return "Spieler " + currentPlayerNr + 1;
+        }
     }
 
     private class Updater extends AsyncTask<Update, Void, Void> {
@@ -244,20 +253,16 @@ public class Controller {
         }
     }
 
-    private void skipPlayerThisTurn(){
-      int help = (currentPlayerNr+1)%4;
-        while(players.get(help).getPauseNextTurn()==true){
+    private void skipPlayerThisTurn() {
+        int help = (currentPlayerNr + 1) % 4;
+        while (players.get(help).getPauseNextTurn() == true) {
             players.get(help).setPauseNextTurn(false);
-            help = (help+1)%4;
+            help = (help + 1) % 4;
         }
 
-            if(players.get(help).getPauseNextTurn()==false) {
-                currentPlayerNr = help;
-            }
+        if (players.get(help).getPauseNextTurn() == false) {
+            currentPlayerNr = help;
+        }
     }
-
-
-
-
 
 }

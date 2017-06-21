@@ -44,11 +44,11 @@ class MyTurnPreDiceRollState implements State {
 
             if (++unluckyThrowsCount < 3) {
                 // he may roll again (up to 3 times)
-                list.add(new NotificationAction(NotificationAction.Type.TEXTFIELD,"","Sie können erneut würfeln"));
+                list.add(new NotificationAction(NotificationAction.Type.TEXTFIELD, "", "Sie können erneut würfeln"));
 
             } else {
                 // player has used up his 3 rolls
-                list.add(new NotificationAction(NotificationAction.Type.TEXTFIELD,"","Sie können nicht mehr würfeln"));
+                list.add(new NotificationAction(NotificationAction.Type.TEXTFIELD, "", "Sie können nicht mehr würfeln"));
                 context.endTurn(playerHasCheatedThisTurn);
             }
         } else if (context.logic().hasValidMoves(context.currPlayerNr(), result)) {
@@ -56,7 +56,7 @@ class MyTurnPreDiceRollState implements State {
             context.setState(new MyTurnSelectFigureState(result, previousPlayerHasCheated, playerHasCheatedThisTurn, -1));
         } else {
             // player can't move any of his figures with the number he rolled
-            list.add(new NotificationAction(NotificationAction.Type.TEXTFIELD,"","Keine Züge möglich, nächster ist dran"));
+            list.add(new NotificationAction(NotificationAction.Type.TEXTFIELD, "", "Keine Züge möglich, nächster ist dran"));
             context.endTurn(hasCheated || playerHasCheatedThisTurn);
         }
 
@@ -68,10 +68,10 @@ class MyTurnPreDiceRollState implements State {
     @Override
     public void catchCheater(boolean playerBeforeHasCheated) {
         //TODO punishment for cheating
-        if(playerBeforeHasCheated){
-
-        }else{
-
+        if (playerBeforeHasCheated) {
+            Log.d("Cheater", "player before has cheated");
+        } else {
+            Log.d("Cheater", "player before has not cheated");
         }
 
     }
