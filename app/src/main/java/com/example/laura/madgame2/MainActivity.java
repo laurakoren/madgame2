@@ -13,9 +13,6 @@ import com.example.laura.madgame2.highscore.ScoreEdit;
 public class MainActivity extends AppCompatActivity {
     private Intent intent;
     private static final int NUMBER_IDENTIFIER = 1;
-    private int number;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void onClickShowHighscores(View view){
+    public void onClickShowHighscores(View view) {
         intent = new Intent(this, HighscoreActivity.class);
         startActivity(intent);
     }

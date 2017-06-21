@@ -74,7 +74,6 @@ public class RollDiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View w) {
                 final CharSequence[] numbers = new CharSequence[]{"1", "2", "3", "4", "5", "6"};
-
                 //DialogBox wo man eintragen kann welche Zahl man gerne würfeln würde.
                 new AlertDialog.Builder(RollDiceActivity.this).
                         setTitle("Wähle die Zahl aus die du würfeln möchtest!")
@@ -162,6 +161,7 @@ public class RollDiceActivity extends AppCompatActivity {
         //Fenster soll erst nach gewisser Zeit (0,5 sek) geschlossen werden!
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
+            @Override
             public void run() {
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("result", rolledNumber);

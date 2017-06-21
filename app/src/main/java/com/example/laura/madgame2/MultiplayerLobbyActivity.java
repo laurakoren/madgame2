@@ -1,8 +1,8 @@
 package com.example.laura.madgame2;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,7 +13,6 @@ import com.example.laura.madgame2.utils.ActivityUtils;
 
 public class MultiplayerLobbyActivity extends AppCompatActivity {
 
-    private static final String TAG = "MulitplayerLobby";
     private Intent intent;
     private Server server;
     private TextView hostIp;
@@ -43,7 +42,7 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
         ActivityUtils.setCurrentActivity(this);
         if (Server.isServerRunning()) {
             server = Server.getInstance();
-            role = Role.Host;
+            role = Role.HOST;
             hostIp = (TextView) findViewById(R.id.txtIp);
             hostIp.setText(server.getIp() + ":" + server.getPort());
             playerNameTextViews[0].setText(server.getPlayerName());
@@ -56,7 +55,7 @@ public class MultiplayerLobbyActivity extends AppCompatActivity {
 
     public void doCancel(View view) {
         intent = new Intent(this, MultiplayerActivity.class);
-        if (role == Role.Host) {
+        if (role == Role.HOST) {
             Server.shutdown();
         }
         startActivity(intent);

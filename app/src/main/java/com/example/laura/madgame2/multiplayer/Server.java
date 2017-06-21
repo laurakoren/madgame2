@@ -36,7 +36,6 @@ public class Server extends Thread implements Observer {
 
     private String playerName = "";
     private static Server instance;
-    private final String TAG = "Server";
     private static ServerSocket serverSocket;
     private int port;
     private String ip;
@@ -91,7 +90,7 @@ public class Server extends Thread implements Observer {
                     }*/
                     clients.add(count, eClient);
                     MultiplayerLobbyActivity multiLobby = (MultiplayerLobbyActivity) ActivityUtils.getCurrentActivity();
-                    while (eClient.getPlayername() == "") {
+                    while ("".equals(eClient.getPlayername())) {
                         Thread.sleep(100);
                     }
 

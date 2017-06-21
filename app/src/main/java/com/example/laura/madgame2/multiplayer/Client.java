@@ -2,13 +2,11 @@ package com.example.laura.madgame2.multiplayer;
 
 import android.content.Intent;
 import android.os.Looper;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.laura.madgame2.MultiplayerActivity;
 import com.example.laura.madgame2.MultiplayerLobbyActivity;
 import com.example.laura.madgame2.PlayField;
-//import com.example.laura.madgame2.TestActivity;
 import com.example.laura.madgame2.gamestate.Controller;
 import com.example.laura.madgame2.multiplayer.update.Update;
 import com.example.laura.madgame2.utils.ActivityUtils;
@@ -29,8 +27,6 @@ import java.util.logging.Logger;
 
 public class Client extends Thread {
 
-    private static final String TAG = "Client";
-
     private static String playerName = "";
     private Socket clientSocket;
     private DataInputStream in;
@@ -41,7 +37,6 @@ public class Client extends Thread {
     private String ip;
     private static Client instance;
     private boolean gameStarted = false;
-    private Update update;
     private Logger logger = Logger.getLogger("global");
     private boolean killThread = false;
 
@@ -97,7 +92,7 @@ public class Client extends Thread {
             try {
                 Thread.sleep(500);
                 input = in.readUTF();
-                if (input.equals("start")) {
+                if ("start".equals(input)) {
                     gameStarted = true;
                     ActivityUtils.getCurrentActivity().startActivity(new Intent(ActivityUtils.getCurrentActivity(), PlayField.class));
                     sendString("acceptStart");
@@ -118,9 +113,8 @@ public class Client extends Thread {
         Controller.getInstance().setMP(true);
         while (gameStarted && !killThread) {
             try {
-                update = (Update) objectIn.readObject();
+                Update update = (Update) objectIn.readObject();
                 Controller.getInstance().receiveUpdate(update);
-                update = null;
 
             } catch (IOException e) {
                 logger.log(Level.WARNING, "IOException occurred at Client Thread run!", e);

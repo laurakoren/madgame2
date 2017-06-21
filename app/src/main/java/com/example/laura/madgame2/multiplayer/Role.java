@@ -5,5 +5,5 @@ package com.example.laura.madgame2.multiplayer;
  */
 
 public enum Role {
-    Host, Client
+    HOST, Client
 }

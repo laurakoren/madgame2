@@ -1,7 +1,6 @@
 package com.example.laura.madgame2.gamestate;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.example.laura.madgame2.gamelogic.Field;
 import com.example.laura.madgame2.gamestate.action.Action;
@@ -16,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.laura.madgame2.gamestate.action.NotificationAction.Type.TEXTFIELD;
+import static com.example.laura.madgame2.gamestate.action.NotificationAction.Type.TOAST;
 
 /**
  * State that is active during this Player's turn. In this state the Player may select one of his figures to move.
@@ -51,7 +51,7 @@ class MyTurnSelectFigureState implements State {
 
                     if (diceRollResult == 6) {
                         // player has rolled 6, he may roll another time
-                        result.add(new NotificationAction(TEXTFIELD, "", "Erneut würfeln"));
+                        result.add(new NotificationAction(TEXTFIELD, "", "6 gewürfelt, nochmal würfeln"));
 
                         context.setState(new MyTurnPreDiceRollState(previousPlayerHasCheated, playerHasCheatedThisTurn));
                     } else {
@@ -72,7 +72,7 @@ class MyTurnSelectFigureState implements State {
             }
         } else {
             // player has selected another Player's figure
-            result.add(new NotificationAction(TEXTFIELD, "", "Nicht Ihre Figur"));
+            result.add(new NotificationAction(TOAST, "", "Nicht Ihre Figur"));
         }
 
         if (context.logic().hasWon(context.players().get(playerNr))) {
@@ -95,14 +95,19 @@ class MyTurnSelectFigureState implements State {
     }
 
     @Override
-    public void catchCheater(boolean playerBeforeHasCheated, Controller context) {
-        if (playerBeforeHasCheated) {
-            int cheaterNr = (Math.abs(context.getMyPlayerNr().intValue() - 1)) % 4;
+    public List<Action> catchCheater(boolean playerBeforeHasCheated, Controller context) {
+        List<Action> result = new ArrayList<>();
 
+        if (playerBeforeHasCheated) {
+            int cheaterNr = (((context.getMyPlayerNr() - 1) % 4) + 4) % 4;
             context.addCheater(cheaterNr);
+            result.add(new NotificationAction(TOAST, "", "erwischt, " + context.getPlayerName() + " wird bestraft"));
         } else {
             context.endTurn(false);
+            result.add(new NotificationAction(TOAST, "", "fälschlich beschuldigt, du wirst bestraft"));
         }
+
+        return result;
     }
 
     private class DrawUpdate extends AsyncTask<Update, Void, Void> {
@@ -112,7 +117,7 @@ class MyTurnSelectFigureState implements State {
         protected DrawUpdate() {
         }
 
-        public DrawUpdate(Controller controller) {
+        DrawUpdate(Controller controller) {
             this.controller = controller;
         }
 

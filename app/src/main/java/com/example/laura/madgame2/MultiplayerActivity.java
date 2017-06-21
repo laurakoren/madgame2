@@ -4,11 +4,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -23,11 +22,9 @@ import java.util.logging.Logger;
 
 public class MultiplayerActivity extends AppCompatActivity {
 
-    private static final String TAG = "MultiplayerActivity";
+    private static String chosenPlayerName;
     private Intent intent;
-    private Client client;
     private Logger logger = Logger.getLogger("global");
-    private Button button;
     private EditText result;
 
     public static String getChosenPlayerName() {
@@ -37,8 +34,6 @@ public class MultiplayerActivity extends AppCompatActivity {
     public static void setChosenPlayerName(String chosenPlayerName) {
         MultiplayerActivity.chosenPlayerName = chosenPlayerName;
     }
-
-    private static String chosenPlayerName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +48,6 @@ public class MultiplayerActivity extends AppCompatActivity {
      */
     public void setName(View view) {
         final Context context = this;
-        button = (Button) findViewById(R.id.btnChooseName);
         result = (EditText) findViewById(R.id.showEnteredName);
 
         LayoutInflater li = LayoutInflater.from(context);
@@ -89,7 +83,7 @@ public class MultiplayerActivity extends AppCompatActivity {
     }
 
     public void hostGame(View view) {
-        Server server = Server.getInstance();
+        Server.getInstance();
         intent = new Intent(this, MultiplayerLobbyActivity.class);
         startActivity(intent);
     }
@@ -108,7 +102,7 @@ public class MultiplayerActivity extends AppCompatActivity {
                 startActivity(intent);
                 Thread.currentThread().interrupt();
             }
-            client = Client.getInstance();
+            Client client = Client.getInstance();
 
             if (client != null && client.isConnected()) {
                 client.start();

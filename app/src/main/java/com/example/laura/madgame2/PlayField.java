@@ -60,7 +60,6 @@ public class PlayField extends AppCompatActivity {
         outPutText.setText("Spieler 0 starte Spiel!");
 
         // create players
-        // TODO create players in multiplayer lobby and pass them to playfield
         List<Player> players = new ArrayList<>();
         for (int i = 0; i < 4; i++)
             players.add(new Player(i));
@@ -139,22 +138,7 @@ public class PlayField extends AppCompatActivity {
     }
 
     public void hasCheated(View view) {
-        /*
-        // TODO in state pattern auslagern
-
-        //hat der vorherige Spieler gecheatet?
-        boolean help = controller.getPlayerBefore().getCheater();
-
-        if (help) {
-            ScoreEdit.updateScore("cheaterCaught");
-            Toast.makeText(getApplication(), "Spieler " + controller.getPlayerBefore().getPlayerNr() + " hat geschummelt und muss nächste Runde aussetzen!",
-                    Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getApplication(), "Spieler " + controller.getPlayerBefore().getPlayerNr() + " hat nicht geschummelt! Du musst nächste Runde aussetzen!",
-                    Toast.LENGTH_SHORT).show();
-        }
-        */
-        controller.catchCheater();
+        handleUpdates(controller.catchCheater());
     }
 
     /**
@@ -307,16 +291,21 @@ public class PlayField extends AppCompatActivity {
      *
      * @see #handleUpdate(Action)
      */
-    public synchronized void handleUpdates(List<Action> actions) {
-        // handle new actions
-        if (actions != null)
-            for (Action action : actions)
-                handleUpdate(action);
+    public synchronized void handleUpdates(final List<Action> actions) {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // handle new actions
+                if (actions != null)
+                    for (Action action : actions)
+                        handleUpdate(action);
 
-        // handle queued actions
-        Action action;
-        while (!asyncTaskRunning && (action = actionQueue.poll()) != null)
-            handleUpdate(action);
+                // handle queued actions
+                Action action;
+                while (!asyncTaskRunning && (action = actionQueue.poll()) != null)
+                    handleUpdate(action);
+            }
+        });
     }
 
     /**
@@ -370,7 +359,8 @@ public class PlayField extends AppCompatActivity {
             } else {
                 actionQueue.add(new EndGameAction());
                 asyncTaskRunning = true;
-                ScoreEdit.updateScore("gamesWon");
+                if (a.winner.getPlayerNr() == controller.getMyPlayerNr())
+                    ScoreEdit.updateScore("gamesWon");
                 alert("Spiel beendet!", "Spieler " + a.name + " hat gewonnen!", "Ok");
             }
 
