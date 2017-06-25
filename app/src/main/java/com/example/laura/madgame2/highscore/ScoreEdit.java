@@ -18,7 +18,7 @@ public class ScoreEdit {
     private static SharedPreferences sharedPref;
     private static Context context;
 
-    static final String[] keys = {"amountDiceRolls", "cheaterCaught", "gamesCheated", "gamesWon"};
+    private static final String[] keys = {"amountDiceRolls", "cheaterCaught", "gamesCheated", "gamesWon"};
 
     //somit kann die Klasse nicht von außen instantiiert werden
     private ScoreEdit() {
