@@ -13,7 +13,7 @@ import java.util.List;
  */
 
 public class CheatingRevisedTest extends ControllerAbstractUnitTest {
-
+/*
     @Test
     public void cantStartWithoutSixRollReworked() {
 
@@ -32,7 +32,7 @@ public class CheatingRevisedTest extends ControllerAbstractUnitTest {
         //   Assert.assertNotNull(controller.chooseFigure(0, 0));
 
     }
-
+*/
     @Test
     public void cantUseDoubleCheat() {
 
